@@ -22,14 +22,13 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     private $jwtAuth;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * The constructor.
@@ -62,20 +61,18 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     ): ResponseInterface {
         $token = explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? '';
 
-        $this->logger->debug('token header: '.$token);
+        $this->logger->debug("token header: " . $token);
         if (!$token) {
-            $token = isset($_COOKIE['Authorization']) ? $_COOKIE['Authorization'] : '';
-            $this->logger->debug('token cookie: '.$token);
+            $token = isset($_COOKIE["Authorization"]) ? $_COOKIE["Authorization"] : '';
+            $this->logger->debug("token cookie: " . $token);
         }
 
         if (!$token || !$this->jwtAuth->validateToken($token)) {
             $response = $this->responseFactory->createResponse()
                 ->withHeader('Content-Type', 'application/json')
-                ->withStatus(401, 'Unauthorized')
-            ;
+                ->withStatus(401, 'Unauthorized');
 
             $response->getBody()->write(json_encode('Unauthorized'));
-
             return $response;
         }
 
