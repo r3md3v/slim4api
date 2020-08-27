@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use App\Domain\User\Service\UserReader;
+use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
