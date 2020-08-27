@@ -6,7 +6,6 @@ use App\Auth\JwtAuth;
 use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 final class LogoutAction
 {
@@ -25,7 +24,8 @@ final class LogoutAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
         //$token = explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? ''; // not working
         $token = isset($_COOKIE['Authorization']) ? $_COOKIE['Authorization'] : -1; // must be a way toread cookie via SLIM...
 
@@ -52,13 +52,12 @@ final class LogoutAction
             ->withHeader(
                 'Set-Cookie',
                 'Authorization=; HttpOnly; Secure; Path=/;  SameSite=Strict; Max-Age=0'
-            )
-        ;
+            );
 
         // Feed the logger
         $this->logger->debug('LogoutAction: Active JWT canceled'); // for [{$username}]
 
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withStatus(201);
     }
