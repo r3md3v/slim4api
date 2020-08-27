@@ -49,7 +49,8 @@ final class UserCreator
         $userId = $this->repository->insertUser($data);
 
         // Logging here: User created successfully
-        $this->logger->info(sprintf('user %s created with id: %s', $data['username'], $userId));
+        $this->logger->debug(sprintf("user %s created with id: %s", $data['username'], $userId));
+        $this->logger->info(sprintf('User created successfully: %s', $userId));
 
         return $userId;
     }
@@ -59,7 +60,9 @@ final class UserCreator
      *
      * @param array $data The form data
      *
+     * @return void
      * @throws ValidationException
+     *
      */
     private function validateNewUser(array $data): void
     {
@@ -75,11 +78,11 @@ final class UserCreator
             $errors['email'] = 'Invalid email address';
         }
 
-        if (!empty($errors)) {
+        if (sizeof($errors) > 0) {
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if ($this->repository->userExists($data['username'], $data['email'])) {
+        if (true == $this->repository->userExists($data['username'], $data['email'])) {
             throw new ValidationException('User name already exists with name '.$data['username'].' or email '.$data['email'].'.', $errors);
         }
     }

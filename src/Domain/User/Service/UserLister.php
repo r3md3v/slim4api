@@ -29,8 +29,8 @@ final class UserLister
     public function __construct(UserListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->repository = $repository;
-        $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
         $this->defaultPageSize = $ci->get('settings')['db']['defaultPageSize'];
+        $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -40,9 +40,9 @@ final class UserLister
      * @param mixed $page     Page number
      * @param mixed $pagesize Nb of lines
      *
+     * @return UserList
      * @throws ValidationException
      *
-     * @return UserList
      */
     public function getUserList($page, $pagesize): array
     {

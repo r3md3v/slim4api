@@ -44,12 +44,15 @@ final class UserSearcher
      * @param mixed  $page     Page number
      * @param mixed  $pagesize Nb of lines
      *
+     * @return UserSearch
      * @throws ValidationException
      *
-     * @return UserSearch
      */
-    public function getUserSearch(string $keyword, $in, $page, $pagesize): array
+    public function getUserSearch(string $keyword, int $in, int $page, int $pagesize): array
     {
+        // Validation
+
+        if (!is_numeric($page) || $page < 1 || $page < $this->defaultPage)
         // Feed the logger
         $this->logger->debug("UserSearcher.getUserSearch: input: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
 

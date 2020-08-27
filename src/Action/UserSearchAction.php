@@ -27,6 +27,7 @@ final class UserSearchAction
      * The constructor.
      *
      * @param UserSearcher $userSearcher The user searcher
+     * @param Logger $logger the logger
      */
     public function __construct(UserSearcher $userSearcher, LoggerFactory $lf)
     {
@@ -48,6 +49,7 @@ final class UserSearchAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
+
         // Collect input from the HTTP request
         $keyword = (string) $args['keyword'];
         $in = isset($_GET['in']) ? $_GET['in'] : -1;

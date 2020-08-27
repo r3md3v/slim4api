@@ -13,15 +13,16 @@ use Slim\Logger;
  */
 final class UserListAction
 {
+
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
     /**
      * @var UserLister
      */
     private $userLister;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * The constructor.
@@ -49,6 +50,7 @@ final class UserListAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
+
         // Collect input from the HTTP request
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $size = isset($_GET['size']) ? $_GET['size'] : 0;

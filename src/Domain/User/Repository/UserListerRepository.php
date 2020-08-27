@@ -37,9 +37,9 @@ class UserListerRepository
      * @param mixed $page
      * @param mixed $pagesize
      *
+     * @return users List of Users
      * @throws DomainException
      *
-     * @return users List of Users
      */
     public function getUsers($page, $pagesize): array
     {

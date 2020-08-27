@@ -65,7 +65,7 @@ final class UserReadAction
             'first_name' => $userData->firstName,
             'last_name' => $userData->lastName,
             'email' => $userData->email,
-            'profile' => $userData->profile,
+			'profile' => $userData->profile,
         ];
 
         // Build the HTTP response
