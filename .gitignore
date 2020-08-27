@@ -1,0 +1,9 @@
+vendor/
+.idea/
+logs/
+tmp/
+/config/settings.php
+/config/settings.php.remi
+/config/settings.php.fran
+/private.pem
+/public.pem
