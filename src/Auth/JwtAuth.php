@@ -79,9 +79,9 @@ final class JwtAuth
      *
      * @param array $claims The claims
      *
+     * @return string The JWT
      * @throws UnexpectedValueException
      *
-     * @return string The JWT
      */
     public function createJwt(array $claims): string
     {
@@ -106,7 +106,6 @@ final class JwtAuth
      * @param string $token The JWT
      *
      * @return Token The parsed token
-     *
      * @throws InvalidArgumentException
      *
      */
