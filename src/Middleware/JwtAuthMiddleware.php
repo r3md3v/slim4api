@@ -44,7 +44,10 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     ) {
         $this->jwtAuth = $jwtAuth;
         $this->responseFactory = $responseFactory;
-        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
+        $this->logger = $lf
+            ->addFileHandler('error.log')
+            ->addConsoleHandler()
+            ->createInstance('error');
     }
 
     /**
