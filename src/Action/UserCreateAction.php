@@ -3,7 +3,6 @@
 namespace App\Action;
 
 use App\Domain\User\Service\UserCreator;
-use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
@@ -37,14 +36,14 @@ use Slim\Logger;
 final class UserCreateAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var UserCreator
      */
     private $userCreator;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.

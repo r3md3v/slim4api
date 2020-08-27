@@ -59,10 +59,14 @@ final class HomeAction
      * The constructor.
      *
      * @param ContainerInterface $ci The Container
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(ContainerInterface $ci, LoggerFactory $lf)
     {
-        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
+        $this->logger = $lf
+            ->addFileHandler('error.log')
+            ->addConsoleHandler()
+            ->createInstance('error');
         //get containers objects
         $this->container = $ci;
         $apiSettings = $this->container->get('settings')['api'];
@@ -71,7 +75,7 @@ final class HomeAction
         $this->version = $apiSettings['version'];
         $this->url = $apiSettings['url'];
         $this->build = $apiSettings['build'];
-        $this->datetime = date('Y-m-d H:i:s').' '.date_default_timezone_get();
+        $this->datetime = date('Y-m-d H:i:s') . ' ' . date_default_timezone_get();
         $this->timestamp = time();
     }
 
@@ -98,7 +102,7 @@ final class HomeAction
         ];
 
         //$response->getBody()->write((string)json_encode(['success' => true]));
-        $response->getBody()->write((string) json_encode($message));
+        $response->getBody()->write((string)json_encode($message));
 
         return $response->withHeader('Content-Type', 'application/json');
     }
