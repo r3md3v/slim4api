@@ -8,7 +8,6 @@ Made with [slim4](https://github.com/slimphp/Slim).
 
 [![Software License][ico-license]](LICENSE.md)
 
-
 ## QUICK INSTALL:
 
 ### Pre Requisite:
@@ -202,6 +201,38 @@ docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_customers.php
 docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_users.php
 ```
 
-## THAT'S IT!
+## Docker
 
+#info create containers
+https://vonkrafft.fr/console/simple-site-php-avec-docker-nginx/
+https://dev.to/martinpham/symfony-5-development-with-docker-4hj8
+
+## start
+```
+docker-compose up -d 
+```
+##start db + php + app
+```
+docker-compose -f docker-compose-nginx.yml up -d mysql php-fpm
+docker-compose -f docker-compose-nginx.yml up -d my_app
+docker-compose -f docker-compose-nginx.yml logs -f
+```
+## reload conf
+
+### docker
+* dkr_reload_nginx.sh:
+```
+docker-compose -f docker-compose-nginx.yml exec my_app nginx -s reload
+```
+
+## faker - populate database
+### docker
+* dkr_faker.sh:
+
+```
+docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_customers.php
+docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_users.php```
+```
+
+## THAT'S IT!
 Have fun!
