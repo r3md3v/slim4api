@@ -28,7 +28,7 @@ final class UserListAction
      * The constructor.
      *
      * @param UserLister $userLister The user lister
-     * @param LoggerFactory $lf The loggerFactory
+     * @param Logger $logger the loggerFactory
      */
     public function __construct(UserLister $userLister, LoggerFactory $lf)
     {
@@ -41,7 +41,7 @@ final class UserListAction
      *
      * @param ServerRequestInterface $request The request
      * @param ResponseInterface $response The response
-     * @param array $args The route arguments // unused for List
+     * @param array $args The route arguments
      *
      * @return ResponseInterface The response
      */
@@ -49,11 +49,12 @@ final class UserListAction
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args = []
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
 
         // Collect input from the HTTP request
-		$page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $size = isset($_GET['size']) ? $_GET['size'] : 0;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $size = isset($_GET['size']) ? $_GET['size'] : 1;
 
         // Feed the logger
         $this->logger->debug("UserListAction: page: $page, size: $size");
@@ -70,7 +71,7 @@ final class UserListAction
                 'first_name' => $userData->firstName,
                 'last_name' => $userData->lastName,
                 'email' => $userData->email,
-				'profile' => $userData->profile,
+                'profile' => $userData->profile,
             ]);
         }
 

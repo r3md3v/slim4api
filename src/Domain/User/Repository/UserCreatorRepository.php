@@ -60,26 +60,25 @@ class UserCreatorRepository
 
 
     /**
-     * check if userid or email is already in database.
+     * check if email is already in database.
      *
-     * @param username
      * @param email
      *
      * @return boolean
      */
-    public function userExists(string $username, string $email): bool
+    public function userExists(string $email): bool
     {
 
         $params = [];
-		$params['username'] = $username;
         $params['email'] = $email;
 
         $sql = "SELECT * FROM users AS u 
-                WHERE u.USRNAME =:username OR u.USREMAIL =:email;";
+                WHERE u.USREMAIL =:email;";
 
         $statement = $this->connection->prepare($sql);
         $statement->execute($params);
 
         return $statement->rowCount() > 0;
+
     }
 }

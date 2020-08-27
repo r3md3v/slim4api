@@ -3,7 +3,6 @@
 namespace App\Action;
 
 use App\Domain\User\Service\UserReader;
-use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
@@ -49,8 +48,8 @@ final class UserReadAction
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args = []
-    ): ResponseInterface {
-
+    ): ResponseInterface
+    {
         // Collect input from the HTTP request
         $userId = (int)$args['id'];
 
@@ -67,7 +66,7 @@ final class UserReadAction
             'first_name' => $userData->firstName,
             'last_name' => $userData->lastName,
             'email' => $userData->email,
-			'profile' => $userData->profile,
+            'profile' => $userData->profile,
         ];
 
         // Build the HTTP response

@@ -49,12 +49,13 @@ final class UserSearchAction
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args = []
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
 
         // Collect input from the HTTP request
         $keyword = (string)$args['keyword'];
-        $in = isset($_GET['in'])  ? $_GET['in'] : -1;
-		$page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $in = isset($_GET['in']) ? $_GET['in'] : -1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $size = isset($_GET['size']) ? $_GET['size'] : 0;
 
         // Feed the logger
@@ -72,12 +73,12 @@ final class UserSearchAction
                 'first_name' => $userData->firstName,
                 'last_name' => $userData->lastName,
                 'email' => $userData->email,
-				'profile' => $userData->profile,
+                'profile' => $userData->profile,
             ]);
         }
 
         // Build the HTTP response
-		$response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

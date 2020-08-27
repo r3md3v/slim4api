@@ -32,9 +32,9 @@ class UserListerRepository
      * @param int page Page number
      * @param int pagesize Nb of lines
      *
+     * @return users List of Users
      * @throws DomainException
      *
-     * @return users List of Users
      */
     public function getUsers($page = 1, $pagesize = 50): array
     {
@@ -68,7 +68,7 @@ class UserListerRepository
         }
 
         if (count($users) == 0) {
-            throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
+            throw new DomainException(sprintf('No user page #%d!', ($page + 1)));
         }
 
         return $users;

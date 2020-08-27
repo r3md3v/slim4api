@@ -38,28 +38,28 @@ final class UserSearcher
      * Search user list
      *
      * @param string keyword Word to search
-	 * @param int in Field number
- 	 * @param int page Page number
-	 * @param int pagesize Nb of lines
-	 * @param int defaultSearchField Search field
-     *
-     * @throws ValidationException
+     * @param int in Field number
+     * @param int page Page number
+     * @param int pagesize Nb of lines
+     * @param int defaultSearchField Search field
      *
      * @return UserSearch
+     * @throws ValidationException
+     *
      */
     public function getUserSearch(string $keyword, int $in, int $page, int $pagesize): array
     {
-		// Validation
- 
-        if (!is_numeric($page) || $page < $this->defaultPage)
+        // Validation
+
+        if (!is_numeric($page) || $page < 1 || $page < $this->defaultPage)
             $page = $this->defaultPage;
 
-        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
+        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize < $this->defaultPageSize)
             $pagesize = $this->defaultPageSize;
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField))
             $in = -1;
-            else $in = $this->defaultSearchField[$in-1];
+        else $in = $this->defaultSearchField[$in - 1];
 
         if (empty($keyword)) {
             throw new ValidationException('Keyword required');
