@@ -28,12 +28,15 @@ final class UserSearchAction
      * The constructor.
      *
      * @param UserSearcher $userSearcher The user searcher
-     * @param Logger $logger the logger
+     * @param LoggerFactory $lf
      */
     public function __construct(UserSearcher $userSearcher, LoggerFactory $lf)
     {
         $this->userSearcher = $userSearcher;
-        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
+        $this->logger = $lf
+            ->addFileHandler('error.log')
+            ->addConsoleHandler()
+            ->createInstance('error');
     }
 
     /**
