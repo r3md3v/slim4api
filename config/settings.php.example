@@ -57,7 +57,7 @@ $settings['jwt'] = [
     'private_key' => '-----BEGIN RSA PRIVATE KEY-----
 ...copy paste you key here...
 -----END RSA PRIVATE KEY-----',
-
+    // The public key
     'public_key' => '-----BEGIN PUBLIC KEY-----
 ...copy paste you key here...
 -----END PUBLIC KEY-----',
@@ -67,8 +67,8 @@ $settings['jwt'] = [
 $settings['db'] = [
     'driver' => 'mysql',
     'host' => 'localhost',
-    'username' => 'userslim',
     'database' => 'slim4api',
+    'username' => 'userslim',
     'password' => 'Secr3t',
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',

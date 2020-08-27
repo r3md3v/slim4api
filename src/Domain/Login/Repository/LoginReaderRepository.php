@@ -38,25 +38,26 @@ class LoginReaderRepository
      */
     public function getLoginByUP(string $username, string $password): LoginData
     {
-        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWULASTTOKEN, JWUSTATUS FROM usersjwt WHERE JWUUSERNAME = :username AND JWUPASSWORD = :password;';
+        $sql = 'SELECT JWUID, JWUUSERNAME, JWUPASSWORD, JWUEMAIL, JWULASTTOKEN, JWUSTATUS FROM usersjwt WHERE JWUUSERNAME = :username;';
         $statement = $this->connection->prepare($sql);
 
         $username = htmlspecialchars(strip_tags($username));
-        $password = password_hash(htmlspecialchars(strip_tags($password, PASSWORD_BCRYPT)));
+        //$password = password_hash(htmlspecialchars(strip_tags($password)), PASSWORD_BCRYPT);
 
         $statement->bindParam('username', $username);
-        $statement->bindParam('password', $password);
+        //$statement->bindParam('password', $password);
 
         $statement->execute();
 
         $row = $statement->fetch();
-
         if (!$row) {
-            throw new DomainException(sprintf('Login incorrect for: %s', $username));
+            throw new DomainException(sprintf('Login incorrect for: %s', $username)); // no such user
         }
-
         if (1 != $row['JWUSTATUS']) {
-            throw new DomainException(sprintf('User not active: %s', $username));
+            throw new DomainException(sprintf('User locked: %s', $username)); // user locked
+        }
+        if (!password_verify($password, $row['JWUPASSWORD'])) {
+            throw new DomainException(sprintf('Login incorrect for: %s', $username)); // wrong pw
         }
 
         // Map array to data object

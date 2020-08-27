@@ -51,7 +51,7 @@ final class TokenCreateAction
         // $userAuthData = $this->userAuth->authenticate($username, $password);
 
         //
-        // Here for testing purpose
+        // Here for testing purpose /////////////// START
         //
         if (empty($username) || empty($password)) {
             throw new ValidationException('Username and password required');
@@ -84,7 +84,7 @@ final class TokenCreateAction
         }
 
         //
-        // Here for testing purpose
+        // Here for testing purpose /////////////////////// END
         // $userAuthData = \App\Domain\Login\Service\LoginReader\getLoginDetails($username, $password);
         //
         //$isValidLogin = ('user' === $username && 'secret' === $password);

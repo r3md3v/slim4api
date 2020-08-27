@@ -27,14 +27,14 @@ return function (App $app) {
     // Hello - group1
     $app->group('/hello', function (Group $group1) {
         $group1->get('', \App\Action\HelloAction::class)->setName('hello');
-        $group1->get('/', \App\Action\HelloAction::class)->setName('hello'); // trailing slash not recommanded
+        //$group1->get('/', \App\Action\HelloAction::class)->setName('hello'); // trailing slash not recommanded => TrailingSlashMiddleware
         $group1->get('/{name}', \App\Action\HelloAction::class)->setName('hello');
     });
 
     // Customers - group2
     $app->group('/customers', function (Group $group2) {
         $group2->get('', \App\Action\CustomerListAction::class)->setName('customer-list');
-        // $group2->get('/', \App\Action\CustomerListAction::class)->setName('customer-list'); // trailing slash not recommanded => TrailingSlashMiddleware
+        //$group2->get('/', \App\Action\CustomerListAction::class)->setName('customer-list'); // trailing slash not recommanded => TrailingSlashMiddleware
         $group2->get('/id/{id:[0-9]+}', \App\Action\CustomerReadAction::class);
         $group2->get('/search/{keyword}', \App\Action\CustomerSearchAction::class);
         $group2->post('', \App\Action\CustomerCreateAction::class);
