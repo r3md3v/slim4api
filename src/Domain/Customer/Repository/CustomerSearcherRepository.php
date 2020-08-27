@@ -30,20 +30,18 @@ class CustomerSearcherRepository
     }
 
     /**
-     * Get customer search.
+     * Get customer search
      *
      * @param string keyword Word to search
      * @param array in Field exact name/human name
-     * @param int page Page number
-     * @param int pagesize Nb of lines
      * @param mixed $keyword
      * @param mixed $in
      * @param mixed $page
      * @param mixed $pagesize
      *
+     * @return customers Search of Customers
      * @throws DomainException
      *
-     * @return customers Search of Customers
      */
     public function getCustomers($keyword, $in, $page, $pagesize): array
     {
@@ -78,12 +76,12 @@ class CustomerSearcherRepository
         $customers = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $customer = new CustomerData();
-            $customer->id = (int) $row['CUSID'];
-            $customer->name = (string) $row['CUSNAME'];
-            $customer->address = (string) $row['CUSADDRESS'];
-            $customer->city = (string) $row['CUSCITY'];
-            $customer->phone = (string) $row['CUSPHONE'];
-            $customer->email = (string) $row['CUSEMAIL'];
+            $customer->id = (int)$row['CUSID'];
+            $customer->name = (string)$row['CUSNAME'];
+            $customer->address = (string)$row['CUSADDRESS'];
+            $customer->city = (string)$row['CUSCITY'];
+            $customer->phone = (string)$row['CUSPHONE'];
+            $customer->email = (string)$row['CUSEMAIL'];
             array_push($customers, $customer);
         }
 
@@ -104,7 +102,6 @@ class CustomerSearcherRepository
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-
         return $row['nb'];
     }
 }

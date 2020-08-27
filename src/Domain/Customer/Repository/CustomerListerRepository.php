@@ -37,11 +37,11 @@ class CustomerListerRepository
      * @param mixed $page
      * @param mixed $pagesize
      *
+     * @return customers List of Customers
      * @throws DomainException
      *
-     * @return customers List of Customers
      */
-    public function getCustomers($page, $pagesize): array
+    public function getCustomers($page = 1, $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("CustomerListerRepository.getCustomers: page: {$page}, size: {$pagesize}");
