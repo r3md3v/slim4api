@@ -77,8 +77,7 @@ final class LogoutAction
             ->withHeader(
                 'Set-Cookie',
                 'Authorization=; HttpOnly; Secure; Path=/;  SameSite=Strict; Max-Age=0'
-            )
-        ;
+            );
 
         // Feed the logger
         $this->logger->debug('LogoutAction: Active JWT canceled'); // for [{$username}]
