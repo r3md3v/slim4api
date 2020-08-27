@@ -34,14 +34,12 @@ class UserListerRepository
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
-     * @param mixed $page
-     * @param mixed $pagesize
      *
      * @return users List of Users
      * @throws DomainException
      *
      */
-    public function getUsers($page, $pagesize): array
+    public function getUsers($page = 1, $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("UserListerRepository.getUsers: page: {$page}, size: {$pagesize}");
