@@ -5,36 +5,26 @@ use Monolog\Logger;
 // Error reporting for development
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-$display_error_details = true;
 
 // Error reporting for production
-// error_reporting(0);
-// ini_set('display_errors', '0');
-// $display_error_details = false;
+//error_reporting(0);
+//ini_set('display_errors', '0');
 
 // Set default timezone to Europe/Paris if PHP 5.4 // Keep this a very first data loaded by PHP
-if (@function_exists('date_default_timezone_set') && @function_exists('date_default_timezone_get')) {
+if (@function_exists('date_default_timezone_set') && @function_exists('date_default_timezone_get'))
     @date_default_timezone_set(@date_default_timezone_get());
-}
-if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-    date_default_timezone_set('Europe/Paris');
-}
+if (version_compare(PHP_VERSION, '5.4.0') >= 0)
+	date_default_timezone_set('Europe/Paris');
 
 // Settings
 $settings = [];
 
-// Redirection to another macine/port
-$settings['redirection'] = [
-    'port' => 8080,
-    'servername' => 'localhost'
-];
-
 // API Name and version
 $settings['api'] = [
-    'name' => 'slim4api',
-    'version' => '0.7',
-    'url' => 'http://localhost:8080',
-    'build' => '2020-08-26',
+	'name' => 'slim4api',
+	'version' => '0.5',
+	'url' => "http://localhost:8080",
+	'build' => '2020-08-09'
 ];
 
 // Path settings
@@ -49,44 +39,37 @@ $settings['cors'] = '*';
 // JWT Java Web Token
 // https://odan.github.io/2019/12/02/slim4-oauth2-jwt.html
 $settings['jwt'] = [
-    // The issuer name
-    'issuer' => 'www.example.com',
-    // Max lifetime in seconds
-    'lifetime' => 14400,
-    // The private key
-    'private_key' => '-----BEGIN RSA PRIVATE KEY-----
-...copy paste you key here...
------END RSA PRIVATE KEY-----',
-    // The public key
-    'public_key' => '-----BEGIN PUBLIC KEY-----
-...copy paste you key here...
------END PUBLIC KEY-----',
+            'secret' => "supersecretkeyyoushouldnotcommittogithub",
+            'secure' => false,
+            "header" => "Authorization",
+            "regexp" => "/Token\s+(.*)$/i",
+            'passthrough' => ['OPTIONS']
+        ];
+
+// Error Handling Middleware settings
+$settings['error'] = [
+    // Should be set to false in production
+    'display_error_details' => true,
+
+    // Parameter is passed to the default ErrorHandler
+    // View in rendered output by enabling the "displayErrorDetails" setting.
+    // For the console and unit tests we also disable it
+    'log_errors' => true,
+
+    // Display error details in error log
+    'log_error_details' => true,
 ];
 
 // Database settings
 $settings['db'] = [
     'driver' => 'mysql',
     'host' => 'localhost',
+    'username' => 'root',
     'database' => 'slim4api',
-    'username' => 'userslim',
     'password' => 'Secr3t',
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
-    'defaultPage' => '1',
-    'defaultPageSize' => '50',
-    'defaultSearchFieldUser' => [
-        ['User name','USRNAME'], 
-        ['First name', 'USRFIRSTNAME'], 
-        ['Last name', 'USRLASTNAME'], 
-        ['Email', 'USREMAIL'], 
-        ['Profile', 'USRPROFILE']],
-    'defaultSearchFieldCustomer' => [
-        ['Customer name', 'CUSNAME'],
-        ['Address', 'CUSADDRESS'],
-        ['City', 'CUSCITY'],
-        ['Phone', 'CUSPHONE'],
-        ['Email','CUSEMAIL']
-    ],
+	'limit' => 50,
     'flags' => [
         // Turn off persistent connections
         PDO::ATTR_PERSISTENT => false,
@@ -101,23 +84,9 @@ $settings['db'] = [
     ],
 ];
 
-// Error Handling Middleware settings
-$settings['error'] = [
-    // Should be set to false in production
-    'display_error_details' => $display_error_details,
-
-    // Parameter is passed to the default ErrorHandler
-    // View in rendered output by enabling the "displayErrorDetails" setting.
-    // For the console and unit tests we also disable it
-    'log_errors' => true,
-
-    // Display error details in error log
-    'log_error_details' => true,
-];
-
 // Logger settings
 $settings['logger'] = [
-    'display_error_details' => t$display_error_details,
+    'display_error_details' => true,
     'log_errors' => true,
     'log_error_details' => true,
     'name' => 'Monologer/logger',
@@ -131,5 +100,8 @@ $settings['twig'] = [
     'path_templates' => __DIR__ . '/../templates/',
     'path_cache' => __DIR__ . '/../tmp/views/'
 ];
+
+//trailingSlash
+$settings['trail']=false;
 
 return $settings;

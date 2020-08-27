@@ -2,6 +2,7 @@
 
 use App\Auth\JwtAuth;
 use App\Factory\LoggerFactory;
+use App\Middleware\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
@@ -92,5 +93,10 @@ return [
 
         return $view;
     },
+
+    TrailingSlashMiddleware::class => function (ContainerInterface $c) {
+        $trailingSetting = $c->get('settings')['trail'];
+        return new TrailingSlashMiddleware((bool)$trailingSetting);
+    }
 
 ];

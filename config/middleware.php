@@ -15,9 +15,6 @@ return function (App $app) {
     // Parse json, form data and xml
     $app->addBodyParsingMiddleware();
 
-    // Add/Remove the trailing slash (true/false)
-    $app->add(new TrailingSlashMiddleware(false));
-
     // Redirect HTTP traffic to HTTPS
     $app->add(HttpsMiddleware::class);
 
@@ -44,4 +41,7 @@ return function (App $app) {
 
     // Catch exceptions and errors
     $app->add(ErrorMiddleware::class);
+
+    // Add/Remove the trailing slash (true/false)
+    $app->add(TrailingSlashMiddleware::class);
 };
