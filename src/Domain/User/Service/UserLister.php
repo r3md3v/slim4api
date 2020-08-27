@@ -54,6 +54,7 @@ final class UserLister
         if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
            $pagesize = $this->defaultPageSize;
 
+        $this->logger->debug("UserLister.getUserList: page: $page, size: $pagesize");
         $users = $this->repository->getUsers($page, $pagesize);
 
         return $users;
