@@ -1,61 +1,61 @@
 * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 body {
     font-family: helvetica, arial, sans-serif;
-    color: rgb(66,69,86);
+    color: rgb(66, 69, 86);
     background-color: #BEBEBE;
 }
 
 .flex-container {
-	display: flex;
+    display: flex;
     align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	height: 100%;
-    border:3px solid gray;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    border: 3px solid gray;
 }
 
-h1{
+h1 {
     font-size: 2.5em;
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .form {
-	line-height: 1.5;
-	margin-bottom: 10px;
-	width: 400px;
-	font-size: 1em;
-	color: black;
-	padding: 5px 10px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    width: 400px;
+    font-size: 1em;
+    color: black;
+    padding: 5px 10px;
 }
 
 button {
-    border:3px solid white;
+    border: 3px solid white;
     font-size: 1em;
-    color: rgb(66,69,86);
+    color: rgb(66, 69, 86);
     padding: 2px 30px;
-    background: rgba(255,255,255,1.0);
+    background: rgba(255, 255, 255, 1.0);
     border-radius: 5px;
     opacity: 0.8;
 }
 
-button:hover{
-	opacity: 1;
+button:hover {
+    opacity: 1;
 }
 
 input[type=text]:focus {
-	outline: none;
+    outline: none;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-	color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
 }
