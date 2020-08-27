@@ -51,9 +51,9 @@ final class CustomerLister
      * @param mixed $page     Page number
      * @param mixed $pagesize Nb of lines
      *
+     * @return CustomerList
      * @throws ValidationException
      *
-     * @return CustomerList
      */
     public function getCustomerList(int $page = 1, int $pagesize = 50): array
     {

@@ -3,7 +3,6 @@
 namespace App\Action;
 
 use App\Domain\Customer\Service\CustomerCreator;
-use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
