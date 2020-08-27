@@ -51,6 +51,7 @@ final class UserSearcher
     public function getUserSearch(string $keyword, int $in, int $page, int $pagesize): array
     {
         // Validation
+        $this->logger->debug("UserSearcher.getUser: input: keyword: $keyword, in: $in, page: $page, size: $pagesize");
 
         if (!is_numeric($page) || $page < 1 || $page < $this->defaultPage)
         // Feed the logger
@@ -75,7 +76,9 @@ final class UserSearcher
         if (empty($keyword)) {
             throw new ValidationException('Keyword required');
         }
+        $this->logger->debug("UserSearcher.getUser: output: keyword: $keyword, in: $in, page: $page, size: $pagesize");
+        $users = $this->repository->getUsers($keyword, $in, $page, $pagesize);
 
-        return $this->repository->getUsers($keyword, $in, $page, $pagesize);
+        return $users;
     }
 }

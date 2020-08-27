@@ -62,6 +62,8 @@ class UserSearcherRepository
             $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :limit, :pagesize ;';
         }
 
+        $this->logger->debug("UserSearcherRepository.getUser: keyword: $keyword, in: $in, page: $page, size: $pagesize");
+
         $statement = $this->connection->prepare($sql);
 
         $keyword = htmlspecialchars(strip_tags($keyword));
