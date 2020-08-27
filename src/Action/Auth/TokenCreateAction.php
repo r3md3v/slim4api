@@ -11,6 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
+// check token
+// https://jwt.io/?value=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMxMzJlYmE0LTdjMjAtNDgxNC04NWMzLTYzOWNlODBmYWE2YyJ9.eyJpc3MiOiJ3d3cuZXhhbXBsZS5jb20iLCJqdGkiOiIzMTMyZWJhNC03YzIwLTQ4MTQtODVjMy02MzljZTgwZmFhNmMiLCJpYXQiOjE1OTc1NjU5MDcsIm5iZiI6MTU5NzU2NTkwNywiZXhwIjoxNTk3NTgwMzA3LCJ1aWQiOiJ1c2VyIn0.J-1SXt1q2R48WHLOaZJW83oRdIRmE0bCVURrwZRr5n1c4JqXHqpI1mykXA4Lcc1ITDiC8IvhPvpMr3mK5KYgRFU7TX8Tv9Vn-G5RJ9mCZfIUlMzjTn-eddLTPWKseDRKH6j2QkeHd4oXKgZeZCRPpPCmcwC8BvDFE02-j3zc1pWtXWLM-Vlw6VCUA2_pSwRb5sQTjvz5GHmakZsck3U99V5_gTsD7H4eEJ3B0p-zbQW2bApqrrfJAdlu7RSz2LO4civoRWE22kIdfBmktsEserL8RBgdn5AIw40yNh_VUCd5eNfAfs-J-1tek5-4r0a4n2VQycOFcju3Mz7JqEaMcw
+
 final class TokenCreateAction
 {
     private $jwtAuth;
@@ -40,11 +43,12 @@ final class TokenCreateAction
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response
-    ): ResponseInterface {
-        $data = (array) $request->getParsedBody();
+    ): ResponseInterface
+    {
+        $data = (array)$request->getParsedBody();
 
-        $username = (string) ($data['username'] ?? '');
-        $password = (string) ($data['password'] ?? '');
+        $username = (string)($data['username'] ?? '');
+        $password = (string)($data['password'] ?? '');
 
         // Validate login (pseudo code)
         // Warning: This should be done in an application service and not here!
@@ -96,8 +100,7 @@ final class TokenCreateAction
 
             return $response
                 ->withHeader('Content-Type', 'application/json')
-                ->withStatus(401, 'Unauthorized')
-            ;
+                ->withStatus(401, 'Unauthorized');
         }
 
         // Create a fresh token
@@ -122,14 +125,13 @@ final class TokenCreateAction
             // add cookie
             ->withHeader(
                 'Set-Cookie',
-                'Authorization='.$result['access_token'].'; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age='.$lifetime
-            )
-        ;
+                'Authorization=' . $result['access_token'] . '; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age=' . $lifetime
+            );
 
         // Feed the logger
         $this->logger->debug("TokenCreateAction: JWT created for [{$username}]");
 
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withStatus(201);
     }
