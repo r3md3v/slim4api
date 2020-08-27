@@ -4,6 +4,7 @@ namespace App\Domain\Customer\Service;
 
 use App\Domain\Customer\Repository\CustomerSearcherRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -24,12 +25,13 @@ final class CustomerSearcher
      *
      * @param CustomerSearcherRepository $repository The repository
      */
-    public function __construct(CustomerSearcherRepository $repository, ContainerInterface $ci)
+    public function __construct(CustomerSearcherRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->repository = $repository;
         $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
         $this->defaultPageSize = $ci->get('settings')['db']['defaultPageSize'];
         $this->defaultSearchField = $ci->get('settings')['db']['defaultSearchFieldCustomer'];
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -47,11 +49,11 @@ final class CustomerSearcher
     public function getCustomerSearch(string $keyword, int $in, int $page, int $pagesize): array
     {
 		// Validation
- 
-        if (!is_numeric($page) || $page < $this->defaultPage)
+
+        if (!is_numeric($page) || $page < 1 || $page < $this->defaultPage)
             $page = $this->defaultPage;
 
-        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
+        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize < $this->defaultPageSize)
             $pagesize = $this->defaultPageSize;
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField))

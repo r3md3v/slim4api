@@ -3,7 +3,6 @@
 namespace App\Action;
 
 use App\Domain\Customer\Service\CustomerCreator;
-use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
@@ -37,15 +36,14 @@ use Slim\Logger;
 final class CustomerCreateAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-
-    /**
      * @var CustomerCreator
      */
     private $customerCreator;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.

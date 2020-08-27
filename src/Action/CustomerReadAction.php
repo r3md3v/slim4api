@@ -3,31 +3,24 @@
 namespace App\Action;
 
 use App\Domain\Customer\Service\CustomerReader;
-use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Logger;
 
 /**
- * Action.
+ * Action
  */
 final class CustomerReadAction
 {
     /**
-     * @var Logger
+     * @var customerReader
      */
-    private $logger;
-
-    /**
-     * @var CustomerReader
-     */
-    private $CustomerReader;
+    private $customerReader;
 
     /**
      * The constructor.
      *
      * @param CustomerReader $CustomerReader The Customer reader
-     * @param LoggerFactory  $lf             The loggerFactory
+     * @param LoggerFactory $lf The loggerFactory
      */
     public function __construct(CustomerReader $CustomerReader, LoggerFactory $lf)
     {
@@ -38,9 +31,9 @@ final class CustomerReadAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request  The request
-     * @param ResponseInterface      $response The response
-     * @param array                  $args     The route arguments
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array $args The route arguments
      *
      * @return ResponseInterface The response
      */
@@ -48,9 +41,10 @@ final class CustomerReadAction
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args = []
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
         // Collect input from the HTTP request
-        $customerId = (int) $args['id'];
+        $customerId = (int)$args['id'];
 
         // Feed the logger
         $this->logger->debug("CustomerReadAction: id: {$customerId}");
@@ -69,7 +63,7 @@ final class CustomerReadAction
         ];
 
         // Build the HTTP response
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
