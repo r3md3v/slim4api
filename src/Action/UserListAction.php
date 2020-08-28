@@ -15,14 +15,14 @@ final class UserListAction
 {
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * @var UserLister
      */
     private $userLister;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * The constructor.
