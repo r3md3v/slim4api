@@ -2,7 +2,7 @@
 <html>
   <head>
 	<title>Slim4API</title>
-	<link href="css/favicon.ico" rel="icon" />
+	<link href="favicon.ico" rel="icon" />
     <link href="css/slim4api.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="js/veriform.js"></script>
   </head>
@@ -12,7 +12,7 @@
 
 	<h1>Slim4API - Customer Create</h1>
 
-	<form method="post" class="form" action="/customers" 
+	<form method="post" class="form" action="/customers"
 		onsubmit="if(verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!'))
 			return validateEmail(email,'Error : email format invalid!');
 			return false;">
@@ -34,8 +34,8 @@
 			<input type="email" class="form" name="email" placeholder="user1@domain.com" /><br />
 
 			<br />
-		
-			<button>Save</button>
+
+			<input name="save" type="submit" value="save">
 		</p>
 	</form>
 	</div>
