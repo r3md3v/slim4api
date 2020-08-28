@@ -53,19 +53,19 @@ class LoginReaderRepository
         if (!$row) {
             throw new DomainException(sprintf('Login incorrect for: %s', $username)); // no such user
         }
-        if (1 != $row['JWUSTATUS']) {
-            throw new DomainException(sprintf('User locked: %s', $username)); // user locked
-        }
         if (!password_verify($password, $row['JWUPASSWORD'])) {
             throw new DomainException(sprintf('Login incorrect for: %s', $username)); // wrong pw
+        }
+        if (1 != $row['JWUSTATUS']) {
+            throw new DomainException(sprintf('Access locked: %s', $username)); // user locked
         }
 
         // Map array to data object
         $login = new LoginData();
         $login->id = (int) $row['JWUID'];
-        $login->username = (string) $row['JWUNAME'];
+        $login->username = (string) $row['JWUUSERNAME'];
         $login->email = (string) $row['JWUEMAIL'];
-        $login->token = (string) $row['JWUTOKEN'];
+        $login->token = (string) $row['JWULASTTOKEN'];
         $login->status = (string) $row['JWUSTATUS'];
 
         return $login;

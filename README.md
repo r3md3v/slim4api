@@ -13,7 +13,7 @@ Made with [slim4](https://github.com/slimphp/Slim).
 
 ### Pre Requisite:
 
-- PHP.
+- PHP 7.2+.
 - Composer.
 - MySQL/MariaDB.
 - OpenSSL
@@ -21,7 +21,7 @@ Made with [slim4](https://github.com/slimphp/Slim).
 
 ### With Composer:
 
-Create a new project :
+Create a new project:
 ```bash
 $ composer create-project r3md3v/slim4api [my-api-name]
 $ cd [my-api-name]
@@ -33,15 +33,15 @@ $ composer start
 ### JWT/JSON Web Token keys
 
 Generate private key and public keys with these commands:
-	openssl genrsa -out private.pem 2048
-	openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+```
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+```
 
 
 ### Create database:
 
-Create a new DB via phpMyAdmin or any other tool
-Run db.sql to create tables users and customers
-Run dbjwt.sql to create specific tables for JWT
+Create a new DB and execute `db.sql` to create tables (users and customers) and feed 5 lines, and execute `dbjwt.sql` to create specific tables for JWT with 3 lines
 
 
 #### Configure app (settings.php):
@@ -53,7 +53,7 @@ ini_set('display_errors', '0');
 $display_error_details = false;
 ```
 
-Configure MySQL connection :
+Configure MySQL connection:
 ```
 $settings['db'] = [
 	'driver' => 'mysql',
@@ -63,7 +63,7 @@ $settings['db'] = [
 	'password' => 'yourMySqlPassword',
 ```
 
-Configure JWT  (change issuer, lifetime, and copy content of private and public keys generated previously) :
+Configure JWT  (change issuer, lifetime, and copy content of private and public keys generated previously):
 ```
 $settings['jwt'] = [
     // The issuer name
@@ -77,13 +77,21 @@ $settings['jwt'] = [
     'public_key' => '-----BEGIN PUBLIC KEY-----
 -----END PUBLIC KEY-----',
 ];
+
+```
+Specify if redirection is other than 8080:
+```
+$settings['redirection'] = [
+    'port' => 8080,
+    'servername' => 'localhost',
+];
 ```
 
 
 #### Populate DB:
 
-For POC purpose, users and customers tables have 5 lines.
-Run this command as many times a needed, to populate 500 additionnal lines of data in users and customers tables thanks to faker :
+- For POC purpose, users and customers tables have 5 lines.
+- Run this command as many times a needed, to populate 500 additionnal lines of data in users and customers tables thanks to faker:
 ```
 $ composer faker
 ```
@@ -93,14 +101,14 @@ $ composer faker
 
 ### LIST OF REQUIRE DEPENDENCIES:
 
-For basic app: slim/slim slim/psr7 selective/basepath slim/monolog php-di/php-di
-For Swagger: doctrine/annotations slim/twig-view symfony/yaml
-For JWT: lcobucci/jwt symfony/polyfill-uuid cakephp/chronos
+- For basic app: slim/slim slim/psr7 selective/basepath slim/monolog php-di/php-di
+- For Swagger: doctrine/annotations slim/twig-view symfony/yaml
+- For JWT: lcobucci/jwt symfony/polyfill-uuid cakephp/chronos
 
 
 ### LIST OF DEVELOPMENT DEPENDENCIES:
 
-phpunit/phpunit fzaninotto/faker
+- phpunit/phpunit fzaninotto/faker
 
 
 ## ENDPOINTS:
@@ -142,11 +150,11 @@ phpunit/phpunit fzaninotto/faker
 
 ## FORMS:
 
-createUserForm.php = triggers `POST /users` username,password,firstname,lastname,email,profile 
-createCustomerForm.php = triggers `POST /customers` cusname,address,city,phone,email
-login.php = required to trigger `/users` endpoint
-checkJWTForm.php = gives detail about a JSON Web Token
-hashPWDForm.php = returns a BCRYPT hashed version of a string
+- createUserForm.php = triggers `POST /users` username,password,firstname,lastname,email,profile 
+- createCustomerForm.php = triggers `POST /customers` cusname,address,city,phone,email
+- login.php = required to trigger `/users` endpoint
+- checkJWTForm.php = gives detail about a JSON Web Token
+- hashPWDForm.php = returns a BCRYPT hashed version of a string
 
 
 ## THAT'S IT!

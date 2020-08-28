@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Slim4API</title>
-	<link href="css/favicon.ico" rel="icon" />
+	<link href="favicon.ico" rel="icon" />
 	<link href="css/slim4api.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="js/veriform.js"></script>
   </head>
@@ -12,8 +12,7 @@
 
 	<h1>Slim4API - Login</h1>
 
-	<form method="post" action="/tokens"
-		onsubmit="return verifForm([username,password],'Erreur : les champs marqués d\'une astérisque sont obligatoires !');">
+	<form method="post" action="/tokens" onsubmit="return verifForm([username,password],'Error : fields marked with an asterisk are mandatory!');">
 
 		<p>
 		
@@ -30,8 +29,8 @@
 			<button>Login</button>
 			<button onclick="javascript:username.value='user';password.value='secret';">Autologin</button>
 			<button><a href="/logout">Logout</button>
-			<button><a href="/checkJWTform.php">Check JWT</button>
-			<button><a href="/hashPWDform.php">Hash PWD</button>
+			<button><a href="/checkJWTForm.php">Check JWT</button>
+			<button><a href="/hashPWDForm.php">Hash PWD</button>
 			
 			<br />
 			

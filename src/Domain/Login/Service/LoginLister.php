@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Domain\Customer\Service;
+namespace App\Domain\Login\Service;
 
-use App\Domain\Customer\Repository\CustomerListerRepository;
+use App\Domain\Login\Repository\LoginListerRepository;
 use App\Exception\ValidationException;
 use Psr\Container\ContainerInterface;
 
 /**
  * Service.
  */
-final class CustomerLister
+final class LoginLister
 {
     /**
-     * @var CustomerListerRepository
+     * @var LoginListerRepository
      */
     private $repository;
     private $defaultPage;
@@ -21,9 +21,9 @@ final class CustomerLister
     /**
      * The constructor.
      *
-     * @param CustomerListerRepository $repository The repository
+     * @param LoginListerRepository $repository The repository
      */
-    public function __construct(CustomerListerRepository $repository, ContainerInterface $ci)
+    public function __construct(LoginListerRepository $repository, ContainerInterface $ci)
     {
         $this->repository = $repository;
         $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
@@ -31,16 +31,16 @@ final class CustomerLister
     }
 
     /**
-     * Read Customer list.
+     * Read login list.
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
      *
      * @throws ValidationException
      *
-     * @return CustomerList
+     * @return LoginList
      */
-    public function getCustomerList(int $page, int $pagesize): array
+    public function getLoginList(int $page, int $pagesize): array
     {
         // Validation
 
@@ -52,16 +52,16 @@ final class CustomerLister
             $pagesize = $this->defaultPageSize;
         }
 
-        return $this->repository->getCustomers($page, $pagesize);
+        return $this->repository->getLogins($page, $pagesize);
     }
 
     /**
-     * Count customers.
+     * Count logins.
      *
      * @return nb
      */
-    public function getCustomerCount(): int
+    public function getLoginCount(): int
     {
-        return $this->repository->countCustomers();
+        return $this->repository->countLogins();
     }
 }

@@ -4,7 +4,6 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Repository\UserListerRepository;
 use App\Exception\ValidationException;
-use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -23,7 +22,6 @@ final class UserLister
      * The constructor.
      *
      * @param UserListerRepository $repository The repository
-     * @param ContainerInterface $ci
      */
     public function __construct(UserListerRepository $repository, ContainerInterface $ci)
     {
@@ -33,7 +31,7 @@ final class UserLister
     }
 
     /**
-     * Read user list
+     * Read user list.
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
@@ -45,15 +43,25 @@ final class UserLister
     public function getUserList(int $page, int $pagesize): array
     {
         // Validation
- 
-        if (!is_numeric($page) || $page < $this->defaultPage)
-           $page = $this->defaultPage;
 
-        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
-           $pagesize = $this->defaultPageSize;
-   
-        $users = $this->repository->getUsers($page, $pagesize);
+        if (!is_numeric($page) || $page < $this->defaultPage) {
+            $page = $this->defaultPage;
+        }
 
-        return $users;
+        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize) {
+            $pagesize = $this->defaultPageSize;
+        }
+
+        return $this->repository->getUsers($page, $pagesize);
+    }
+
+    /**
+     * Count users.
+     *
+     * @return nb
+     */
+    public function getUserCount(): int
+    {
+        return $this->repository->countUsers();
     }
 }

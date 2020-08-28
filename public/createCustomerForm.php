@@ -13,7 +13,9 @@
 	<h1>Slim4API - Customer Create</h1>
 
 	<form method="post" class="form" action="/customers" 
-		onsubmit="if(validateEmail(email,'Error : email format invalid!')) return verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!'); return false;">
+		onsubmit="if(verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!'))
+			return validateEmail(email,'Error : email format invalid!');
+			return false;">
 
 		<p>
 			<label for="cusname">* Name:</label><br />

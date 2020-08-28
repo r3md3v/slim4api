@@ -23,7 +23,7 @@ if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
 // Settings
 $settings = [];
 
-// Redirection to another macine/port
+// Redirection to another host/port
 $settings['redirection'] = [
     'port' => 8080,
     'servername' => 'localhost'
@@ -117,7 +117,7 @@ $settings['error'] = [
 
 // Logger settings
 $settings['logger'] = [
-    'display_error_details' => t$display_error_details,
+    'display_error_details' => $display_error_details,
     'log_errors' => true,
     'log_error_details' => true,
     'name' => 'Monologer/logger',

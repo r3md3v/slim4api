@@ -18,8 +18,7 @@
     <h1>Slim4API - PHP/BCRYPT password hash</h1>
     <small>Not advised to run MySQL ENCRYPT() that relies on OS crypt() and could leave info in MySQL logfiles</small><br /><br />
     
-	<form method="post" action="/hashPWDForm.php" 
-		onsubmit="return verifForm([password],'Error : fields marked with an asterisk are mandatory!'); return false;">
+	<form method="post" action="/hashPWDForm.php" onsubmit="return verifForm([password],'Error : fields marked with an asterisk are mandatory!');">
 
 		<p>
 			<label for="password">* Password:</label><br />

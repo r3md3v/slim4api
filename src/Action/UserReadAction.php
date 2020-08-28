@@ -9,15 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
 
 /**
- * Action
+ * Action.
  */
 final class UserReadAction
 {
-
     /**
      * @var Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var UserReader
@@ -27,8 +26,8 @@ final class UserReadAction
     /**
      * The constructor.
      *
-     * @param UserReader $userReader The user reader
-     * @param LoggerFactory $lf The loggerFactory
+     * @param UserReader    $userReader The user reader
+     * @param LoggerFactory $lf         The loggerFactory
      */
     public function __construct(UserReader $userReader, LoggerFactory $lf)
     {
@@ -39,9 +38,9 @@ final class UserReadAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args The route arguments
+     * @param ServerRequestInterface $request  The request
+     * @param ResponseInterface      $response The response
+     * @param array                  $args     The route arguments
      *
      * @return ResponseInterface The response
      */
@@ -50,12 +49,11 @@ final class UserReadAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-
         // Collect input from the HTTP request
-        $userId = (int)$args['id'];
+        $userId = (int) $args['id'];
 
         // Feed the logger
-        $this->logger->debug("UserReadAction: id: $userId");
+        $this->logger->debug("UserReadAction: id: {$userId}");
 
         // Invoke the Domain with inputs and retain the result
         $userData = $this->userReader->getUserDetails($userId);
@@ -67,11 +65,11 @@ final class UserReadAction
             'first_name' => $userData->firstName,
             'last_name' => $userData->lastName,
             'email' => $userData->email,
-			'profile' => $userData->profile,
+            'profile' => $userData->profile,
         ];
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

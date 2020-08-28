@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Domain\User\Repository;
+namespace App\Domain\Login\Repository;
 
-use App\Domain\User\Data\UserData;
+use App\Domain\Login\Data\LoginData;
 use DomainException;
 use PDO;
 
 /**
  * Repository.
  */
-class UserListerRepository
+class LoginListerRepository
 {
     /**
      * @var PDO The database connection
@@ -27,7 +27,7 @@ class UserListerRepository
     }
 
     /**
-     * Get user list.
+     * Get login list.
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
@@ -36,19 +36,19 @@ class UserListerRepository
      *
      * @throws DomainException
      *
-     * @return users List of Users
+     * @return logins List of Logins
      */
-    public function getUsers($page = 1, $pagesize = 50): array
+    public function getLogins($page = 1, $pagesize = 50): array
     {
-        $usernb = $this->countUsers();
+        $loginnb = $this->countLogins();
 
-        if (0 == $usernb) {
-            throw new DomainException(sprintf('No user!'));
+        if (0 == $loginnb) {
+            throw new DomainException(sprintf('No login!'));
         }
-        $pagemax = ceil($usernb / $pagesize);
+        $pagemax = ceil($loginnb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users LIMIT ?, ?;';
+        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWUDESCRIPTION, JWULASTTOKEN, JWUSTATUS FROM usersjwt LIMIT ?, ?;';
         $statement = $this->connection->prepare($sql);
 
         $statement->bindParam(1, $limit, PDO::PARAM_INT);
@@ -56,33 +56,33 @@ class UserListerRepository
 
         $statement->execute();
 
-        $users = [];
+        $logins = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $user = new UserData();
-            $user->id = (int) $row['USRID'];
-            $user->username = (string) $row['USRNAME'];
-            $user->firstName = (string) $row['USRFIRSTNAME'];
-            $user->lastName = (string) $row['USRLASTNAME'];
-            $user->email = (string) $row['USREMAIL'];
-            $user->profile = (string) $row['USRPROFILE'];
-            array_push($users, $user);
+            $login = new LoginData();
+            $login->id = (int) $row['JWUID'];
+            $login->username = (string) $row['JWUUSERNAME'];
+            $login->email = (string) $row['JWUEMAIL'];
+			$login->description = (string) $row['JWUDESCRIPTION'];
+            $login->lasttoken = (string) $row['JWULASTTOKEN'];
+            $login->status = (string) $row['JWUSTATUS'];
+            array_push($logins, $login);
         }
 
-        if (0 == count($users)) {
+        if (0 == count($logins)) {
             throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
         }
 
-        return $users;
+        return $logins;
     }
 
     /**
-     * Get user count.
+     * Get login count.
      *
-     * @return nb Nb of Users
+     * @return nb Nb of logins
      */
-    public function countUsers(): int
+    public function countLogins(): int
     {
-        $sql = 'SELECT COUNT(*) AS nb FROM users;';
+        $sql = 'SELECT COUNT(*) AS nb FROM usersjwt;';
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
