@@ -1,14 +1,18 @@
 function verifForm(arrayFields, msg) {
     // Alert and color if fields marked with asterisk are empty
     var nbVerif = 0;
-    for (var i = 0, len = arrayFields.length; i < len; i++) {
-        if (arrayFields[i].value == '') {
-            arrayFields[i].style.backgroundColor = '#FF5555';
+    var elt;
+    arrayFields.forEach(function (item) {
+        console.log('item: ' + item);
+        elt = document.getElementsByName(item)[0]
+        if (elt.value == '') {
+            elt.style.backgroundColor = '#FF5555';
         } else {
-            arrayFields[i].style.backgroundColor = '';
+            elt.style.backgroundColor = '';
             nbVerif++;
         }
-    }
+    });
+
     if (nbVerif < arrayFields.length) {
         alert(msg);
         return false;
@@ -19,21 +23,25 @@ function verifForm(arrayFields, msg) {
 function verifFormSpace(arrayFields, msg) {
     // Alert and color if fields should not contain space
     var nbVerif = 0;
-    for (var i = 0, len = arrayFields.length; i < len; i++) {
-        if (arrayFields[i].value.indexOf(" ") != -1) {
-            arrayFields[i].style.backgroundColor = '#FFAAAA';
+    var elt;
+    arrayFields.forEach(function (item) {
+        elt = document.getElementsByName(item)[0]
+        if (elt.value.indexOf(" ") != -1) {
+            elt.style.backgroundColor = '#FFAAAA';
         } else {
-            arrayFields[i].style.backgroundColor = '';
+            elt.style.backgroundColor = '';
             nbVerif++;
         }
-    }
+    });
     if (nbVerif < arrayFields.length) {
         alert(msg);
         return false;
     }
 }
 
-function validateEmail(email) {
+function validateEmail(emailField) {
+    var email = document.getElementsByName(emailField)[0].value
+    console.log('email:' + email);
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
