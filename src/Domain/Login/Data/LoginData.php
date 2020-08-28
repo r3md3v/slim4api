@@ -16,7 +16,10 @@ final class LoginData
     public $email;
 	
     /** @var string */
-    public $token;
+    public $description;
+
+    /** @var string */
+    public $lasttoken;
 
     /** @var string */
     public $status;

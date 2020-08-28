@@ -5,26 +5,36 @@ use Monolog\Logger;
 // Error reporting for development
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+$display_error_details = true;
 
 // Error reporting for production
-//error_reporting(0);
-//ini_set('display_errors', '0');
+// error_reporting(0);
+// ini_set('display_errors', '0');
+// $display_error_details = false;
 
 // Set default timezone to Europe/Paris if PHP 5.4 // Keep this a very first data loaded by PHP
-if (@function_exists('date_default_timezone_set') && @function_exists('date_default_timezone_get'))
+if (@function_exists('date_default_timezone_set') && @function_exists('date_default_timezone_get')) {
     @date_default_timezone_set(@date_default_timezone_get());
-if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-	date_default_timezone_set('Europe/Paris');
+}
+if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+    date_default_timezone_set('Europe/Paris');
+}
 
 // Settings
 $settings = [];
 
+// Redirection to another host/port
+$settings['redirection'] = [
+    'port' => 8080,
+    'servername' => 'localhost'
+];
+
 // API Name and version
 $settings['api'] = [
-	'name' => 'slim4api',
-	'version' => '0.5',
-	'url' => "http://localhost:8080",
-	'build' => '2020-08-09'
+    'name' => 'slim4api',
+    'version' => '0.7',
+    'url' => 'http://localhost:8080',
+    'build' => '2020-08-26',
 ];
 
 // Path settings
@@ -64,12 +74,26 @@ $settings['error'] = [
 $settings['db'] = [
     'driver' => 'mysql',
     'host' => 'localhost',
-    'username' => 'root',
     'database' => 'slim4api',
+    'username' => 'userslim',
     'password' => 'Secr3t',
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
-	'limit' => 50,
+    'defaultPage' => '1',
+    'defaultPageSize' => '50',
+    'defaultSearchFieldUser' => [
+        ['User name','USRNAME'], 
+        ['First name', 'USRFIRSTNAME'], 
+        ['Last name', 'USRLASTNAME'], 
+        ['Email', 'USREMAIL'], 
+        ['Profile', 'USRPROFILE']],
+    'defaultSearchFieldCustomer' => [
+        ['Customer name', 'CUSNAME'],
+        ['Address', 'CUSADDRESS'],
+        ['City', 'CUSCITY'],
+        ['Phone', 'CUSPHONE'],
+        ['Email','CUSEMAIL']
+    ],
     'flags' => [
         // Turn off persistent connections
         PDO::ATTR_PERSISTENT => false,
@@ -84,9 +108,23 @@ $settings['db'] = [
     ],
 ];
 
+// Error Handling Middleware settings
+$settings['error'] = [
+    // Should be set to false in production
+    'display_error_details' => $display_error_details,
+
+    // Parameter is passed to the default ErrorHandler
+    // View in rendered output by enabling the "displayErrorDetails" setting.
+    // For the console and unit tests we also disable it
+    'log_errors' => true,
+
+    // Display error details in error log
+    'log_error_details' => true,
+];
+
 // Logger settings
 $settings['logger'] = [
-    'display_error_details' => true,
+    'display_error_details' => $display_error_details,
     'log_errors' => true,
     'log_error_details' => true,
     'name' => 'Monologer/logger',

@@ -2,7 +2,7 @@
 
 namespace App\Action\Auth;
 
-//namespace App\Domain\Login\Service;
+namespace App\Domain\Login\Service;
 
 use App\Domain\Login\Data\LoginData;
 use App\Domain\Login\Repository\LoginReaderRepository;
