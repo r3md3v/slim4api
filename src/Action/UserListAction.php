@@ -53,8 +53,8 @@ final class UserListAction
     {
 
         // Collect input from the HTTP request
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $size = isset($_GET['size']) ? $_GET['size'] : 1;
+        $page = isset($_GET['page']) ? $_GET['page'] : -1;
+        $size = isset($_GET['size']) ? $_GET['size'] : -1;
 
         // Feed the logger
         $this->logger->debug("UserListAction: page: $page, size: $size");

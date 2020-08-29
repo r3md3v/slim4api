@@ -52,8 +52,8 @@ final class CustomerListAction
     {
 
         // Collect input from the HTTP request
-        $page = $_GET['page'];
-        $size = $_GET['size'];
+        $page = isset($_GET['page']) ? $_GET['page'] : -1;
+        $size = isset($_GET['size']) ? $_GET['size'] : -1;
 
         $this->logger->debug("CustomerListAction:page: $page, size: $size");
 
