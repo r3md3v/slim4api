@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Slim4API</title>
     <link href="favicon.ico" rel="icon"/>
@@ -13,7 +13,7 @@
         <h1>Slim4API - Customer Create</h1>
 
         <form method="post" class="form" action="/customers"
-              onsubmit="if(verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!')) {return (validateEmail(email,'Error : email format invalid!')} return false;">
+              onsubmit="return verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!') && validateEmail(email,'Error : email format invalid!');">
 
             <p>
                 <label for="cusname">* Name:</label><br/>
@@ -32,11 +32,6 @@
                 <input type="email" class="form" name="email" placeholder="user1@domain.com"/><br/>
 
                 <br/>
-
-                <input type="button" name="buttonEml" value="check email"
-                       onclick="validateEmail(email,'Error : email format invalid!');">
-                <input type="button" name="buttonFlds" value="check fields"
-                       onclick="verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!');">
 
                 <input name="save" type="submit" value="save">
             </p>
