@@ -9,15 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
 
 /**
- * Action
+ * Action.
  */
 final class UserReadAction
 {
-
     /**
      * @var Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var UserReader
@@ -55,7 +54,7 @@ final class UserReadAction
         $userId = (int)$args['id'];
 
         // Feed the logger
-        $this->logger->debug("UserReadAction: id: $userId");
+        $this->logger->debug("UserReadAction: id: {$userId}");
 
         // Invoke the Domain with inputs and retain the result
         $userData = $this->userReader->getUserDetails($userId);

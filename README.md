@@ -196,4 +196,5 @@ docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_users.php```
 ```
 
 ## THAT'S IT!
+
 Have fun!

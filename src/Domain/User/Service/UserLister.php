@@ -35,7 +35,7 @@ final class UserLister
     }
 
     /**
-     * Read user list
+     * Read user list.
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
@@ -48,15 +48,25 @@ final class UserLister
     {
         // Validation
 
-        if (!is_numeric($page) || $page < $this->defaultPage)
-           $page = $this->defaultPage;
+        if (!is_numeric($page) || $page < $this->defaultPage) {
+            $page = $this->defaultPage;
+        }
 
-        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
-           $pagesize = $this->defaultPageSize;
+        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize) {
+            $pagesize = $this->defaultPageSize;
+        }
 
         $this->logger->debug("UserLister.getUserList: page: $page, size: $pagesize");
         $users = $this->repository->getUsers($page, $pagesize);
+    }
 
-        return $users;
+    /**
+     * Count users.
+     *
+     * @return nb
+     */
+    public function getUserCount(): int
+    {
+        return $this->repository->countUsers();
     }
 }

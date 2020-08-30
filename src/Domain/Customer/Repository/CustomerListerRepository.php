@@ -27,7 +27,7 @@ class CustomerListerRepository
     }
 
     /**
-     * Get customer list
+     * Get customer list.
      *
      * @param int page Page number
      * @param int pagesize Nb of lines
@@ -66,19 +66,25 @@ class CustomerListerRepository
             array_push($customers, $customer);
         }
 
-        if (count($customers) == 0) {
-            throw new DomainException(sprintf('No customer page #%d!', ($page + 1)));
+        if (0 == count($customers)) {
+            throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
         }
 
         return $customers;
     }
 
+    /**
+     * Get customer count.
+     *
+     * @return nb Nb of Customers
+     */
     public function countCustomers(): int
     {
-        $sql = "SELECT COUNT(*) AS nb FROM customers;";
+        $sql = 'SELECT COUNT(*) AS nb FROM customers;';
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
+
         return $row['nb'];
     }
 }
