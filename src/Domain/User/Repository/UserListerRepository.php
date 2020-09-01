@@ -39,7 +39,7 @@ class UserListerRepository
      * @throws DomainException
      *
      */
-    public function getUsers($page = 1, $pagesize = 50): array
+    public function getUsers(int $page = 1, int $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("UserListerRepository.getUsers: page: {$page}, size: {$pagesize}");
