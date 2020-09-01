@@ -22,9 +22,28 @@ final class CustomerData
     /** @var string */
     public $email;
 
+    /**
+     * CustomerData constructor.
+     * @param int $id
+     * @param string $name
+     * @param string $address
+     * @param string $city
+     * @param string $phone
+     * @param string $email
+     */
+    public function __construct(int $id, string $name, string $address, string $city, string $phone, string $email)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->address = $address;
+        $this->city = $city;
+        $this->phone = $phone;
+        $this->email = $email;
+    }
+
     /** @var string */
     // public $updatedby;
-	
+
     /** @var timestamp */
     // public $updatedat;
 
