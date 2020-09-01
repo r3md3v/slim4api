@@ -96,6 +96,7 @@ class UserListerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         // Mock the required repository method
+        $this->mock(UserListerRepository::class)->method('getUsers')->with(1, 5)->willReturn();
         $service = $this->container->get(UserLister::class);
         $actual = $service->getUserList('a', 1);
     }
@@ -107,6 +108,7 @@ class UserListerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         // Mock the required repository method
+        $this->mock(UserListerRepository::class)->method('getUsers')->with(1, 5)->willReturn();
         $service = $this->container->get(UserLister::class);
         $actual = $service->getUserList(1, 'a');
     }
