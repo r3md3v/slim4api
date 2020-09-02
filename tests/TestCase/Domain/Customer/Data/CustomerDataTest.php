@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Domain\Customer\Data;
+namespace Tests\TestCase\Domain\Customer\Data;
 
 use App\Domain\Customer\Data\CustomerData;
 use PHPUnit\Framework\TestCase;
