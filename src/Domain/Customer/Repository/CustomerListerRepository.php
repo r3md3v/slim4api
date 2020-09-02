@@ -41,7 +41,7 @@ class CustomerListerRepository
      * @throws DomainException
      *
      */
-    public function getCustomers($page, $pagesize): array
+    public function getCustomers(int $page = 1, int $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("CustomerListerRepository.getCustomers: page: {$page}, size: {$pagesize}");
