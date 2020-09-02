@@ -70,6 +70,7 @@ final class CustomerLister
             $pagesize = $this->defaultPageSize;
         }
 
+        $this->logger->debug("CustomerList.CustomerList: page: $page, size: $pagesize");
         return $this->repository->getCustomers($page, $pagesize);
     }
         $this->logger->debug("getCustomerList: page: $page, pagesize: $pagesize");
