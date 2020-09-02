@@ -39,6 +39,7 @@ final class CustomerCreator
      * @param array $data The form data
      *
      * @return int The new customer ID
+     * @throws ValidationException
      */
     public function createCustomer(array $data): int
     {
@@ -80,6 +81,7 @@ final class CustomerCreator
         }
 
         if (sizeof($errors) > 0) {
+            $this->logger->debug(sprintf("createCustomer: errors not null: %i,error: %s", sizeof($errors), $errors['mandatory']));
             throw new ValidationException('Please check your input.', $errors);
         }
 
