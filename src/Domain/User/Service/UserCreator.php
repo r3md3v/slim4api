@@ -25,6 +25,7 @@ final class UserCreator
      * The constructor.
      *
      * @param UserCreatorRepository $repository The repository
+     * @param Logger                $loger      The logger
      */
     public function __construct(UserCreatorRepository $repository, Logger $logger)
     {
@@ -74,11 +75,11 @@ final class UserCreator
             $errors['email'] = 'Invalid email address';
         }
 
-        if (sizeof($errors) > 0) {
+        if (!empty($errors)) {
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if (true == $this->repository->userExists($data['username'], $data['email'])) {
+        if ($this->repository->userExists($data['username'], $data['email'])) {
             throw new ValidationException('User name already exists with name '.$data['username'].' or email '.$data['email'].'.', $errors);
         }
     }

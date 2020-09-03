@@ -45,18 +45,17 @@ final class JwtAuth
     /**
      * The constructor.
      *
-     * @param string $issuer The issuer name
-     * @param int $lifetime The max lifetime
+     * @param string $issuer     The issuer name
+     * @param int    $lifetime   The max lifetime
      * @param string $privateKey The private key as string
-     * @param string $publicKey The public key as string
+     * @param string $publicKey  The public key as string
      */
     public function __construct(
         string $issuer,
         int $lifetime,
         string $privateKey,
         string $publicKey
-    )
-    {
+    ) {
         $this->issuer = $issuer;
         $this->lifetime = $lifetime;
         $this->privateKey = $privateKey;
@@ -91,7 +90,8 @@ final class JwtAuth
             ->identifiedBy(uuid_create(), true)
             ->issuedAt($issuedAt)
             ->canOnlyBeUsedAfter($issuedAt)
-            ->expiresAt($issuedAt + $this->lifetime);
+            ->expiresAt($issuedAt + $this->lifetime)
+        ;
 
         foreach ($claims as $name => $value) {
             $builder = $builder->withClaim($name, $value);
@@ -105,10 +105,9 @@ final class JwtAuth
      *
      * @param string $token The JWT
      *
-     * @return Token The parsed token
-     *
      * @throws InvalidArgumentException
      *
+     * @return string Token The parsed token
      */
     public function createParsedToken(string $token): Token
     {
@@ -138,5 +137,23 @@ final class JwtAuth
         $data->setId($token->getClaim('jti'));
 
         return $token->validate($data);
+    }
+
+    /**
+     * Decode token.
+     *
+     * @param string $token The JWT
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return string Token The decoded token
+     */
+    public function decodeToken(string $token): Token
+    {
+        $token = (new Parser())->parse($token);
+        $token->getHeaders(); // Retrieves the token header
+        $token->getClaims(); // Retrieves the token claims
+
+        return $token;
     }
 }

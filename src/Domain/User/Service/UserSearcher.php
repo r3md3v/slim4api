@@ -24,6 +24,8 @@ final class UserSearcher
      * The constructor.
      *
      * @param UserSearcherRepository $repository The repository
+     * @param ContainerInterface     $ci         The container interface
+     * @param LoggerFactory          $lf         The logger Factory
      */
     public function __construct(UserSearcherRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -35,38 +37,42 @@ final class UserSearcher
     }
 
     /**
-     * Search user list
+     * Search user list.
      *
-     * @param string keyword Word to search
-	 * @param int in Field number
- 	 * @param int page Page number
-	 * @param int pagesize Nb of lines
-	 * @param int defaultSearchField Search field
+     * @param string $keyword  Word to search
+     * @param mixed  $in       Field number
+     * @param mixed  $page     Page number
+     * @param mixed  $pagesize Nb of lines
      *
      * @throws ValidationException
      *
      * @return UserSearch
      */
-    public function getUserSearch(string $keyword, int $in, int $page, int $pagesize): array
+    public function getUserSearch(string $keyword, $in, $page, $pagesize): array
     {
-		// Validation
- 
-        if (!is_numeric($page) || $page < $this->defaultPage)
+        // Feed the logger
+        $this->logger->debug("UserSearcher.getUserSearch: input: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
+
+        // Validation
+
+        if (!is_numeric($page) || $page < $this->defaultPage) {
             $page = $this->defaultPage;
+        }
 
-        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
+        if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize) {
             $pagesize = $this->defaultPageSize;
+        }
 
-        if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField))
+        if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
             $in = -1;
-            else $in = $this->defaultSearchField[$in-1];
+        } else {
+            $in = $this->defaultSearchField[$in - 1];
+        }
 
         if (empty($keyword)) {
             throw new ValidationException('Keyword required');
         }
 
-        $users = $this->repository->getUsers($keyword, $in, $page, $pagesize);
-
-        return $users;
+        return $this->repository->getUsers($keyword, $in, $page, $pagesize);
     }
 }

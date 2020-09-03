@@ -4,6 +4,7 @@ namespace App\Action\Auth;
 
 use App\Auth\JwtAuth;
 use App\Domain\Login\Service\LoginReader;
+use App\Domain\Login\Service\TokenManager;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -20,6 +21,11 @@ final class TokenCreateAction
     private $loginReader;
 
     /**
+     * @var TokenManager
+     */
+    private $tokenManager;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -27,14 +33,16 @@ final class TokenCreateAction
     /**
      * Constructor.
      *
-     * @param LoginReader   $loginReader The login Reader
-     * @param JwtAuth       $jwtAuth     The JWT authentifier
-     * @param LoggerFactory $lf          The loggerFactory
+     * @param LoginReader   $loginReader  The login reader
+     * @param TokenManager  $tokenManager The token manager
+     * @param JwtAuth       $jwtAuth      The JWT authentifier
+     * @param LoggerFactory $lf           The loggerFactory
      */
-    public function __construct(LoginReader $loginReader, JwtAuth $jwtAuth, LoggerFactory $lf)
+    public function __construct(LoginReader $loginReader, TokenManager $tokenManager, JwtAuth $jwtAuth, LoggerFactory $lf)
     {
         $this->jwtAuth = $jwtAuth;
         $this->loginReader = $loginReader;
+        $this->tokenManager = $tokenManager;
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -46,6 +54,7 @@ final class TokenCreateAction
 
         $username = (string) ($data['username'] ?? '');
         $password = (string) ($data['password'] ?? '');
+        $sourceip = (string) $this->loginReader->getUserIpAddr();
 
         // Feed the logger
         $this->logger->debug("TokenCreateAction: username: {$username}");
@@ -54,19 +63,31 @@ final class TokenCreateAction
             throw new ValidationException('Username and password required');
         }
 
-        // Validate login (pseudo code)
-        //$isValidLogin = ('user' === $username && 'secret' === $password);
+        // Build the HTTP response
+        $response = $response
+            ->withHeader('Content-Type', 'application/json')
+        ;
 
-        // $userAuthData = $this->userAuth->authenticate($username, $password);
-        $login = $this->loginReader->getLoginDetails($username, $password);
+        // Validate login (pseudo code) $isValidLogin = ('user' === $username && 'secret' === $password)
 
-        /*if (!$isValidLogin) {
+        //$login = $this->loginReader->getLoginDetails($username, $password, $sourceip)->status
+
+        // Check for valid authentication credentials
+        if ('ok' != $this->loginReader->getLoginDetails($username, $password, $sourceip)->status) {
             $this->logger->debug('TokenCreateAction: invalid login/password');
-            // Invalid authentication credentials
             $response->getBody()->write(json_encode('Unauthorized access'));
 
             return $response
-                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(401, 'Unauthorized')
+            ;
+        }
+
+        /* Check for valid existing token for user
+        if (-1 == $this->loginReader->getTokenForUser($username)) {
+            $this->logger->debug('TokenCreateAction: token locked');
+            $response->getBody()->write(json_encode('Token locked'));
+
+            return $response
                 ->withStatus(401, 'Unauthorized')
             ;
         }*/
@@ -78,6 +99,17 @@ final class TokenCreateAction
 
         $lifetime = $this->jwtAuth->getLifetime();
 
+        //$tokenv = $this->jwtAuth->validateToken($token); // of course
+        //$tokend = $this->jwtAuth->decodeToken($token);
+        //get existingtoken ?
+        //echo "jwt={$jwt} tokenv={$tokenv} tokend=".$tokend->getHeader('jti').'<br />';
+
+        // Save token into db if not exist
+        $this->tokenManager->logTokenDetails($username, $token, $lifetime);
+
+        // Cleanup token log
+        // $this->loginReader->logTokenCleanup();
+
         // Transform the result into a OAuh 2.0 Access Token Response
         // https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
         $result = [
@@ -88,7 +120,6 @@ final class TokenCreateAction
 
         // Build the HTTP response
         $response = $response
-            ->withHeader('Content-Type', 'application/json')
             ->withHeader('Authorization', $result['access_token'])
             // add cookie
             ->withHeader(

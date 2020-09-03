@@ -37,15 +37,14 @@ use Slim\Logger;
 final class CustomerCreateAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-
-    /**
      * @var CustomerCreator
      */
     private $customerCreator;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.

@@ -1,6 +1,6 @@
-# SLIM4API - USER CUSTOMER API - POC
+# SlimM4API - API POC
 
-RESTful API POC with JWT to manage users and customers.
+RESTful API proof of concept manage customers and users with JWT.
 
 Based on: `PHP 7, Slim 4, MySQL, PHPUnit, OpenSSL`.
 
@@ -19,7 +19,7 @@ Made with [slim4](https://github.com/slimphp/Slim).
 - OpenSSL
 
 
-### With Composer:
+### Composer:
 
 Create a new project:
 ```bash
@@ -30,9 +30,14 @@ $ composer start
 ```
 
 
-### JWT/JSON Web Token keys
+### JWT/JSON Web Token keys:
 
 Generate private key and public keys with these commands:
+```bash
+$gen_cert.sh
+$gen_jwt_key.sh
+```
+or
 ```
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
@@ -41,7 +46,7 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
 ### Create database:
 
-Create a new DB and execute `db.sql` to create tables (users and customers) and feed 5 lines, and execute `dbjwt.sql` to create specific tables for JWT with 3 lines
+Create a new DB and execute `db.sql` to create tables users customers logins loginlog (automatic for docker)
 
 
 #### Configure app (settings.php):
@@ -79,7 +84,7 @@ $settings['jwt'] = [
 ];
 
 ```
-Specify if redirection is other than 8080:
+Specify redirection if other than 8080:
 ```
 $settings['redirection'] = [
     'port' => 8080,
@@ -111,9 +116,9 @@ $ composer faker
 - phpunit/phpunit fzaninotto/faker
 
 
-## ENDPOINTS:
+## ENDPOINTS AND VERBS:
 
-### BY DEFAULT:
+### Default:
 
 - Status: `GET /`
 - Status: `GET /status`
@@ -144,7 +149,8 @@ $ composer faker
 	option page+size
 	option in = search keyword in field number (default 1 / search in all fields if not set
 
-### UsersJWT:
+### Logins:
+- Create token: `POST /tokens` username or email/password
 - Delete token: `GET /logout`
 
 
@@ -156,6 +162,45 @@ $ composer faker
 - checkJWTForm.php = gives detail about a JSON Web Token
 - hashPWDForm.php = returns a BCRYPT hashed version of a string
 
+
+## JWT IN ACTION:
+
+- Access to endpoint /users is protected by JWT a require issuance of a JWT via endpoint /tokens or login.php.
+- Each login attempt is recorded in table loginlog
+
+
+## Docker
+
+#info create containers
+https://vonkrafft.fr/console/simple-site-php-avec-docker-nginx/
+https://dev.to/martinpham/symfony-5-development-with-docker-4hj8
+
+## start
+```
+docker-compose up -d 
+```
+##start db + php + app
+```
+docker-compose -f docker-compose-nginx.yml up -d mysql php-fpm
+docker-compose -f docker-compose-nginx.yml up -d my_app
+docker-compose -f docker-compose-nginx.yml logs -f
+```
+## reload conf
+
+### docker
+* dkr_reload_nginx.sh:
+```
+docker-compose -f docker-compose-nginx.yml exec my_app nginx -s reload
+```
+
+## faker - populate database
+### docker
+* dkr_faker.sh:
+
+```
+docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_customers.php
+docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_users.php
+```
 
 ## THAT'S IT!
 

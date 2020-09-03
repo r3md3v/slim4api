@@ -26,7 +26,7 @@ $settings = [];
 // Redirection to another host/port
 $settings['redirection'] = [
     'port' => 8080,
-    'servername' => 'localhost'
+    'servername' => 'localhost',
 ];
 
 // API Name and version
@@ -35,6 +35,15 @@ $settings['api'] = [
     'version' => '0.7',
     'url' => 'http://localhost:8080',
     'build' => '2020-08-26',
+    'endpoints' => [
+        '/' => 'Get, Get /status',
+        '/hello' => 'Get, Get /{name}',
+        '/users' => 'Get, Get /id/{id], Get /search/{keyword}, Post',
+        '/customers' => 'Get, Get /id/{id], Get /search/{keyword}, Post',
+        '/doc/v1' => 'Get (Swager)',
+        '/tokens' => 'Post',
+        '/logout' => 'Get',
+    ],
 ];
 
 // Path settings
@@ -50,16 +59,18 @@ $settings['cors'] = '*';
 // https://odan.github.io/2019/12/02/slim4-oauth2-jwt.html
 $settings['jwt'] = [
     // The issuer name
-    'issuer' => 'www.example.com',
+    'issuer' => 'www.slim4api.com',
     // Max lifetime in seconds
-    'lifetime' => 14400,
+    'lifetime' => 14400, // 14400 seconds = 4 hours (86400 = 24 hours)
+    // Token log cleanup
+    'cleanup' => 60 * 60 * 24 * 30, // 30 days
     // The private key
     'private_key' => '-----BEGIN RSA PRIVATE KEY-----
-...copy paste you key here...
+...paste you key here...
 -----END RSA PRIVATE KEY-----',
     // The public key
     'public_key' => '-----BEGIN PUBLIC KEY-----
-...copy paste you key here...
+...paste you key here...
 -----END PUBLIC KEY-----',
 ];
 
@@ -75,17 +86,17 @@ $settings['db'] = [
     'defaultPage' => '1',
     'defaultPageSize' => '50',
     'defaultSearchFieldUser' => [
-        ['User name','USRNAME'], 
-        ['First name', 'USRFIRSTNAME'], 
-        ['Last name', 'USRLASTNAME'], 
-        ['Email', 'USREMAIL'], 
-        ['Profile', 'USRPROFILE']],
+        ['User name', 'USRNAME'],
+        ['First name', 'USRFIRSTNAME'],
+        ['Last name', 'USRLASTNAME'],
+        ['Email', 'USREMAIL'],
+        ['Profile', 'USRPROFILE'], ],
     'defaultSearchFieldCustomer' => [
         ['Customer name', 'CUSNAME'],
         ['Address', 'CUSADDRESS'],
         ['City', 'CUSCITY'],
         ['Phone', 'CUSPHONE'],
-        ['Email','CUSEMAIL']
+        ['Email', 'CUSEMAIL'],
     ],
     'flags' => [
         // Turn off persistent connections
@@ -97,7 +108,7 @@ $settings['db'] = [
         // Set default fetch mode to array
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         // Set character set
-        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci',
     ],
 ];
 
@@ -123,13 +134,16 @@ $settings['logger'] = [
     'name' => 'Monologer/logger',
     'path' => __DIR__ . '/../logs/',
     'file_permission' => 0775,
-    'level' => Logger::DEBUG
+    'level' => Logger::DEBUG,
 ];
 
 // Twig
 $settings['twig'] = [
     'path_templates' => __DIR__ . '/../templates/',
-    'path_cache' => __DIR__ . '/../tmp/views/'
+    'path_cache' => __DIR__ . '/../tmp/views/',
 ];
+
+// Trailing slash
+$settings['trail'] = false;
 
 return $settings;

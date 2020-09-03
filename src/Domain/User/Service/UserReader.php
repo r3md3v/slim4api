@@ -42,8 +42,6 @@ final class UserReader
             throw new ValidationException('User ID required');
         }
 
-        $user = $this->repository->getUserById($userId);
-
-        return $user;
+        return $this->repository->getUserById($userId);
     }
 }

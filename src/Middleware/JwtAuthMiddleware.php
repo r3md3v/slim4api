@@ -35,6 +35,7 @@ final class JwtAuthMiddleware implements MiddlewareInterface
      * The constructor.
      *
      * @param JwtAuth                  $jwtAuth         The JWT auth
+     * @param LoggerFactory            $lf              The logger factory
      * @param ResponseFactoryInterface $responseFactory The response factory
      */
     public function __construct(

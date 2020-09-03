@@ -37,14 +37,14 @@ use Slim\Logger;
 final class UserCreateAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var UserCreator
      */
     private $userCreator;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.

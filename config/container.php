@@ -2,6 +2,7 @@
 
 use App\Auth\JwtAuth;
 use App\Factory\LoggerFactory;
+use App\Middleware\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Selective\BasePath\BasePathMiddleware;
@@ -15,7 +16,7 @@ use Twig\Loader\FilesystemLoader;
 
 return [
     'settings' => function () {
-        return require __DIR__ . '/settings.php';
+        return require __DIR__.'/settings.php';
     },
 
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
@@ -34,10 +35,10 @@ return [
     JwtAuth::class => function (ContainerInterface $container) {
         $config = $container->get('settings')['jwt'];
 
-        $issuer = (string)$config['issuer'];
-        $lifetime = (int)$config['lifetime'];
-        $privateKey = (string)$config['private_key'];
-        $publicKey = (string)$config['public_key'];
+        $issuer = (string) $config['issuer'];
+        $lifetime = (int) $config['lifetime'];
+        $privateKey = (string) $config['private_key'];
+        $publicKey = (string) $config['public_key'];
 
         return new JwtAuth($issuer, $lifetime, $privateKey, $publicKey);
     },
@@ -47,7 +48,6 @@ return [
     },
 
     ErrorMiddleware::class => function (ContainerInterface $container) {
-        // $logger = $container->get(Logger::class);
         $app = $container->get(App::class);
         $settings = $container->get('settings')['logger'];
         $loggerFactory = $container->get(LoggerFactory::class);
@@ -56,9 +56,9 @@ return [
         return new ErrorMiddleware(
             $app->getCallableResolver(),
             $app->getResponseFactory(),
-            (bool)$settings['display_error_details'],
-            (bool)$settings['log_errors'],
-            (bool)$settings['log_error_details'],
+            (bool) $settings['display_error_details'],
+            (bool) $settings['log_errors'],
+            (bool) $settings['log_error_details'],
             $logger
         );
     },
@@ -73,7 +73,7 @@ return [
         $password = $settings['password'];
         $charset = $settings['charset'];
         $flags = $settings['flags'];
-        $dsn = "$driver:host=$host;dbname=$dbname;charset=$charset";
+        $dsn = "{$driver}:host={$host};dbname={$dbname};charset={$charset}";
 
         return new PDO($dsn, $username, $password, $flags);
     },
@@ -82,15 +82,18 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
 
-    Twig::class => function (ContainerInterface $c) {
-        $twigSettings = $c->get('settings')['twig'];
+    Twig::class => function (ContainerInterface $container) {
+        $twigSettings = $container->get('settings')['twig'];
 
         $loader = new FilesystemLoader($twigSettings['path_templates']);
         $options = ['cache' => $twigSettings['path_cache']];
 
-        $view = new Twig($loader, $options);
-
-        return $view;
+        return  new Twig($loader, $options);
     },
 
+    TrailingSlashMiddleware::class => function (ContainerInterface $container) {
+        $trailingSetting = $container->get('settings')['trail'];
+
+        return new TrailingSlashMiddleware((bool) $trailingSetting);
+    },
 ];

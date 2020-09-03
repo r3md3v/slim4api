@@ -18,8 +18,8 @@
 		
 			<!-- forced login user/secret to be replaced with actual credentials cehck from database -->
 			
-			<label for="username">* Username:</label><br>
-			<input type="text" class="form" name="username" placeholder="userid" /><br/>
+			<label for="username">* Username or Email:</label><br>
+			<input type="text" class="form" name="username" placeholder="userid or email" /><br/>
 
 			<label for="password">* Password:</label><br>
 			<input type="password" class="form" name="password" placeholder="password" /><br />
@@ -27,10 +27,11 @@
 			<br />
 
 			<button>Login</button>
-			<button onclick="javascript:username.value='user';password.value='secret';">Autologin</button>
-			<button><a href="/logout">Logout</button>
-			<button><a href="/checkJWTForm.php">Check JWT</button>
-			<button><a href="/hashPWDForm.php">Hash PWD</button>
+            <button onclick="username.value='user';password.value='secret';">Autologin User</button>
+            <button onclick="username.value='miked';password.value='password';">Autologin MikeD</button>
+			<button><a href="/logout">Logout</a></button>
+			<button><a href="/checkJWTForm.php">Check JWT</a></button>
+			<button><a href="/hashPWDForm.php">Hash PWD</a></button>
 			
 			<br />
 			

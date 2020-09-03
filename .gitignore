@@ -3,7 +3,9 @@ vendor/
 logs/
 tmp/
 /config/settings.php
-/config/settings.php.remi
-/config/settings.php.fran
-/private.pem
-/public.pem
+/config/settings.php.*
+/*.pem
+*.pem
+*.phar
+*/php.php
+*.iml

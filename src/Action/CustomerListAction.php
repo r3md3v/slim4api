@@ -50,8 +50,8 @@ final class CustomerListAction
         array $args = []
     ): ResponseInterface {
         // Collect input from the HTTP request
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $size = isset($_GET['size']) ? $_GET['size'] : 0;
+        $page = isset($_GET['page']) ? $_GET['page'] : -1;
+        $size = isset($_GET['size']) ? $_GET['size'] : -1;
 
         // Feed the logger
         $this->logger->debug("CustomerListAction: page: {$page}, size: {$size}");

@@ -3,6 +3,7 @@
 namespace App\Domain\Customer\Repository;
 
 use App\Domain\Customer\Data\CustomerData;
+use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
 
@@ -19,11 +20,13 @@ class CustomerListerRepository
     /**
      * The constructor.
      *
-     * @param PDO $connection The database connection
+     * @param PDO           $connection The database connection
+     * @param LoggerFactory $lf         The logger Factory
      */
-    public function __construct(PDO $connection)
+    public function __construct(PDO $connection, LoggerFactory $lf)
     {
         $this->connection = $connection;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -38,8 +41,11 @@ class CustomerListerRepository
      *
      * @return customers List of Customers
      */
-    public function getCustomers($page = 1, $pagesize = 50): array
+    public function getCustomers($page, $pagesize): array
     {
+        // Feed the logger
+        $this->logger->debug("CustomerListerRepository.getCustomers: page: {$page}, size: {$pagesize}");
+
         $customernb = $this->countCustomers();
 
         if (0 == $customernb) {
@@ -69,7 +75,7 @@ class CustomerListerRepository
         }
 
         if (0 == count($customers)) {
-            throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
+            throw new DomainException(sprintf('No item page %d / %d', $page + 1, $pagemax));
         }
 
         return $customers;

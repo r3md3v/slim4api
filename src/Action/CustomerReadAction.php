@@ -14,11 +14,6 @@ use Slim\Logger;
 final class CustomerReadAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var CustomerReader
      */
     private $CustomerReader;

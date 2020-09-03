@@ -51,6 +51,11 @@ final class HomeAction
     private $datetime;
 
     /**
+     * @var array
+     */
+    private $endpoints;
+
+    /**
      * @var UserLister
      */
     private $userLister;
@@ -103,6 +108,7 @@ final class HomeAction
         $this->build = $apiSettings['build'];
         $this->datetime = date('Y-m-d H:i:s').' '.date_default_timezone_get();
         $this->timestamp = time();
+        $this->endpoints = $apiSettings['endpoints'];
     }
 
     /**
@@ -124,11 +130,11 @@ final class HomeAction
 
         $message = [
             'name' => $this->name,
-            'version' => $this->version,
+            'version' => $this->version.' '.$this->build,
             'url' => $this->url,
-            'build' => $this->build,
             'datetime' => $this->datetime,
             'timestamp' => $this->timestamp,
+            'endpoints' => $this->endpoints,
             'tables' => $tables,
         ];
 

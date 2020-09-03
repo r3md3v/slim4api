@@ -13,7 +13,6 @@ use Slim\Logger;
  */
 final class UserListAction
 {
-
     /**
      * @var UserLister
      */
@@ -22,13 +21,13 @@ final class UserListAction
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * The constructor.
      *
-     * @param UserLister $userLister The user lister
-     * @param LoggerFactory $lf The loggerFactory
+     * @param UserLister    $userLister The user lister
+     * @param LoggerFactory $lf         The loggerFactory
      */
     public function __construct(UserLister $userLister, LoggerFactory $lf)
     {
@@ -39,9 +38,9 @@ final class UserListAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args The route arguments // unused for List
+     * @param ServerRequestInterface $request  The request
+     * @param ResponseInterface      $response The response
+     * @param array                  $args     The route arguments // unused for List
      *
      * @return ResponseInterface The response
      */
@@ -50,13 +49,12 @@ final class UserListAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-
         // Collect input from the HTTP request
-		$page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $size = isset($_GET['size']) ? $_GET['size'] : 0;
 
         // Feed the logger
-        $this->logger->debug("UserListAction: page: $page, size: $size");
+        $this->logger->debug("UserListAction: page: {$page}, size: {$size}");
 
         // Invoke the Domain with inputs and retain the result
         $userList = $this->userLister->getUserList($page, $size);
@@ -70,12 +68,12 @@ final class UserListAction
                 'first_name' => $userData->firstName,
                 'last_name' => $userData->lastName,
                 'email' => $userData->email,
-				'profile' => $userData->profile,
+                'profile' => $userData->profile,
             ]);
         }
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

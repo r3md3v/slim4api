@@ -4,6 +4,7 @@ namespace App\Domain\Customer\Service;
 
 use App\Domain\Customer\Repository\CustomerListerRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -22,26 +23,32 @@ final class CustomerLister
      * The constructor.
      *
      * @param CustomerListerRepository $repository The repository
+     * @param ContainerInterface       $ci         The container interface
+     * @param LoggerFactory            $lf         The logger Factory
      */
-    public function __construct(CustomerListerRepository $repository, ContainerInterface $ci)
+    public function __construct(CustomerListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->repository = $repository;
         $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
         $this->defaultPageSize = $ci->get('settings')['db']['defaultPageSize'];
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
      * Read Customer list.
      *
-     * @param int page Page number
-     * @param int pagesize Nb of lines
+     * @param mixed $page     Page number
+     * @param mixed $pagesize Nb of lines
      *
      * @throws ValidationException
      *
      * @return CustomerList
      */
-    public function getCustomerList(int $page, int $pagesize): array
+    public function getCustomerList($page, $pagesize): array
     {
+        // Feed the logger
+        $this->logger->debug("CustomerLister.getCustomerList: input: page: {$page}, size: {$pagesize}");
+
         // Validation
 
         if (!is_numeric($page) || $page < $this->defaultPage) {

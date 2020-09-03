@@ -3,6 +3,7 @@
 namespace App\Domain\User\Repository;
 
 use App\Domain\User\Data\UserData;
+use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
 
@@ -19,11 +20,13 @@ class UserListerRepository
     /**
      * The constructor.
      *
-     * @param PDO $connection The database connection
+     * @param PDO           $connection The database connection
+     * @param LoggerFactory $lf         The logger Factory
      */
-    public function __construct(PDO $connection)
+    public function __construct(PDO $connection, LoggerFactory $lf)
     {
         $this->connection = $connection;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -38,8 +41,11 @@ class UserListerRepository
      *
      * @return users List of Users
      */
-    public function getUsers($page = 1, $pagesize = 50): array
+    public function getUsers($page, $pagesize): array
     {
+        // Feed the logger
+        $this->logger->debug("UserListerRepository.getUsers: page: {$page}, size: {$pagesize}");
+
         $usernb = $this->countUsers();
 
         if (0 == $usernb) {
@@ -69,7 +75,7 @@ class UserListerRepository
         }
 
         if (0 == count($users)) {
-            throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
+            throw new DomainException(sprintf('No item page %d / %d', $page + 1, $pagemax));
         }
 
         return $users;

@@ -9,15 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
 
 /**
- * Action
+ * Action.
  */
 final class UserSearchAction
 {
-
     /**
      * @var Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var UserSearcher
@@ -28,7 +27,6 @@ final class UserSearchAction
      * The constructor.
      *
      * @param UserSearcher $userSearcher The user searcher
-     * @param Logger $logger the logger
      */
     public function __construct(UserSearcher $userSearcher, LoggerFactory $lf)
     {
@@ -39,9 +37,9 @@ final class UserSearchAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
-     * @param array $args The route arguments
+     * @param ServerRequestInterface $request  The request
+     * @param ResponseInterface      $response The response
+     * @param array                  $args     The route arguments
      *
      * @return ResponseInterface The response
      */
@@ -50,15 +48,14 @@ final class UserSearchAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-
         // Collect input from the HTTP request
-        $keyword = (string)$args['keyword'];
-        $in = isset($_GET['in'])  ? $_GET['in'] : -1;
-		$page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $keyword = (string) $args['keyword'];
+        $in = isset($_GET['in']) ? $_GET['in'] : -1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $size = isset($_GET['size']) ? $_GET['size'] : 0;
 
         // Feed the logger
-        $this->logger->debug("UserSearchAction:page: $page, size: $size, in: $in, keyword: $keyword");
+        $this->logger->debug("UserSearchAction:page: {$page}, size: {$size}, in: {$in}, keyword: {$keyword}");
 
         // Invoke the Domain with inputs and retain the result
         $userSearch = $this->userSearcher->getUserSearch($keyword, $in, $page, $size);
@@ -72,12 +69,12 @@ final class UserSearchAction
                 'first_name' => $userData->firstName,
                 'last_name' => $userData->lastName,
                 'email' => $userData->email,
-				'profile' => $userData->profile,
+                'profile' => $userData->profile,
             ]);
         }
 
         // Build the HTTP response
-		$response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

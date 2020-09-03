@@ -33,19 +33,18 @@
                 if ('' != $jwt) {
                     $splitJwt = explode('.', $jwt);
                     if (3 != count($splitJwt)) {
-                        echo "Error : The JWT string must have two dots'";
-                    } else {
-                        foreach ($splitJwt as $key => $chunk) {
-                            if ($remainder = strlen($chunk) % 4) {
-                                $chunk .= str_repeat('=', 4 - $remainder);
-                            }
-                            $decoded = base64_decode(strtr($chunk, '-_', '+/'));
-                            $data = json_decode($decoded);
-                            if (JSON_ERROR_NONE != json_last_error()) {
-                                echo "\nError in json part {$key}";
-                            } else {
-                                echo print_r($data);
-                            }
+                        echo '** Alert : The JWT string must have two dots **'."\n";
+                    }
+                    foreach ($splitJwt as $key => $chunk) {
+                        if ($remainder = strlen($chunk) % 4) {
+                            $chunk .= str_repeat('=', 4 - $remainder);
+                        }
+                        $decoded = base64_decode(strtr($chunk, '-_', '+/'));
+                        $data = json_decode($decoded);
+                        if (JSON_ERROR_NONE != json_last_error()) {
+                            echo "\nError in json part {$key}";
+                        } else {
+                            echo print_r($data);
                         }
                     }
                 }
@@ -55,9 +54,10 @@
 			<br />
             
             <br />
-            <button>Check Here</button>
-
-			<button><a target="jwtio" href="https://jwt.io/?value=<?php echo $jwt; ?>">Check from jwt.io</a></button>
+            <button>Check</button>
+            <button><a target="jwtio" href="https://jwt.io/?value=<?php echo $jwt; ?>">Check from jwt.io</a></button>
+            <button onclick="javascript:var d = new Date(); var l = 4; d.setTime(d.getTime() + (l * 60 * 60 *  60)); var expires = 'expires='+d.toUTCString();document.cookie = 'Authorization=<?php echo $jwt; ?>; Max-Age='+expires+'; HttpOnly; Secure; SameSite=Strict; path=/;'; alert('Cookie created for '+l+' hours');">Forge Cookie</button>
+            <button onclick="javascript:document.cookie = 'Authorization=;expires=Thu, 01 Jan 1970 00:00:00 UTC; HttpOnly; Secure; SameSite=Strict; path=/;'">Delete Cookie</button>
 		
 		</p>
 	</form>

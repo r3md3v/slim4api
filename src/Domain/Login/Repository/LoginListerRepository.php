@@ -38,7 +38,7 @@ class LoginListerRepository
      *
      * @return logins List of Logins
      */
-    public function getLogins($page = 1, $pagesize = 50): array
+    public function getLogins($page, $pagesize): array
     {
         $loginnb = $this->countLogins();
 
@@ -48,7 +48,7 @@ class LoginListerRepository
         $pagemax = ceil($loginnb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWUDESCRIPTION, JWULASTTOKEN, JWUSTATUS FROM usersjwt LIMIT ?, ?;';
+        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWUDESCRIPTION, JWULASTTOKEN, JWUSTATUS FROM logins LIMIT ?, ?;';
         $statement = $this->connection->prepare($sql);
 
         $statement->bindParam(1, $limit, PDO::PARAM_INT);
@@ -62,14 +62,14 @@ class LoginListerRepository
             $login->id = (int) $row['JWUID'];
             $login->username = (string) $row['JWUUSERNAME'];
             $login->email = (string) $row['JWUEMAIL'];
-			$login->description = (string) $row['JWUDESCRIPTION'];
+            $login->description = (string) $row['JWUDESCRIPTION'];
             $login->lasttoken = (string) $row['JWULASTTOKEN'];
             $login->status = (string) $row['JWUSTATUS'];
             array_push($logins, $login);
         }
 
         if (0 == count($logins)) {
-            throw new DomainException(sprintf('No item page #%d!', ($page + 1)));
+            throw new DomainException(sprintf('No item page %d / %d!', $page + 1, $pagemax));
         }
 
         return $logins;
@@ -82,7 +82,7 @@ class LoginListerRepository
      */
     public function countLogins(): int
     {
-        $sql = 'SELECT COUNT(*) AS nb FROM usersjwt;';
+        $sql = 'SELECT COUNT(*) AS nb FROM logins;';
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);

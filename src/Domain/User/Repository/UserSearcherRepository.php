@@ -3,6 +3,7 @@
 namespace App\Domain\User\Repository;
 
 use App\Domain\User\Data\UserData;
+use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
 
@@ -19,11 +20,13 @@ class UserSearcherRepository
     /**
      * The constructor.
      *
-     * @param PDO $connection The database connection
+     * @param PDO           $connection The database connection
+     * @param LoggerFactory $lf         The logger Factory
      */
-    public function __construct(PDO $connection)
+    public function __construct(PDO $connection, LoggerFactory $lf)
     {
         $this->connection = $connection;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -44,6 +47,9 @@ class UserSearcherRepository
      */
     public function getUsers($keyword, $in, $page, $pagesize): array
     {
+        // Feed the logger
+        $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
+
         $usernb = $this->countUsers();
 
         if (0 == $usernb) {
@@ -83,10 +89,10 @@ class UserSearcherRepository
 
         if (0 == count($users)) {
             if (-1 != $in) {
-                throw new DomainException(sprintf('No user with keyword [%s] in field [%s] page #%d!', str_replace('%', '', $keyword), $in[0], ($page + 1)));
+                throw new DomainException(sprintf('No user with keyword [%s] in field [%s] page %d / %d', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax));
             }
 
-            throw new DomainException(sprintf('No user with keyword [%s] in any field page #%d!', str_replace('%', '', $keyword), ($page + 1)));
+            throw new DomainException(sprintf('No user with keyword [%s] in any field page %d / %d', str_replace('%', '', $keyword), $page + 1, $pagemax));
         }
 
         return $users;

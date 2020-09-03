@@ -4,6 +4,7 @@ namespace App\Domain\Login\Service;
 
 use App\Domain\Login\Repository\LoginListerRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -22,12 +23,15 @@ final class LoginLister
      * The constructor.
      *
      * @param LoginListerRepository $repository The repository
+     * @param ContainerInterface    $ci         The container interface
+     * @param LoggerFactory         $lf         The logger Factory
      */
-    public function __construct(LoginListerRepository $repository, ContainerInterface $ci)
+    public function __construct(LoginListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->repository = $repository;
         $this->defaultPage = $ci->get('settings')['db']['defaultPage'];
         $this->defaultPageSize = $ci->get('settings')['db']['defaultPageSize'];
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -42,6 +46,9 @@ final class LoginLister
      */
     public function getLoginList(int $page, int $pagesize): array
     {
+        // Feed the logger
+        $this->logger->debug("LoginLister.getLoginList: input: page: {$page}, size: {$pagesize}");
+
         // Validation
 
         if (!is_numeric($page) || $page < $this->defaultPage) {
