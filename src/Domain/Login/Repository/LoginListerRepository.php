@@ -38,7 +38,7 @@ class LoginListerRepository
      *
      * @return logins List of Logins
      */
-    public function getLogins($page = 1, $pagesize = 50): array
+    public function getLogins($page, $pagesize): array
     {
         $loginnb = $this->countLogins();
 
@@ -48,7 +48,7 @@ class LoginListerRepository
         $pagemax = ceil($loginnb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWUDESCRIPTION, JWULASTTOKEN, JWUSTATUS FROM usersjwt LIMIT ?, ?;';
+        $sql = 'SELECT JWUID, JWUUSERNAME, JWUEMAIL, JWUDESCRIPTION, JWULASTTOKEN, JWUSTATUS FROM logins LIMIT ?, ?;';
         $statement = $this->connection->prepare($sql);
 
         $statement->bindParam(1, $limit, PDO::PARAM_INT);
