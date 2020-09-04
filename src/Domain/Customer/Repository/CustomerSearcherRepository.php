@@ -43,7 +43,7 @@ class CustomerSearcherRepository
      * @throws DomainException
      *
      */
-    public function getCustomers($keyword, $in, $page, $pagesize): array
+    public function getCustomers(string $keyword, string $in, int $page, int $pagesize): array
     {
         // Feed the logger
         $this->logger->debug("CustomerSearcherRepository.getCustomers: page: {$page}, size: {$pagesize}");
