@@ -20,7 +20,7 @@ final class UserListAction
     private $userLister;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
