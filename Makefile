@@ -1,4 +1,4 @@
-.PHONY: vendor coverage genrsa faker up down reload php phplog test sonarstart sonarlog sonarrun
+.PHONY: vendor coverage genrsa genjwt faker up down reload php phplog test sonarstart sonarlog sonarrun
 
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(dir $(MAKEPATH))
@@ -14,6 +14,10 @@ coverage:
 
 genrsa:
 		openssl req -x509 -nodes -newkey rsa:4096 -keyout Docker/key.pem -out Docker/cert.pem -days 3650 -subj '/CN=phoebe'
+
+genjwt:
+		openssl genrsa -out jwtkey.pem 2048
+		openssl rsa -in jwtkey.pem -outform PEM -pubout -out jwtpublic.pem
 
 faker:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_customers.php
