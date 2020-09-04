@@ -31,9 +31,9 @@ class CustomerReaderRepository
      *
      * @param int $CustomerId The Customer id
      *
+     * @return CustomerData The Customer data
      * @throws DomainException
      *
-     * @return CustomerData The Customer data
      */
     public function getCustomerById(int $CustomerId): CustomerData
     {
@@ -48,13 +48,13 @@ class CustomerReaderRepository
         }
 
         // Map array to data object
-		$customer = new CustomerData();
-		$customer->id = (int)$row['CUSID'];
-		$customer->name = (string)$row['CUSNAME'];
-		$customer->address = (string)$row['CUSADDRESS'];
-		$customer->city = (string)$row['CUSCITY'];
-		$customer->phone = (string)$row['CUSPHONE'];
-		$customer->email = (string)$row['CUSEMAIL'];
+        $customer = new CustomerData();
+        $customer->id = (int)$row['CUSID'];
+        $customer->name = (string)$row['CUSNAME'];
+        $customer->address = (string)$row['CUSADDRESS'];
+        $customer->city = (string)$row['CUSCITY'];
+        $customer->phone = (string)$row['CUSPHONE'];
+        $customer->email = (string)$row['CUSEMAIL'];
 
         return $customer;
     }
