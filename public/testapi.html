@@ -26,13 +26,14 @@
 	<tr><td><a target="new" href="/customers?page=1&size=2">GET /customers?page=1&size=2</a></td><td>List of 2 customers page 1</td></tr>
 	<tr><td><a target="new" href="/customers/search/place?in=2&size=5">GET /customers/search/place?in=2&size=5</a></td><td>Search 5 customers with address=place</td></tr>
 	<tr><td>&nbsp;</td></tr>
-	<tr><td><a target="new" href="/users/id/2">GET /users/id/2</a></td><td>Get user 2 by id</td></tr>
-	<tr><td><a target="new" href="/createUserForm.php">POST /users</a></td><td>Create user with data from form</td></tr>
-	<tr><td><a target="new" href="/users?page=1&size=2">GET /users?page=1&size=2</a></td><td>List of 2 users page 1</td></tr>
-	<tr><td><a target="new" href="/users/search/com?in=5">GET /users/search/com?in=5</a></td><td>Search user with email=com</td></tr>
+	<tr><td><a target="new" href="/users/id/2">GET /users/id/2</a></td><td>Get user 2 by id (JWT required)</td></tr>
+	<tr><td><a target="new" href="/createUserForm.php">POST /users</a></td><td>Create user with data from form (JWT required)</td></tr>
+	<tr><td><a target="new" href="/users?page=1&size=2">GET /users?page=1&size=2</a></td><td>List of 2 users page 1 (JWT required)</td></tr>
+	<tr><td><a target="new" href="/users/search/com?in=5">GET /users/search/com?in=5</a></td><td>Search user with email=com (JWT required)</td></tr>
 	<tr><td>&nbsp;</td></tr>
-	<tr><td><a target="new" href="/login.php">Login</a></td><td> required to trigger /users endpoint</td></tr>
-	<tr><td><a target="new" href="/logout">GET /logout</a></td><td>Delete token</td></tr>
+	<tr><td><a target="new" href="/login.php">Login</a></td><td>Form to grant access to /users endpoint</td></tr>
+    <tr><td><a target="new" href="/logout">GET /logout</a></td><td>Delete JWT</td></tr>
+    <tr><td><a target="new" href="/cleanup">GET /cleanup</a></td><td>Cleanup logins and token log</td></tr>
 	</table>
 
 	</div>

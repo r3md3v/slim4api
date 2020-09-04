@@ -85,6 +85,16 @@ final class TokenManager
         $decoded = base64_decode(strtr($chunk, '-_', '+/'));
         $this->repository->insertTokenDetails($username, $decoded, $lifetime);
         */
-        $this->repository->insertTokenDetails($username, $token, $lifetime);
+        return $this->repository->insertTokenDetails($username, $token, $lifetime);
+    }
+
+    /**
+     * Cleanup token log.
+     *
+     * @return row Nb of rows
+     */
+    public function cleanupTokens(): int
+    {
+        return $this->repository->deleteExpiredTokens();
     }
 }

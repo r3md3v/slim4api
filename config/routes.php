@@ -14,7 +14,8 @@ return function (App $app) {
 
     // JWT oauth2 API login. This route must not be protected.
     $app->post('/tokens', \App\Action\Auth\TokenCreateAction::class);
-    $app->get('/tokens', \App\Action\Auth\TokenListAction::class); // to build = list of issued tokens and status
+    //$app->get('/tokens', \App\Action\Auth\TokenListAction::class); // to build = list of issued tokens and status
+    $app->get('/cleanup', \App\Action\Auth\CleanupAction::class);
     $app->get('/logout', \App\Action\Auth\LogoutAction::class);
 
     // Home

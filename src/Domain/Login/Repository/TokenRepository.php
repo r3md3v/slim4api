@@ -49,18 +49,25 @@ class TokenRepository
 
         if (!$row) {
             $tokens = explode('.', $token);
+            //throw new DomainException(sprintf('Token not found: %s', $tokens[0])); // only show header of token for security reason
 
-            throw new DomainException(sprintf('Token not found: %s', $tokens[0])); // only show header of token for security reason
+            $token = new TokenData();
+            $token->id = (int) 0;
+            $token->username = (string) 'No active token';
+            $token->token = (string) $tokens[0];
+            $token->status = (string) 1;
+            $token->issued = (string) 'na';
+            $token->expired = (string) 'na';
+        } else {
+            // Map array to data object
+            $token = new TokenData();
+            $token->id = (int) $row['TOKID'];
+            $token->username = (string) $row['TOKUSERNAME'];
+            $token->token = (string) $row['TOKTOKEN'];
+            $token->status = (string) $row['TOKSTATUS'];
+            $token->issued = (string) $row['TOKISSUEDAT'];
+            $token->expired = (string) $row['TOKEXPIREDAT'];
         }
-
-        // Map array to data object
-        $token = new TokenData();
-        $token->id = (int) $row['TOKID'];
-        $token->username = (string) $row['TOKUSERNAME'];
-        $token->token = (string) $row['TOKTOKEN'];
-        $token->status = (string) $row['TOKSTATUS'];
-        $token->issued = (string) $row['TOKISSUEDAT'];
-        $token->expired = (string) $row['TOKEXPIREDAT'];
 
         return $token;
     }
@@ -71,6 +78,8 @@ class TokenRepository
      * @param string $username The login username
      * @param string $token    The Token
      * @param string $lifetime The lifetime
+     *
+     * @return tokenid The token id
      */
     public function insertTokenDetails(string $username, string $token, string $lifetime): int
     {
@@ -96,6 +105,10 @@ class TokenRepository
      * Revoke token.
      *
      * @param string $token The Token
+     *
+     * @throws DomainException
+     *
+     * @return nbrow The nb of rows
      */
     public function revokeTokenByJwt(string $token): int
     {
@@ -105,7 +118,7 @@ class TokenRepository
 
         $statement->execute();
 
-        $nbrows = (int) $statement->rowCount();
+        $nbrows = $statement->rowCount();
 
         if (!$nbrows = 0) {
             // Show only header of token for security reason
@@ -114,6 +127,21 @@ class TokenRepository
             throw new DomainException(sprintf('Token not found: %s', $tokens[0]));
         }
 
-        return $nbrows;
+        return (int) $nbrows;
+    }
+
+    /**
+     * Cleanup token log.
+     *
+     * @return nbrow The nb of rows
+     */
+    public function deleteExpiredTokens(): int
+    {
+        $sql = 'DELETE FROM logtokens WHERE TOKEXPIREDAT <= NOW()';
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+
+        return (int) $statement->rowCount();
     }
 }

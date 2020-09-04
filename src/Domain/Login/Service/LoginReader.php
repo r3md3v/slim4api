@@ -90,4 +90,16 @@ final class LoginReader
 
         return $ip;
     }
+
+    /**
+     * Cleanup logins.
+     *
+     * @param mixed $retention
+     *
+     * @return nb nb of rows deleted
+     */
+    public function cleanupLogins($retention): int
+    {
+        return $this->repository->cleanupLogin($retention);
+    }
 }

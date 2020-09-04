@@ -85,6 +85,8 @@ class LoginReaderRepository
      * @param string $username The login username
      * @param string $sourceip The Source IP
      * @param object $login    The result
+     *
+     * @return loginid Loginlog id
      */
     public function logLogin(string $username, string $sourceip, object $login): int
     {
@@ -103,5 +105,22 @@ class LoginReaderRepository
         $this->connection->prepare($sql)->execute($paramSql);
 
         return (int) $this->connection->lastInsertId();
+    }
+
+    /**
+     * Cleanup login log.
+     *
+     * @param mixed $retention
+     *
+     * @return nbrow nb rows deleted
+     */
+    public function cleanupLogin($retention): int
+    {
+        $sql = 'DELETE FROM loglogins WHERE LOGUPDATEDAT < DATE_SUB(NOW(), INTERVAL '.$retention.' SECOND);';
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+
+        return (int) $statement->rowCount();
     }
 }
