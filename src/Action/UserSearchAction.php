@@ -32,7 +32,7 @@ final class UserSearchAction
     public function __construct(UserSearcher $userSearcher, LoggerFactory $lf)
     {
         $this->userSearcher = $userSearcher;
-        $this->logger = $lf->addFileHandler('error.log') > addConsoleHandler()->createInstance('error');
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
