@@ -31,7 +31,7 @@ final class CustomerData
      * @param string $phone
      * @param string $email
      */
-    public function __construct(int $id, string $name, string $address, string $city, string $phone, string $email)
+    public function __construct(int $id = 1, string $name = "", string $address = "", string $city = "", string $phone = "", string $email = "")
     {
         $this->id = $id;
         $this->name = $name;
