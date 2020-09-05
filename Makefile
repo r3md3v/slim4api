@@ -21,12 +21,24 @@ genjwt:
 
 faker:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_customers.php
+		docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_loglogins.php
+		docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_logtokens.php
 		docker-compose -f docker-compose-nginx.yml exec php-fpm php faker_users.php
+
+build:
+		docker-compose -f docker-compose-nginx.yml build
+
+upfront:
+		docker-compose -f docker-compose-nginx.yml up -d --build
+
 up:
 		docker-compose -f docker-compose-nginx.yml up -d --build
 
+upback:
+		docker-compose -f docker-compose-nginx.yml up -d mysql php-fpm
+
 down:
-		docker-compose -f docker-compose-nginx.yml docker-compose-nginx.yml down -v
+		docker-compose -f docker-compose-nginx.yml down -v --remove-orphans
 
 reload:
 		docker-compose -f docker-compose-nginx.yml exec my_app nginx -s reload
@@ -34,8 +46,9 @@ reload:
 php:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm bash
 
-phplog:
-		docker-compose -f docker-compose-nginx.yml logs -f php-fpm
+log:
+		docker-compose -f docker-compose-nginx.yml logs -f php-fpm my_app
+
 test:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm composer test
 
