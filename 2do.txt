@@ -1,0 +1,10 @@
+For some upcoming version
+-------------------------
+
+make logtoken optionnal as per $settings['jwt'] ['log'] = true/false
+split tables logtoken and logtokenrevoked (blacklist)
+fix VlidationException not returning comments
+
+
+create correct yaml file for swagger
+trigger zircote/swagger to generate yaml from AO

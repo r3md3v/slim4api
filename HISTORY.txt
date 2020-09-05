@@ -1,0 +1,150 @@
+[v 0.1] Jul 2020
+
+First version based on excellent article from Daniel's Dev Blog
+https://odan.github.io/2019/11/05/slim4-tutorial.html
+Team work with https://github.com/edgd1er/slim4api
+
+
+[v 0.2]
+
+Some fine tuning
+
+Added endpoint hello/{username} responding Hello World if no username
+
+Added endpoint status and $settings['api'] = [
+    'name' => 'slim4api',
+    'version' => '0.75',
+    'url' => 'http://localhost:8080',
+    'build' => '2020-09-01',
+	]
+as inspired from https://github.com/maurobonfietti/slim4-soccer-api-demo
+
+
+[v 0.3]
+
+Added middleware https as per https://odan.github.io/2020/04/07/slim4-https-middleware.html
+and new settings 
+$settings['redirection'] = [
+    'port' => 8080,
+    'servername' => 'localhost',
+];
+
+
+Add middleware CORS as per https://www.slimframework.com/docs/v4/cookbook/enable-cors.html
+with options *
+	$settings['cors'] = '*';
+
+
+[v 0.4]
+
+Added [customers] table with all same endpoints as [users]
+
+Added user/search/keyword customer user/search/keyword
+
+Added loggerFactory as per https://odan.github.io/2020/05/25/slim4-logging.html
+
+Added Faker for users and customers
+
+createUserForm.php to trigger POST /users
+
+
+[v 0.5]
+
+Added middleware JWT/JAVA Web Tokens as per https://odan.github.io/2019/12/02/slim4-oauth2-jwt.html
+
+Added Swagger rendering as per https://odan.github.io/2020/06/12/slim4-swagger-ui.html
+with template file petstore V3
+Investigation on open annotations and zircote/swagger-php
+
+Use local copy in public\js\swagger-ui-bundle.js + swagger-ui-standalone-preset.js + public\css\swagger-ui.css
+
+Added page+size options in list/search, and $settings['db'] = ['defaultPage' => '1','defaultPageSize' => '50']
+
+Added search in specific folder as per list in $settings['db'] = ['defaultSearchFieldUser', 'defaultSearchFieldCustomer'],
+
+Added createCustomerrForm.php to trigger POST /customers
+
+Added CSS and JS for mandatory fields validation in createUserForm.php and createCustomerForm.php
+
+
+[v 0.6]
+
+Added testapi.html for basic testing/validation of endpoints
+
+New setting.php $settings['error'] $display_error_details = true/false used in $settings['logger'].
+
+Added three new middleware to display errors as json 
+	HttpExceptionMiddleware for error 404
+	DomainExceptionMiddleware in case of empty return + feed logger (ex "No item with keyword [clau] in any field page 5 / 5")
+	ValidationExceptionMiddleware in case of incorrect input + feed logger (ex "Email incorrect or existing username")
+
+Added TrailkingSLash middleware to delete useless ending / according to new $settings['trail'] = false;
+
+Added id in endpoint users and customers, and routes specified with regex to avoid shadowed endpoints
+	$group3->get('/id/{id:[0-9]+}',
+	\App\Action\UserReadAction::class);
+
+$_GET unified for page/size in Action
+Values are validated in Service
+	if (!is_numeric($page) || $page < $this->defaultPage)
+	$page = $this->defaultPage;
+	if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
+	$pagesize = $this->defaultPageSize;
+
+Loggers removed from Service+Repository and unified in Action
+	$this->logger->debug("CustomerSearchAction: page: $page, size: $size, in: $in, keyword: $keyword");
+
+In Repo/Search users/customers, responses are according to targeted field or not
+
+        if (0 == count($customers)) {
+            if (-1 != $in) {
+                throw new DomainException(sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax));
+            }
+
+            throw new DomainException(sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax));
+        }
+
+Validations : In User+CustomerCreator.php, added validation of mandatory fields + unique email for both + Unique username for User.
+Validations : In createUser+CustomerForm.php, added a js control on email format
+
+Favicon works only if stored in css/ and targeted with <link href="css/favicon.ico" rel="icon" />
+
+
+[v 0.7]
+
+On login.php, added buttons [Autologin] [Logout] [Check JWT] [Hash PWD]
+
+Form checkJWTForm.php to check token + dynamic link to jwt.io
+
+Form hashPWDForm.php pour calc a hash with PHP BCRYPT function
+
+Endpoint logout to cancel active token
+
+New table usersjwt with id/name/pass/mail/token/status/created/updated filled uppon login
+
+
+[v 0.75]
+
+HomeAction, shows endpoints/verbs as per list defined in settings.php 
+
+Table 'userjwt' renammed 'logins' (best practice would be singular, lowercase, same for tables).
+Login Form takes email in addition to email as identifier/username.
+
+New table loglogins and scripts to log attempts (username/mail+ipsource+resultat+timestamp)
+New table logtokens and scripts to log tokens generated (username/mail+token+status+issuedat+expiredat)
+
+Logout action marks oken as revoked (status=0)
+Middleware JwtAuthMiddleware verifies blacklist (table logtokens where status=0)
+
+Added logger for list/search in Service+Repo (removed in v0.5).
+
+New endpoint /cleanup to purge loglogin table as per $settings['jwt'] = ['settings'] = 60*60*24*30; (30 days)
+and cleanup logtoken for all expired.
+
+
+[v 0.8] sep 2020
+
+Added Faker for loglogins and logtokens
+
+Added history.txt and 2do.txt
+
