@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Middleware.
@@ -24,7 +25,7 @@ final class HttpsMiddleware implements MiddlewareInterface
      */
     private $port;
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -63,7 +64,8 @@ final class HttpsMiddleware implements MiddlewareInterface
         $uri = $request->getUri();
 
         if ($uri->getHost() !== 'localhost' && $uri->getScheme() !== 'https') {
-            $this->logger->info("HttpsMiddleware: current uri: $uri, settings: " . $this->port);
+            $this->logger->info("HttpsMiddleware: current uri: $uri, scheme: " . $uri->getScheme());
+            $this->logger->debug("Host: " . $uri->getHost() . ",protocol: " . $uri->getScheme() . ",  url: $uri");
             $url = (string)$uri->withScheme('https')->withPort($this->port);
 
             $this->logger->info("HTTPS redirecting to $url");
