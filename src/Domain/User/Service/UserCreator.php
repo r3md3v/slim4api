@@ -25,7 +25,7 @@ final class UserCreator
      * The constructor.
      *
      * @param UserCreatorRepository $repository The repository
-     * @param Logger                $loger      The logger
+     * @param Logger $loger The logger
      */
     public function __construct(UserCreatorRepository $repository, Logger $logger)
     {
@@ -72,6 +72,8 @@ final class UserCreator
 
         if (empty($data['username']) || empty($data['password']) || empty($data['first_name']) || empty($data['last_name']) || empty($data['email']) || empty($data['profile'])) {
             $errors['mandatory'] = 'Input [User  Name] [Password] [Firstname] [Lastname] [Email] [Profile] required';
+            $this->logger->debug(sprintf("UserCreator:createUSer: missing params .names:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s",
+                $data['username'], $data['password'], $data['first_name'], $data['last_name'], $data['email'], $data['profile']));
         }
 
         if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -83,7 +85,7 @@ final class UserCreator
         }
 
         if (true == $this->repository->userExists($data['username'], $data['email'])) {
-            throw new ValidationException('User name already exists with name '.$data['username'].' or email '.$data['email'].'.', $errors);
+            throw new ValidationException('User name already exists with name ' . $data['username'] . ' or email ' . $data['email'] . '.', $errors);
         }
     }
 }

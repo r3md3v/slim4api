@@ -28,9 +28,11 @@ class UserCreatorTest extends TestCase
 
         $user = [
             'username' => 'john.doe',
-            'email' => 'john.doe@example.com',
+            'password' => 'passwd',
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'profile' => 'user'
         ];
 
         $actual = $service->createUser($user);

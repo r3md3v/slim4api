@@ -34,8 +34,8 @@ final class CustomerLister
      * The constructor.
      *
      * @param CustomerListerRepository $repository The repository
-     * @param ContainerInterface       $ci         The container interface
-     * @param LoggerFactory            $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(CustomerListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -48,7 +48,7 @@ final class CustomerLister
     /**
      * Read Customer list.
      *
-     * @param mixed $page     Page number
+     * @param mixed $page Page number
      * @param mixed $pagesize Nb of lines
      *
      * @return CustomerList
@@ -70,18 +70,18 @@ final class CustomerLister
             $pagesize = $this->defaultPageSize;
         }
 
-        $this->logger->debug("CustomerList.CustomerList: page: $page, size: $pagesize");
+        $this->logger->debug("CustomerList.getCustomerList: page: $page, size: $pagesize");
         return $this->repository->getCustomers($page, $pagesize);
+
     }
-        $this->logger->debug("getCustomerList: page: $page, pagesize: $pagesize");
-        $customers = $this->repository->getCustomers($page, $pagesize);
 
     /**
      * Count customers.
      *
      * @return nb
      */
-    public function getCustomerCount(): int
+    public
+    function getCustomerCount(): int
     {
         return $this->repository->countCustomers();
     }

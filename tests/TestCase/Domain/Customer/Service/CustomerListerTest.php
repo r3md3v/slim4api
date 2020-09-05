@@ -15,7 +15,7 @@ class CustomerListerTest extends TestCase
 
     use AppTestTrait;
 
-    public function testgetCustomerCount()
+    public function testGetCustomerCount()
     {
 
         // Mock the required repository method
