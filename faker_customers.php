@@ -71,13 +71,13 @@ for ($i = 0; $i < $nbl; $i++){
 	$p7 = $faker->randomElement(array('admin','system','root'));
 	$p8 = $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'); // anytime from now back to 1 year
 
-	$req = "INSERT INTO customers VALUES (0,'$p1 / $p2','$p3','$p4','$p5','$p6','$p7','$p8');";
+	$req = "INSERT INTO $dt VALUES (0,'$p1 / $p2','$p3','$p4','$p5','$p6','$p7','$p8');";
 	mysqli_set_charset($connexion,'utf8');
 	$res = mysqli_query($connexion,$req);
 	//echo "$req<br />";
 }
 
-$req = "SELECT COUNT(*) FROM customers;";
+$req = "SELECT COUNT(*) FROM $dt;";
 $res = mysqli_query($connexion,$req);
 $row = mysqli_fetch_row($res);
 

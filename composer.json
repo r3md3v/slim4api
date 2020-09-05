@@ -34,9 +34,13 @@
 	"scripts": {
 		"start": "php -S localhost:8080 -t public",
 		"test": "phpunit",
-		"faker": [
-		"@php faker_users.php",
-		"@php faker_customers.php"
+		"fakercu": [
+			"@php faker_users.php",
+			"@php faker_customers.php"
+		],
+		"fakerlg": [
+			"@php faker_loglogins.php",
+			"@php faker_logtokens.php"
 		],
 		"docs": "/usr/src/app/vendor/zircote/swagger-php/bin/openapi /usr/src/app/ -o /usr/src/app/resources/docs/swagger.yaml -e /usr/src/app/vendor -e /usr/src/app/logs -e /usr/src/app/tests"
 	},
