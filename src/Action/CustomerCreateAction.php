@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use App\Domain\Customer\Service\CustomerCreator;
+use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
@@ -73,10 +74,10 @@ final class CustomerCreateAction
         // Invoke the Domain with inputs and retain the result
         $customerId = $this->customerCreator->createCustomer($data);
 
-       // Feed the logger
-       $this->logger->debug("CustomerCreateAction: id: $customerId");
+        // Feed the logger
+        $this->logger->debug("CustomerCreateAction: id: $customerId");
 
-       // Transform the result into the JSON representation
+        // Transform the result into the JSON representation
         $result = [
             'customer_id' => $customerId
         ];

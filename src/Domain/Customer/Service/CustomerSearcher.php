@@ -24,8 +24,8 @@ final class CustomerSearcher
      * The constructor.
      *
      * @param CustomerSearcherRepository $repository The repository
-     * @param ContainerInterface         $ci         The container interface
-     * @param LoggerFactory              $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(CustomerSearcherRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -39,19 +39,19 @@ final class CustomerSearcher
     /**
      * Search customer list.
      *
-     * @param string $keyword  Word to search
-     * @param mixed  $in       Field number
-     * @param mixed  $page     Page number
-     * @param mixed  $pagesize Nb of lines
+     * @param string $keyword Word to search
+     * @param mixed $in Field number
+     * @param mixed $page Page number
+     * @param mixed $pagesize Nb of lines
      *
+     * @return array
      * @throws ValidationException
      *
-     * @return CustomerSearch
      */
     public function getCustomerSearch(string $keyword, $in, $page, $pagesize): array
     {
         // Feed the logger
-        $this->logger->debug("CustomerSearcher.getCustomerSearch: input: page: {$page}, size: {$pagesize}");
+        $this->logger->debug("CustomerSearcher.getCustomerSearch: keyword: {$keyword}, input: page: {$page}, size: {$pagesize}");
 
         // Validation
 

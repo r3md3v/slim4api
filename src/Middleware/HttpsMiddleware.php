@@ -40,10 +40,7 @@ final class HttpsMiddleware implements MiddlewareInterface
     {
         $this->responseFactory = $responseFactory;
         $this->container = $ci;
-        $this->logger =
-            $lf->addFileHandler('error.log')
-                ->addConsoleHandler()
-                ->createInstance('error');
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
         $settings = $this->container->get('settings')['redirection'];
         $this->port = (int)$settings['port'];
     }

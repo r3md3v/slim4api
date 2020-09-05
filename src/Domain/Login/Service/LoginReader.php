@@ -25,8 +25,8 @@ final class LoginReader
      * The constructor.
      *
      * @param LoginReaderRepository $repository The repository
-     * @param ContainerInterface    $ci         The container interface
-     * @param LoggerFactory         $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(LoginReaderRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -42,9 +42,9 @@ final class LoginReader
      * @param string $password The login password
      * @param string $sourceip The source IP
      *
+     * @return LoginData The login data
      * @throws ValidationException
      *
-     * @return LoginData The login data
      */
     public function getLoginDetails(string $username, string $password, string $sourceip): LoginData
     {

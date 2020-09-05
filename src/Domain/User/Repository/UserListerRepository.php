@@ -20,8 +20,8 @@ class UserListerRepository
     /**
      * The constructor.
      *
-     * @param PDO           $connection The database connection
-     * @param LoggerFactory $lf         The logger Factory
+     * @param PDO $connection The database connection
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(PDO $connection, LoggerFactory $lf)
     {
@@ -62,13 +62,12 @@ class UserListerRepository
 
         $users = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $user = new UserData();
-            $user->id = (int) $row['USRID'];
-            $user->username = (string) $row['USRNAME'];
-            $user->firstName = (string) $row['USRFIRSTNAME'];
-            $user->lastName = (string) $row['USRLASTNAME'];
-            $user->email = (string) $row['USREMAIL'];
-            $user->profile = (string) $row['USRPROFILE'];
+            $user = new UserData((int)$row['USRID'],
+                (string)$row['USRNAME'],
+                (string)$row['USRFIRSTNAME'],
+                (string)$row['USRLASTNAME'],
+                (string)$row['USREMAIL'],
+                (string)$row['USRPROFILE']);
             array_push($users, $user);
         }
 

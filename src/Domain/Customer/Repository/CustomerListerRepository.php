@@ -20,8 +20,8 @@ class CustomerListerRepository
     /**
      * The constructor.
      *
-     * @param PDO           $connection The database connection
-     * @param LoggerFactory $lf         The logger Factory
+     * @param PDO $connection The database connection
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(PDO $connection, LoggerFactory $lf)
     {
@@ -65,12 +65,12 @@ class CustomerListerRepository
         $customers = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $customer = new CustomerData();
-            $customer->id = (int) $row['CUSID'];
-            $customer->name = (string) $row['CUSNAME'];
-            $customer->address = (string) $row['CUSADDRESS'];
-            $customer->city = (string) $row['CUSCITY'];
-            $customer->phone = (string) $row['CUSPHONE'];
-            $customer->email = (string) $row['CUSEMAIL'];
+            $customer->id = (int)$row['CUSID'];
+            $customer->name = (string)$row['CUSNAME'];
+            $customer->address = (string)$row['CUSADDRESS'];
+            $customer->city = (string)$row['CUSCITY'];
+            $customer->phone = (string)$row['CUSPHONE'];
+            $customer->email = (string)$row['CUSEMAIL'];
             array_push($customers, $customer);
         }
 

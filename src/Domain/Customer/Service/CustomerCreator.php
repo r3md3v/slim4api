@@ -4,6 +4,7 @@ namespace App\Domain\Customer\Service;
 
 use App\Domain\Customer\Repository\CustomerCreatorRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Slim\Logger;
 
 /**
@@ -25,12 +26,12 @@ final class CustomerCreator
      * The constructor.
      *
      * @param CustomerCreatorRepository $repository The repository
-     * @param Logger $logger
+     * @param LoggerFactory $lf
      */
-    public function __construct(CustomerCreatorRepository $repository, Logger $logger)
+    public function __construct(CustomerCreatorRepository $repository, LoggerFactory $lf)
     {
         $this->repository = $repository;
-        $this->logger = $logger;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**

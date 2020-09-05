@@ -33,27 +33,25 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     /**
      * The constructor.
      *
-     * @param JwtAuth                  $jwtAuth         The JWT auth
-     * @param LoggerFactory            $lf              The logger factory
+     * @param JwtAuth $jwtAuth The JWT auth
+     * @param LoggerFactory $lf The logger factory
      * @param ResponseFactoryInterface $responseFactory The response factory
      */
     public function __construct(
         JwtAuth $jwtAuth,
         ResponseFactoryInterface $responseFactory,
         LoggerFactory $lf
-    ) {
+    )
+    {
         $this->jwtAuth = $jwtAuth;
         $this->responseFactory = $responseFactory;
-        $this->logger = $lf
-            ->addFileHandler('error.log')
-            ->addConsoleHandler()
-            ->createInstance('error');
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
      * Invoke middleware.
      *
-     * @param ServerRequestInterface  $request The request
+     * @param ServerRequestInterface $request The request
      * @param RequestHandlerInterface $handler The handler
      *
      * @return ResponseInterface The response
@@ -61,8 +59,9 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
-    ): ResponseInterface {
-        $token = explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? '';
+    ): ResponseInterface
+    {
+        $token = explode(' ', (string)$request->getHeaderLine('Authorization'))[1] ?? '';
 
         $this->logger->debug("token header: " . $token);
         if (!$token) {

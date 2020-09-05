@@ -4,6 +4,7 @@ namespace App\Domain\User\Service;
 
 use App\Domain\User\Repository\UserCreatorRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Slim\Logger;
 
 /**
@@ -25,12 +26,12 @@ final class UserCreator
      * The constructor.
      *
      * @param UserCreatorRepository $repository The repository
-     * @param Logger $loger The logger
+     * @param LoggerFactory $lf
      */
-    public function __construct(UserCreatorRepository $repository, Logger $logger)
+    public function __construct(UserCreatorRepository $repository, LoggerFactory $lf)
     {
         $this->repository = $repository;
-        $this->logger = $logger;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**

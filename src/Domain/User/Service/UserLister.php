@@ -23,8 +23,8 @@ final class UserLister
      * The constructor.
      *
      * @param UserListerRepository $repository The repository
-     * @param ContainerInterface   $ci         The container interface
-     * @param LoggerFactory        $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(UserListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -37,10 +37,10 @@ final class UserLister
     /**
      * Read user list.
      *
-     * @param mixed $page     Page number
+     * @param mixed $page Page number
      * @param mixed $pagesize Nb of lines
      *
-     * @return UserList
+     * @return array
      * @throws ValidationException
      *
      */
@@ -64,6 +64,7 @@ final class UserLister
 
 
     }
+
     /**
      * Count users.
      *
