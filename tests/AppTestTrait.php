@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Test;
+namespace Tests;
 
 use DI\Container;
 use InvalidArgumentException;
-use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,9 +26,9 @@ trait AppTestTrait
     /**
      * Bootstrap app.
      *
+     * @return void
      * @throws UnexpectedValueException
      *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -78,7 +77,8 @@ trait AppTestTrait
         string $method,
         $uri,
         array $serverParams = []
-    ): ServerRequestInterface {
+    ): ServerRequestInterface
+    {
         return (new ServerRequestFactory())->createServerRequest($method, $uri, $serverParams);
     }
 
@@ -95,7 +95,8 @@ trait AppTestTrait
         string $method,
         $uri,
         array $data = null
-    ): ServerRequestInterface {
+    ): ServerRequestInterface
+    {
         $request = $this->createRequest($method, $uri);
 
         if ($data !== null) {

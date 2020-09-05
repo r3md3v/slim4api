@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Test\TestCase\Action;
+namespace Tests\TestCase\Action;
 
 use App\Domain\User\Data\UserData;
 use App\Domain\User\Repository\UserReaderRepository;
-use App\Test\AppTestTrait;
 use PHPUnit\Framework\TestCase;
+use Tests\AppTestTrait;
 
 /**
  * Test.
@@ -47,13 +47,7 @@ class UserReaderActionTest extends TestCase
      */
     public function provideUserReaderAction(): array
     {
-        $user = new UserData();
-        $user->id = 1;
-        $user->username = 'admin';
-        $user->email = 'john.doe@example.com';
-        $user->firstName = 'John';
-        $user->lastName = 'Doe';
-
+        $user = new UserData(1, 'admin', 'john', 'Doe', 'john.doe@example.com', 'user');
         return [
             'User' => [
                 $user,

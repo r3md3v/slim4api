@@ -25,8 +25,7 @@ class CustomerListActionTest extends TestCase
     public function testCustomerListAction(CustomerData $customer, array $expected): void
     {
         // Mock the repository resultset
-        $this->mock(CustomerListerRepository::class)->method('getCustomers
-        ')->willReturn($customer);
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->withAnyParameters()->willReturn($customer);
 
         // Create request with method and url
         $request = $this->createRequest('GET', '/customers');
@@ -46,15 +45,10 @@ class CustomerListActionTest extends TestCase
      */
     public function provideCustomerReaderAction(): array
     {
-        $customer = new CustomerData();
-        $customer->id = 1;
-        $customer->name = 'admin';
-        $customer->address = '025 rue des arbres';
-        $customer->email = 'john.doe@example.com';
-        $customer->firstName = 'John';
+        $customer = new CustomerData(1, 'admin', '25 rue des arbres', 'Lille',
+            "0102030405", 'john.doe@example.com');
+
         $customer->lastName = 'Doe';
-        $customer->city = 'Lille';
-        $customer->phone = "0102030405";
         $customer->updatedby = "roger";
         $customer->updatedat = "123456789";
 
@@ -64,14 +58,11 @@ class CustomerListActionTest extends TestCase
                 [
                     'user_id' => 1,
                     'username' => 'admin',
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
+                    'name' => 'Doe',
                     'email' => 'john.doe@example.com',
                     'city' => 'Lille',
                     'address' => '025 rue des arbres',
-                    'phone' => '0102030405',
-                    'updatedby' => 'roger',
-                    'updateddat' => "123456789",
+                    'phone' => '0102030405'
                 ]
             ]
         ];
