@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Slim4API</title>
-	<link href="favicon.ico" rel="icon" />
+	<link href="css/favicon.ico" rel="icon" />
 	<link href="css/slim4api.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="js/veriform.js"></script>
   </head>
