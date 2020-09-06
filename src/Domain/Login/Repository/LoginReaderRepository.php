@@ -32,9 +32,9 @@ class LoginReaderRepository
      * @param string $username The login username or email
      * @param string $password The login password
      *
+     * @return LoginData The login data
      * @throws DomainException
      *
-     * @return LoginData The login data
      */
     public function getLoginByUMP(string $username, string $password): LoginData
     {
@@ -60,22 +60,21 @@ class LoginReaderRepository
 
         // Return fake result if login not ok
         if ('ok' != $loginresult) {
-            $login = new LoginData();
-            $login->id = (int) 0;
-            $login->username = (string) $username;
-            $login->email = (string) 'na';
-            $login->token = (string) 'na';
-            $login->status = (string) $loginresult;
+            $login = new LoginData(
+                (int)0,
+                (string)$username,
+                (string)'na',
+                (string)'na',
+                (string)$loginresult);
         } else {
             // Map array to data object
-            $login = new LoginData();
-            $login->id = (int) $row['JWUID'];
-            $login->username = (string) $row['JWUUSERNAME'];
-            $login->email = (string) $row['JWUEMAIL'];
-            $login->token = (string) $row['JWULASTTOKEN'];
-            $login->status = (string) $row['JWUSTATUS'];
+            $login = new LoginData(
+                (int)$row['JWUID'],
+                (string)$row['JWUUSERNAME'],
+                (string)$row['JWUEMAIL'],
+                (string)$row['JWULASTTOKEN'],
+                (string)$row['JWUSTATUS']);
         }
-
         return $login;
     }
 
@@ -84,7 +83,7 @@ class LoginReaderRepository
      *
      * @param string $username The login username
      * @param string $sourceip The Source IP
-     * @param object $login    The result
+     * @param object $login The result
      *
      * @return loginid Loginlog id
      */
@@ -104,7 +103,7 @@ class LoginReaderRepository
 
         $this->connection->prepare($sql)->execute($paramSql);
 
-        return (int) $this->connection->lastInsertId();
+        return (int)$this->connection->lastInsertId();
     }
 
     /**
@@ -116,11 +115,11 @@ class LoginReaderRepository
      */
     public function cleanupLogin($retention): int
     {
-        $sql = 'DELETE FROM loglogins WHERE LOGUPDATEDAT < DATE_SUB(NOW(), INTERVAL '.$retention.' SECOND);';
+        $sql = 'DELETE FROM loglogins WHERE LOGUPDATEDAT < DATE_SUB(NOW(), INTERVAL ' . $retention . ' SECOND);';
 
         $statement = $this->connection->prepare($sql);
         $statement->execute();
 
-        return (int) $statement->rowCount();
+        return (int)$statement->rowCount();
     }
 }
