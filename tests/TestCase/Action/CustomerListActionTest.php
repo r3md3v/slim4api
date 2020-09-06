@@ -15,7 +15,7 @@ class CustomerListActionTest extends TestCase
     /**
      * Test.
      *
-     * @dataProvider provideCustomerReaderAction
+     * @dataProvider provideCustomerListerAction
      *
      * @param CustomerData $customer The user
      * @param array $expected The expected result
@@ -25,7 +25,7 @@ class CustomerListActionTest extends TestCase
     public function testCustomerListAction(CustomerData $customer, array $expected): void
     {
         // Mock the repository resultset
-        $this->mock(CustomerListerRepository::class)->method('getCustomers')->withAnyParameters()->willReturn($customer);
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->withAnyParameters()->willReturn($expected);
 
         // Create request with method and url
         $request = $this->createRequest('GET', '/customers');
@@ -43,7 +43,7 @@ class CustomerListActionTest extends TestCase
      *
      * @return array The data
      */
-    public function provideCustomerReaderAction(): array
+    public function provideCustomerListerAction(): array
     {
         $customer = new CustomerData(1, 'admin', '25 rue des arbres', 'Lille',
             "0102030405", 'john.doe@example.com');

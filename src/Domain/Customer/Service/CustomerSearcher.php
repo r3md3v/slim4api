@@ -16,8 +16,17 @@ final class CustomerSearcher
      * @var CustomerSearcherRepository
      */
     private $repository;
+    /**
+     * @var int
+     */
     private $defaultPage;
+    /**
+     * @var int
+     */
     private $defaultPageSize;
+    /**
+     * @var int
+     */
     private $defaultSearchField;
 
     /**
@@ -26,6 +35,8 @@ final class CustomerSearcher
      * @param CustomerSearcherRepository $repository The repository
      * @param ContainerInterface $ci The container interface
      * @param LoggerFactory $lf The logger Factory
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(CustomerSearcherRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -44,7 +55,7 @@ final class CustomerSearcher
      * @param mixed $page Page number
      * @param mixed $pagesize Nb of lines
      *
-     * @return array
+     * @return array []
      * @throws ValidationException
      *
      */
@@ -54,7 +65,6 @@ final class CustomerSearcher
         $this->logger->debug("CustomerSearcher.getCustomerSearch: keyword: {$keyword}, input: page: {$page}, size: {$pagesize}");
 
         // Validation
-
         if (!is_numeric($page) || $page < $this->defaultPage) {
             $page = $this->defaultPage;
         }
