@@ -64,13 +64,14 @@ class CustomerListerRepository
 
         $customers = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $customer = new CustomerData();
-            $customer->id = (int)$row['CUSID'];
-            $customer->name = (string)$row['CUSNAME'];
-            $customer->address = (string)$row['CUSADDRESS'];
-            $customer->city = (string)$row['CUSCITY'];
-            $customer->phone = (string)$row['CUSPHONE'];
-            $customer->email = (string)$row['CUSEMAIL'];
+            $customer = new CustomerData(
+                (int)$row['CUSID'],
+                (string)$row['CUSNAME'],
+                (string)$row['CUSADDRESS'],
+                (string)$row['CUSCITY'],
+                (string)$row['CUSPHONE'],
+                (string)$row['CUSEMAIL']);
+
             array_push($customers, $customer);
         }
 

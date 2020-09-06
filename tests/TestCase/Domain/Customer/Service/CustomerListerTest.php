@@ -77,11 +77,11 @@ class CustomerListerTest extends TestCase
     public function testGetCustomerListPageInf1ToDefault()
     {
         $users = [
-            new UserData(1, 'john.doe',
-                'John',
-                'Doe',
-                'john.doe@example.com',
-                'user')];
+            new CustomerData(1, 'john.doe',
+                'address',
+                'city',
+                'phone',
+                'email')];
 
         // Mock the required repository method
         $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 1)->willReturn($users);
@@ -109,7 +109,7 @@ class CustomerListerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         // Mock the required repository method
-        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 5)->willReturn();
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 5)->willThrowException(TypeError::class);
         $service = $this->container->get(CustomerLister::class);
         $actual = $service->getCustomerList(1, 'a');
     }
