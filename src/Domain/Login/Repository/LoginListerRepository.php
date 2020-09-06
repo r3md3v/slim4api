@@ -38,7 +38,7 @@ class LoginListerRepository
      *
      * @return logins List of Logins
      */
-    public function getLogins($page, $pagesize): array
+    public function getLogins(int $page, int $pagesize): array
     {
         $loginnb = $this->countLogins();
 
