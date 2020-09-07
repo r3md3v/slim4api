@@ -1,6 +1,6 @@
 -- SQL Dump
 
--- Modify database in é lines below name below
+-- Modify database name in 2 lines below
 create schema if not exists slim;
 use slim;
 
@@ -52,6 +52,84 @@ INSERT INTO `customers` (`CUSID`, `CUSNAME`, `CUSADDRESS`, `CUSCITY`, `CUSPHONE`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `logins`
+--
+
+DROP TABLE IF EXISTS `logins`;
+CREATE TABLE IF NOT EXISTS `logins` (
+  `JWUID` int(8) NOT NULL AUTO_INCREMENT,
+  `JWUUSERNAME` varchar(50) NOT NULL,
+  `JWUPASSWORD` varchar(2048) NOT NULL,
+  `JWUEMAIL` varchar(100) NOT NULL,
+  `JWUDESCRIPTION` varchar(200) NOT NULL,
+  `JWULASTTOKEN` varchar(1000) NOT NULL,
+  `JWUSTATUS` varchar(1) NOT NULL,
+  `JWUCREATED` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `JWUMODIFIED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`JWUID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logins`
+--
+
+INSERT INTO `logins` (`JWUID`, `JWUUSERNAME`, `JWUPASSWORD`, `JWUEMAIL`, `JWUDESCRIPTION`, `JWULASTTOKEN`, `JWUSTATUS`, `JWUCREATED`, `JWUMODIFIED`) VALUES
+(1, 'MikeD', '$2y$10$0VkUbW.zvlAwtRESZPcp.OEAsndWTl3kSReSQdgK6bUcvfc63JQTe', 'mike@codeofaninja.com', 'Login [MikeD/password] for Mike Dalisay CodeOfANinja', false, '1', now(), now()),
+(2, 'user', '$2y$10$zz81A20v7euIGy/GBtd4aePUXN9/ydknQgqt.cGINk4FeDASiS1tS', 'user@slim4api.com', 'Login [user/secret] with autologin function to easily test JWT', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImY0ZDY3OWVhLWNiMGEtNDg4Ny1iY2RlLWVlYTNiOTg3OGUzMyJ9.eyJpc3MiOiJ3d3cuZXhhbXBsZS5jb20iLCJqdGkiOiJmNGQ2NzllYS1jYjBhLTQ4ODctYmNkZS1lZWEzYjk4NzhlMzMiLCJpYXQiOjE1OTg0NDE4MjgsIm5iZiI6MTU5ODQ0MTgyOCwiZXhwIjoxNTk4NDU2MjI4LCJ1aWQiOiJ1c2VyIn0.ueZ8wEx2JuDG9xyzNp2wekNDzQn8GLlmkxGiKqJ5opbk3_j5Ce4tNjFfWDBkIIT_dhdnB1UFfy4NnO9-4k-rcWUe3X21AJfztgguieFBQIEb5HrFh3xfl0JpuuWtZkw_474P5lA5w446SESue4BF0kDz9tyCX5SpMn7o3wTnDpTqoGIaVfJM5UcFlWVj-73UEgaN_WR627OIQF9gkmFWKM6FSvZcMFEFUwq26NnrW5Q2wGrNe8uHEXQ-J0cXJKFh88NsA34X0OUBrPCbkI_cJkz4BiJGJrm8MNvPg6e-PV91dAJase7RfM4zfwAwIqFdiYrIeXX5O5XX9Kcjv6U6OA', '1', now(), now()),
+(3, 'nogo', '$2y$10$0VkUbW.zvlAwtRESZPcp.OEAsndWTl3kSReSQdgK6bUcvfc63JQTe', 'inactive@user.com', 'Login [nogo/password] to test inactive user and exception', false, '0', now(), now());
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loglogins`
+--
+
+DROP TABLE IF EXISTS `loglogins`;
+CREATE TABLE IF NOT EXISTS `loglogins` (
+  `LOGID` int(8) NOT NULL AUTO_INCREMENT,
+  `LOGUSERNAME` varchar(100) NOT NULL,
+  `LOGSOURCEIP` varchar(100) NOT NULL,
+  `LOGRESULT` varchar(100) NOT NULL,
+  `LOGUPDATEDAT` datetime NOT NULL,
+  UNIQUE KEY `LOGID` (`LOGID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loglogins`
+--
+
+INSERT INTO `loglogins` VALUES 
+(1, 'miked', '127.0.0.1', 'ok', now()),
+(2, 'user', '127.0.0.1', 'ok', now()),
+(3, 'nogo', '127.0.0.1', 'Access locked: nogo', now());
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logtokens`
+--
+
+DROP TABLE IF EXISTS `logtokens`;
+CREATE TABLE IF NOT EXISTS `logtokens` (
+  `TOKID` int(8) NOT NULL AUTO_INCREMENT,
+  `TOKUSERNAME` varchar(100) NOT NULL,
+  `TOKTOKEN` varchar(1000) NOT NULL,
+  `TOKSTATUS` varchar(2) NOT NULL,
+  `TOKISSUEDAT` datetime NOT NULL,
+  `TOKEXPIREDAT` datetime NOT NULL,
+  PRIMARY KEY (`TOKID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logtokens`
+--
+
+INSERT INTO `logtokens` (`TOKID`, `TOKUSERNAME`, `TOKTOKEN`, `TOKSTATUS`, `TOKISSUEDAT`, `TOKEXPIREDAT`) VALUES
+(0, 'user', 'blabla', '1', '2020-08-28 07:29:00', '2020-08-28 07:29:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -77,82 +155,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`USRID`, `USRNAME`, `USRPASS`, `USRFIRSTNAME`, `USRLASTNAME`, `USREMAIL`, `USRPROFILE`, `USRUPDATEDBY`, `USRUPDATEDAT`) VALUES
 (1, 'margaux17', '5;<xbI`cjbfqBU7T', 'Victoire', 'Moulin', 'richard97@mallet.org', 'users ', 'root', '2019-12-02 06:29:12'),
 (2, 'luce.barbier', 'k4vh$QK0L', 'Laurence', 'Gonzalez', 'gilbert93@lefevre.com', 'users ', 'root', '2019-12-03 00:34:03'),
-(3, 'caroline.colin', 'I%*NZ\hhbfwBGgf', 'Constance', 'Poirier', 'jourdan.raymond@delannoy.org', 'customers stocks articles ', 'system', '2020-03-30 09:58:07'),
+(3, 'caroline.colin', 'I%*NZhhbfwBGgf', 'Constance', 'Poirier', 'jourdan.raymond@delannoy.org', 'customers stocks articles ', 'system', '2020-03-30 09:58:07'),
 (4, 'xavier44', 'v1f<UN}J$:~kD', 'Stéphane', 'Leger', 'dossantos.jacqueline@cousin.fr', 'customers ', 'admin', '2020-05-22 12:19:59'),
 (5, 'mperrier', '=/*MO|Q', 'Michèle', 'Martineau', 'durand.renee@nguyen.fr', 'articles users stocks ', 'root', '2020-01-16 00:45:12');
-
-
---
--- Table structure for table `login`
---
-
-DROP TABLE IF EXISTS `logins`;
-CREATE TABLE IF NOT EXISTS `logins` (
-  `JWUID` int(8) NOT NULL AUTO_INCREMENT,
-  `JWUUSERNAME` varchar(50) NOT NULL,
-  `JWUPASSWORD` varchar(2048) NOT NULL,
-  `JWUEMAIL` varchar(100) NOT NULL,
-  `JWUDESCRIPTION` varchar(200) NOT NULL,
-  `JWULASTTOKEN` varchar(1000) NOT NULL,
-  `JWUSTATUS` varchar(1) NOT NULL,
-  `JWUCREATED` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `JWUMODIFIED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`JWUID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `login`
---
-
-INSERT INTO `logins` (`JWUID`, `JWUUSERNAME`, `JWUPASSWORD`, `JWUEMAIL`, `JWUDESCRIPTION`, `JWULASTTOKEN`, `JWUSTATUS`, `JWUCREATED`, `JWUMODIFIED`) VALUES
-(1, 'MikeD', '$2y$10$0VkUbW.zvlAwtRESZPcp.OEAsndWTl3kSReSQdgK6bUcvfc63JQTe', 'mike@codeofaninja.com', 'Login [MikeD/password] for Mike Dalisay CodeOfANinja', false, '1', now(), now()),
-(2, 'user', '$2y$10$zz81A20v7euIGy/GBtd4aePUXN9/ydknQgqt.cGINk4FeDASiS1tS', 'user@slim4api.com', 'Login [user/secret] with autologin function to easily test JWT', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImY0ZDY3OWVhLWNiMGEtNDg4Ny1iY2RlLWVlYTNiOTg3OGUzMyJ9.eyJpc3MiOiJ3d3cuZXhhbXBsZS5jb20iLCJqdGkiOiJmNGQ2NzllYS1jYjBhLTQ4ODctYmNkZS1lZWEzYjk4NzhlMzMiLCJpYXQiOjE1OTg0NDE4MjgsIm5iZiI6MTU5ODQ0MTgyOCwiZXhwIjoxNTk4NDU2MjI4LCJ1aWQiOiJ1c2VyIn0.ueZ8wEx2JuDG9xyzNp2wekNDzQn8GLlmkxGiKqJ5opbk3_j5Ce4tNjFfWDBkIIT_dhdnB1UFfy4NnO9-4k-rcWUe3X21AJfztgguieFBQIEb5HrFh3xfl0JpuuWtZkw_474P5lA5w446SESue4BF0kDz9tyCX5SpMn7o3wTnDpTqoGIaVfJM5UcFlWVj-73UEgaN_WR627OIQF9gkmFWKM6FSvZcMFEFUwq26NnrW5Q2wGrNe8uHEXQ-J0cXJKFh88NsA34X0OUBrPCbkI_cJkz4BiJGJrm8MNvPg6e-PV91dAJase7RfM4zfwAwIqFdiYrIeXX5O5XX9Kcjv6U6OA', '1', now(), now()),
-(3, 'nogo', '$2y$10$0VkUbW.zvlAwtRESZPcp.OEAsndWTl3kSReSQdgK6bUcvfc63JQTe', 'inactive@user.com', 'Login [nogo/password] to test inactive user and exception', false, '0', now(), now())
-;
-
---
--- Table structure for table `loglogin`
---
-
-DROP TABLE IF EXISTS `loglogins`;
-CREATE TABLE IF NOT EXISTS `loglogins` (
-  `LOGID` int(8) NOT NULL AUTO_INCREMENT,
-  `LOGUSERNAME` varchar(100) NOT NULL,
-  `LOGSOURCEIP` varchar(100) NOT NULL,
-  `LOGRESULT` varchar(100) NOT NULL,
-  `LOGUPDATEDAT` datetime NOT NULL,
-  UNIQUE KEY `LOGID` (`LOGID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `loglogin`
---
-
-INSERT INTO `loglogins` VALUES (1, 'miked', '127.0.0.1', 'ok', now());
-INSERT INTO `loglogins` VALUES (2, 'user', '127.0.0.1', 'ok', now());
-INSERT INTO `loglogins` VALUES (3, 'nogo', '127.0.0.1', 'Access locked: nogo', now());
-
---
--- Table structure for table `logtokens`
---
-
-DROP TABLE IF EXISTS `logtokens`;
-CREATE TABLE IF NOT EXISTS `logtokens` (
-  `TOKID` int(8) NOT NULL AUTO_INCREMENT,
-  `TOKUSERNAME` varchar(100) NOT NULL,
-  `TOKTOKEN` varchar(1000) NOT NULL,
-  `TOKSTATUS` varchar(2) NOT NULL,
-  `TOKISSUEDAT` datetime NOT NULL,
-  `TOKEXPIREDAT` datetime NOT NULL,
-  PRIMARY KEY (`TOKID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `logtokens`
---
-
-INSERT INTO `logtokens` (`TOKID`, `TOKUSERNAME`, `TOKTOKEN`, `TOKSTATUS`, `TOKISSUEDAT`, `TOKEXPIREDAT`) VALUES
-(0, 'user', 'blabla', '1', '2020-08-28 07:29:00', '2020-08-28 07:29:00');
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
