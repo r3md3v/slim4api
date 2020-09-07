@@ -11,8 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=changeItToo
       - MYSQL_HOST=mysql
       - MYSQL_DATABASE=slim
-      - MYSQL_USER=slim
-      - MYSQL_PASSWORD=changeIt
+      - MYSQL_USER=userslim
+      - MYSQL_PASSWORD=Secr3t
     volumes:
       - ./schema/:/docker-entrypoint-initdb.d/
   php-fpm:
