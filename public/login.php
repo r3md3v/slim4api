@@ -15,15 +15,15 @@
 	<form method="post" action="/tokens" onsubmit="return verifForm([username,password],'Error : fields marked with an asterisk are mandatory!');">
 
 		<p>
-		
+
 			<!-- forced login user/secret to be replaced with actual credentials cehck from database -->
-			
+
 			<label for="username">* Username or Email:</label><br>
 			<input type="text" class="form" name="username" placeholder="userid or email" /><br/>
 
 			<label for="password">* Password:</label><br>
 			<input type="password" class="form" name="password" placeholder="password" /><br />
-			
+
 			<br />
 
 			<button>Login</button>
@@ -32,9 +32,9 @@
 			<button><a href="/logout">Logout</a></button>
 			<button><a href="/checkJWTForm.php">Check JWT</a></button>
 			<button><a href="/hashPWDForm.php">Hash PWD</a></button>
-			
+
 			<br />
-			
+
 		</p>
 	</form>
 	</div>

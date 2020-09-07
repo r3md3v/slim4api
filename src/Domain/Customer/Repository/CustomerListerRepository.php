@@ -20,8 +20,8 @@ class CustomerListerRepository
     /**
      * The constructor.
      *
-     * @param PDO           $connection The database connection
-     * @param LoggerFactory $lf         The logger Factory
+     * @param PDO $connection The database connection
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(PDO $connection, LoggerFactory $lf)
     {
@@ -37,11 +37,11 @@ class CustomerListerRepository
      * @param mixed $page
      * @param mixed $pagesize
      *
+     * @return customers List of Customers
      * @throws DomainException
      *
-     * @return customers List of Customers
      */
-    public function getCustomers($page, $pagesize): array
+    public function getCustomers(int $page = 1, int $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("CustomerListerRepository.getCustomers: page: {$page}, size: {$pagesize}");
@@ -64,13 +64,14 @@ class CustomerListerRepository
 
         $customers = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $customer = new CustomerData();
-            $customer->id = (int) $row['CUSID'];
-            $customer->name = (string) $row['CUSNAME'];
-            $customer->address = (string) $row['CUSADDRESS'];
-            $customer->city = (string) $row['CUSCITY'];
-            $customer->phone = (string) $row['CUSPHONE'];
-            $customer->email = (string) $row['CUSEMAIL'];
+            $customer = new CustomerData(
+                (int)$row['CUSID'],
+                (string)$row['CUSNAME'],
+                (string)$row['CUSADDRESS'],
+                (string)$row['CUSCITY'],
+                (string)$row['CUSPHONE'],
+                (string)$row['CUSEMAIL']);
+
             array_push($customers, $customer);
         }
 

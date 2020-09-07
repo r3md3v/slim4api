@@ -38,12 +38,10 @@ class UserSearcherRepository
      * @param int pagesize Nb of lines
      * @param mixed $keyword
      * @param mixed $in
-     * @param mixed $page
-     * @param mixed $pagesize
-     *
-     * @throws DomainException
      *
      * @return users Search of Users
+     * @throws DomainException
+     *
      */
     public function getUsers($keyword, $in, $page, $pagesize): array
     {
@@ -64,6 +62,8 @@ class UserSearcherRepository
             $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :limit, :pagesize ;';
         }
 
+        $this->logger->debug("UserSearcherRepository.getUser: keyword: $keyword, in: $in, page: $page, size: $pagesize");
+
         $statement = $this->connection->prepare($sql);
 
         $keyword = htmlspecialchars(strip_tags($keyword));
@@ -78,15 +78,16 @@ class UserSearcherRepository
         $users = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $user = new UserData();
-            $user->id = (int) $row['USRID'];
-            $user->username = (string) $row['USRNAME'];
-            $user->firstName = (string) $row['USRFIRSTNAME'];
-            $user->lastName = (string) $row['USRLASTNAME'];
-            $user->email = (string) $row['USREMAIL'];
-            $user->profile = (string) $row['USRPROFILE'];
+            $user->id = (int)$row['USRID'];
+            $user->username = (string)$row['USRNAME'];
+            $user->firstName = (string)$row['USRFIRSTNAME'];
+            $user->lastName = (string)$row['USRLASTNAME'];
+            $user->email = (string)$row['USREMAIL'];
+            $user->profile = (string)$row['USRPROFILE'];
             array_push($users, $user);
         }
 
+        $this->logger->debug("UserSearcherRepository: pagemax: $pagemax, nbusers: $usernb");
         if (0 == count($users)) {
             if (-1 != $in) {
                 throw new DomainException(sprintf('No user with keyword [%s] in field [%s] page %d / %d', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax));

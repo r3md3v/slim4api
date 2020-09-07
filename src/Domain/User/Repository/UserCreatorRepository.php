@@ -71,7 +71,7 @@ class UserCreatorRepository
     {
 
         $params = [];
-		$params['username'] = $username;
+        $params['username'] = $username;
         $params['email'] = $email;
 
         $sql = "SELECT * FROM users AS u 

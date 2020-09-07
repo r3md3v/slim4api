@@ -6,6 +6,7 @@ use App\Domain\Customer\Repository\CustomerListerRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -16,15 +17,25 @@ final class CustomerLister
      * @var CustomerListerRepository
      */
     private $repository;
-    private $defaultPage;
+    /**
+     * @var mixed
+     */
     private $defaultPageSize;
+    /**
+     * @var mixed
+     */
+    private $defaultPage;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * The constructor.
      *
      * @param CustomerListerRepository $repository The repository
-     * @param ContainerInterface       $ci         The container interface
-     * @param LoggerFactory            $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(CustomerListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -37,14 +48,14 @@ final class CustomerLister
     /**
      * Read Customer list.
      *
-     * @param mixed $page     Page number
+     * @param mixed $page Page number
      * @param mixed $pagesize Nb of lines
      *
+     * @return CustomerList
      * @throws ValidationException
      *
-     * @return CustomerList
      */
-    public function getCustomerList($page, $pagesize): array
+    public function getCustomerList(int $page = 1, int $pagesize = 50): array
     {
         // Feed the logger
         $this->logger->debug("CustomerLister.getCustomerList: input: page: {$page}, size: {$pagesize}");
@@ -59,7 +70,9 @@ final class CustomerLister
             $pagesize = $this->defaultPageSize;
         }
 
+        $this->logger->debug("CustomerList.getCustomerList: page: $page, size: $pagesize");
         return $this->repository->getCustomers($page, $pagesize);
+
     }
 
     /**
@@ -67,7 +80,8 @@ final class CustomerLister
      *
      * @return nb
      */
-    public function getCustomerCount(): int
+    public
+    function getCustomerCount(): int
     {
         return $this->repository->countCustomers();
     }

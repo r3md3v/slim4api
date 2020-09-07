@@ -106,7 +106,7 @@ final class HomeAction
         $this->version = $apiSettings['version'];
         $this->url = $apiSettings['url'];
         $this->build = $apiSettings['build'];
-        $this->datetime = date('Y-m-d H:i:s').' '.date_default_timezone_get();
+        $this->datetime = date('Y-m-d H:i:s') . ' ' . date_default_timezone_get();
         $this->timestamp = time();
         $this->endpoints = $apiSettings['endpoints'];
     }

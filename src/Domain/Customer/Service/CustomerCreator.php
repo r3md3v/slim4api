@@ -4,6 +4,7 @@ namespace App\Domain\Customer\Service;
 
 use App\Domain\Customer\Repository\CustomerCreatorRepository;
 use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
 use Slim\Logger;
 
 /**
@@ -25,11 +26,12 @@ final class CustomerCreator
      * The constructor.
      *
      * @param CustomerCreatorRepository $repository The repository
+     * @param LoggerFactory $lf
      */
-    public function __construct(CustomerCreatorRepository $repository, Logger $logger)
+    public function __construct(CustomerCreatorRepository $repository, LoggerFactory $lf)
     {
         $this->repository = $repository;
-        $this->logger = $logger;
+        $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     /**
@@ -38,17 +40,20 @@ final class CustomerCreator
      * @param array $data The form data
      *
      * @return int The new customer ID
+     * @throws ValidationException
      */
     public function createCustomer(array $data): int
     {
         // Input validation
         $this->validateNewCustomer($data);
+        //$this->logger->debug(sprintf("createCustomer: %s",var_dump($data)));
 
         // Insert customer
         $customerId = $this->repository->insertCustomer($data);
 
         // Logging here: Customer created successfully
-        $this->logger->info(sprintf('customer %s created with id: %s', $data['cusname'], $customerId));
+        $this->logger->debug(sprintf("customer %s created with id: %s", $data['cusname'], $customerId));
+        $this->logger->info(sprintf('Customer created successfully: %s', $customerId));
 
         return $customerId;
     }
@@ -58,7 +63,9 @@ final class CustomerCreator
      *
      * @param array $data The form data
      *
+     * @return void
      * @throws ValidationException
+     *
      */
     private function validateNewCustomer(array $data): void
     {
@@ -75,11 +82,12 @@ final class CustomerCreator
         }
 
         if (sizeof($errors) > 0) {
+            $this->logger->debug(sprintf("createCustomer: errors not null: %i,error: %s", sizeof($errors), $errors['mandatory']));
             throw new ValidationException('Please check your input.', $errors);
         }
 
         if (true == $this->repository->customerExists($data['email'])) {
-            throw new ValidationException('Customer already exists with email '.$data['email'].'.', $errors);
+            throw new ValidationException('Customer already exists with email ' . $data['email'] . '.', $errors);
         }
     }
 }

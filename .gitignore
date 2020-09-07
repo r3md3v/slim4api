@@ -4,8 +4,8 @@ logs/
 tmp/
 /config/settings.php
 /config/settings.php.*
-/*.pem
-*.pem
+**.pem
 *.phar
 */php.php
 *.iml
+tests/reports

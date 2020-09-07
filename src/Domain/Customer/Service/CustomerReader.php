@@ -18,6 +18,7 @@ final class CustomerReader
 
     /**
      * The constructor.
+     * @codeCoverageIgnore
      *
      * @param CustomerReaderRepository $repository The repository
      */
@@ -35,7 +36,7 @@ final class CustomerReader
      * @throws ValidationException
      *
      */
-    public function getCustomerDetails(int $CustomerId): CustomerData
+    public function getCustomerDetails($CustomerId): CustomerData
     {
         // Validation
         if (empty($CustomerId)) {

@@ -19,19 +19,19 @@ final class LoginReader
      * @var LoginReaderRepository
      */
     private $repository;
-    private $tokenlifetime;
+    private $tokenLifetime;
 
     /**
      * The constructor.
      *
      * @param LoginReaderRepository $repository The repository
-     * @param ContainerInterface    $ci         The container interface
-     * @param LoggerFactory         $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(LoginReaderRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->repository = $repository;
-        $this->tokenlifetime = $ci->get('settings')['jwt']['lifetime'];
+        $this->tokenLifetime = $ci->get('settings')['jwt']['lifetime'];
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -42,9 +42,9 @@ final class LoginReader
      * @param string $password The login password
      * @param string $sourceip The source IP
      *
+     * @return LoginData The login data
      * @throws ValidationException
      *
-     * @return LoginData The login data
      */
     public function getLoginDetails(string $username, string $password, string $sourceip): LoginData
     {
@@ -56,11 +56,10 @@ final class LoginReader
             throw new ValidationException('Username and password required');
         }
 
-        // Get login details with status contening error or 0/1 if user diabled/enabled
+        // Get login details with status contening error or 0/1 if user disabled/enabled
         $login = $this->repository->getLoginByUMP($username, $password);
         if ('0' != $login->status && '1' != $login->status) {
             $this->repository->logLogin($username, $sourceip, $login);
-
             throw new ValidationException($login->status);
         }
 

@@ -16,15 +16,21 @@ final class LoginLister
      * @var LoginListerRepository
      */
     private $repository;
+    /**
+     * @var mixed
+     */
     private $defaultPage;
+    /**
+     * @var mixed
+     */
     private $defaultPageSize;
 
     /**
      * The constructor.
      *
      * @param LoginListerRepository $repository The repository
-     * @param ContainerInterface    $ci         The container interface
-     * @param LoggerFactory         $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(LoginListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -37,14 +43,14 @@ final class LoginLister
     /**
      * Read login list.
      *
-     * @param int page Page number
-     * @param int pagesize Nb of lines
+     * @param mixed page Page number
+     * @param mixed pagesize Nb of lines
      *
+     * @return array LoginList
      * @throws ValidationException
      *
-     * @return LoginList
      */
-    public function getLoginList(int $page, int $pagesize): array
+    public function getLoginList($page, $pagesize): array
     {
         // Feed the logger
         $this->logger->debug("LoginLister.getLoginList: input: page: {$page}, size: {$pagesize}");
@@ -65,7 +71,7 @@ final class LoginLister
     /**
      * Count logins.
      *
-     * @return nb
+     * @return int nb
      */
     public function getLoginCount(): int
     {

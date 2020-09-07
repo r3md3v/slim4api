@@ -27,7 +27,7 @@ final class CustomerListAction
      * The constructor.
      *
      * @param CustomerLister $customerLister The customer lister
-     * @param Logger         $logger         the loggerFactory
+     * @param LoggerFactory $lf
      */
     public function __construct(CustomerLister $customerLister, LoggerFactory $lf)
     {

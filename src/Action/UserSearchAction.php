@@ -27,6 +27,7 @@ final class UserSearchAction
      * The constructor.
      *
      * @param UserSearcher $userSearcher The user searcher
+     * @param LoggerFactory $lf
      */
     public function __construct(UserSearcher $userSearcher, LoggerFactory $lf)
     {
@@ -37,9 +38,9 @@ final class UserSearchAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request  The request
-     * @param ResponseInterface      $response The response
-     * @param array                  $args     The route arguments
+     * @param ServerRequestInterface $request The request
+     * @param ResponseInterface $response The response
+     * @param array $args The route arguments
      *
      * @return ResponseInterface The response
      */
@@ -47,9 +48,11 @@ final class UserSearchAction
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $args = []
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
+
         // Collect input from the HTTP request
-        $keyword = (string) $args['keyword'];
+        $keyword = (string)$args['keyword'];
         $in = isset($_GET['in']) ? $_GET['in'] : -1;
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $size = isset($_GET['size']) ? $_GET['size'] : 0;
@@ -74,7 +77,7 @@ final class UserSearchAction
         }
 
         // Build the HTTP response
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

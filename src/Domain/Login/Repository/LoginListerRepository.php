@@ -34,11 +34,11 @@ class LoginListerRepository
      * @param mixed $page
      * @param mixed $pagesize
      *
+     * @return logins List of Logins
      * @throws DomainException
      *
-     * @return logins List of Logins
      */
-    public function getLogins($page, $pagesize): array
+    public function getLogins(int $page, int $pagesize): array
     {
         $loginnb = $this->countLogins();
 
@@ -58,13 +58,13 @@ class LoginListerRepository
 
         $logins = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $login = new LoginData();
-            $login->id = (int) $row['JWUID'];
-            $login->username = (string) $row['JWUUSERNAME'];
-            $login->email = (string) $row['JWUEMAIL'];
-            $login->description = (string) $row['JWUDESCRIPTION'];
-            $login->lasttoken = (string) $row['JWULASTTOKEN'];
-            $login->status = (string) $row['JWUSTATUS'];
+            $login = new LoginData(
+                (int)$row['JWUID'],
+                (string)$row['JWUUSERNAME'],
+                (string)$row['JWUEMAIL'],
+                (string)$row['JWUDESCRIPTION'],
+                (string)$row['JWULASTTOKEN'],
+                (string)$row['JWUSTATUS']);
             array_push($logins, $login);
         }
 

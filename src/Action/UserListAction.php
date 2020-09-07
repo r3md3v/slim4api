@@ -13,15 +13,16 @@ use Slim\Logger;
  */
 final class UserListAction
 {
+
     /**
      * @var UserLister
      */
     private $userLister;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
-    private $logger;
+    protected $logger;
 
     /**
      * The constructor.
@@ -49,9 +50,10 @@ final class UserListAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
+
         // Collect input from the HTTP request
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $size = isset($_GET['size']) ? $_GET['size'] : 0;
+        $page = isset($_GET['page']) ? $_GET['page'] : -1;
+        $size = isset($_GET['size']) ? $_GET['size'] : -1;
 
         // Feed the logger
         $this->logger->debug("UserListAction: page: {$page}, size: {$size}");
@@ -73,7 +75,7 @@ final class UserListAction
         }
 
         // Build the HTTP response
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

@@ -37,7 +37,7 @@ final class LoggerFactory
     {
         $this->path = (string)$settings['path'];
         $this->level = (int)$settings['level'];
-	}
+    }
 
     /**
      * Build the logger.

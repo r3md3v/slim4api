@@ -11,7 +11,7 @@ use Slim\Logger;
 /**
  * Action
  */
-final class UserListAction
+final class StatusAction
 {
 
     /**

@@ -78,8 +78,8 @@ final class TokenCreateAction
             $response->getBody()->write(json_encode('Unauthorized access'));
 
             return $response
-                ->withStatus(401, 'Unauthorized')
-            ;
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(401, 'Unauthorized');
         }
 
         /* Check for valid existing token for user
@@ -120,13 +120,13 @@ final class TokenCreateAction
 
         // Build the HTTP response
         $response = $response
+            ->withHeader('Content-Type', 'application/json')
             ->withHeader('Authorization', $result['access_token'])
             // add cookie
             ->withHeader(
                 'Set-Cookie',
-                'Authorization='.$result['access_token'].'; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age='.$lifetime
-            )
-        ;
+                'Authorization=' . $result['access_token'] . '; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age=' . $lifetime
+            );
 
         // Feed the logger
         $this->logger->debug("TokenCreateAction: JWT created for [{$username}]");
