@@ -12,8 +12,8 @@
 
 	<h1>Slim4API - User Create</h1>
 
-        <form class="form" method="post" action="/users"
-              onsubmit="return verifForm([username,password,first_name,last_name,email,profile],'Error : fields marked with an asterisk are mandatory!') && validateEmail(email,'Error : email format invalid!');">
+    <form class="form" method="post" action="/users"
+        onsubmit="return verifForm([username,password,first_name,last_name,email,profile],'Error : fields marked with an asterisk are mandatory!') && validateEmail(email,'Error : email format invalid!');">
 
 		<p>
 			<label for="username">* Username:</label><br />

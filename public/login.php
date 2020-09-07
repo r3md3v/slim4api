@@ -16,8 +16,6 @@
 
 		<p>
 
-			<!-- forced login user/secret to be replaced with actual credentials cehck from database -->
-
 			<label for="username">* Username or Email:</label><br>
 			<input type="text" class="form" name="username" placeholder="userid or email" /><br/>
 
