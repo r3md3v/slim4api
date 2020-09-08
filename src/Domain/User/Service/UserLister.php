@@ -6,6 +6,7 @@ use App\Domain\User\Repository\UserListerRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -16,8 +17,18 @@ final class UserLister
      * @var UserListerRepository
      */
     private $repository;
+    /**
+     * @var mixed
+     */
     private $defaultPage;
+    /**
+     * @var mixed
+     */
     private $defaultPageSize;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * The constructor.

@@ -14,20 +14,20 @@ use Slim\Logger;
 final class CustomerListAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var CustomerLister
      */
     private $customerLister;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * The constructor.
      *
      * @param CustomerLister $customerLister The customer lister
-     * @param LoggerFactory $lf
+     * @param LoggerFactory  $lf             The loggerFactory
      */
     public function __construct(CustomerLister $customerLister, LoggerFactory $lf)
     {

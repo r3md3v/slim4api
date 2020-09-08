@@ -14,14 +14,14 @@ use Slim\Logger;
 final class UserReadAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var UserReader
      */
     private $userReader;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.
@@ -65,7 +65,7 @@ final class UserReadAction
             'first_name' => $userData->firstName,
             'last_name' => $userData->lastName,
             'email' => $userData->email,
-			'profile' => $userData->profile,
+            'profile' => $userData->profile,
         ];
 
         // Build the HTTP response

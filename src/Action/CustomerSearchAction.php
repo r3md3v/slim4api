@@ -14,14 +14,14 @@ use Slim\Logger;
 final class CustomerSearchAction
 {
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var CustomerSearcher
      */
     private $customerSearcher;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * The constructor.

@@ -6,6 +6,7 @@ use App\Domain\User\Repository\UserSearcherRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -16,9 +17,22 @@ final class UserSearcher
      * @var UserSearcherRepository
      */
     private $repository;
+    /**
+     * @var mixed
+     */
     private $defaultPage;
+    /**
+     * @var mixed
+     */
     private $defaultPageSize;
+    /**
+     * @var mixed
+     */
     private $defaultSearchField;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * The constructor.

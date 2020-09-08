@@ -9,11 +9,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
 
 /**
- * Action
+ * Action.
  */
 final class UserListAction
 {
-
     /**
      * @var UserLister
      */
@@ -22,7 +21,7 @@ final class UserListAction
     /**
      * @var Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * The constructor.
@@ -50,7 +49,6 @@ final class UserListAction
         ResponseInterface $response,
         array $args = []
     ): ResponseInterface {
-
         // Collect input from the HTTP request
         $page = isset($_GET['page']) ? $_GET['page'] : -1;
         $size = isset($_GET['size']) ? $_GET['size'] : -1;
@@ -75,7 +73,7 @@ final class UserListAction
         }
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

@@ -32,7 +32,7 @@ use Slim\Logger;
  */
 
 /**
- * Action
+ * Action.
  */
 final class CustomerCreateAction
 {
@@ -50,7 +50,7 @@ final class CustomerCreateAction
      * The constructor.
      *
      * @param CustomerCreator $customerCreator The customer creator
-     * @param LoggerFactory $lf The loggerFactory
+     * @param LoggerFactory   $lf              The loggerFactory
      */
     public function __construct(CustomerCreator $customerCreator, LoggerFactory $lf)
     {
@@ -61,29 +61,29 @@ final class CustomerCreateAction
     /**
      * Invoke.
      *
-     * @param ServerRequestInterface $request The request
-     * @param ResponseInterface $response The response
+     * @param ServerRequestInterface $request  The request
+     * @param ResponseInterface      $response The response
      *
      * @return ResponseInterface The response
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         // Collect input from the HTTP request
-        $data = (array)$request->getParsedBody();
+        $data = (array) $request->getParsedBody();
 
         // Invoke the Domain with inputs and retain the result
         $customerId = $this->customerCreator->createCustomer($data);
 
         // Feed the logger
-        $this->logger->debug("CustomerCreateAction: id: $customerId");
+        $this->logger->debug("CustomerCreateAction: id: {$customerId}");
 
         // Transform the result into the JSON representation
         $result = [
-            'customer_id' => $customerId
+            'customer_id' => $customerId,
         ];
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }

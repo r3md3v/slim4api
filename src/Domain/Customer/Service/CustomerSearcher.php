@@ -20,11 +20,11 @@ final class CustomerSearcher
     /**
      * @var mixed
      */
-    private $defaultPageSize;
+    private $defaultPage;
     /**
      * @var mixed
      */
-    private $defaultPage;
+    private $defaultPageSize;
     /**
      * @var int
      */
