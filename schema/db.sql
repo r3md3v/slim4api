@@ -1,8 +1,8 @@
 -- SQL Dump
 
 -- Modify database name in 2 lines below
-create schema if not exists slim;
-use slim;
+-- create schema if not exists slim;
+-- use slim;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -16,7 +16,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `slim4api`
+-- Database: `slim`
 --
 
 -- --------------------------------------------------------
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `logins` (
   `JWUCREATED` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `JWUMODIFIED` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`JWUID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `logins`
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `loglogins` (
   `LOGRESULT` varchar(100) NOT NULL,
   `LOGUPDATEDAT` datetime NOT NULL,
   UNIQUE KEY `LOGID` (`LOGID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `loglogins`
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `logtokens` (
   `TOKISSUEDAT` datetime NOT NULL,
   `TOKEXPIREDAT` datetime NOT NULL,
   PRIMARY KEY (`TOKID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `logtokens`
