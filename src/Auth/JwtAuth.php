@@ -78,9 +78,9 @@ final class JwtAuth
      *
      * @param array $claims The claims
      *
-     * @return string The JWT
      * @throws UnexpectedValueException
      *
+     * @return string The JWT
      */
     public function createJwt(array $claims): string
     {
@@ -90,7 +90,8 @@ final class JwtAuth
             ->identifiedBy(uuid_create(), true)
             ->issuedAt($issuedAt)
             ->canOnlyBeUsedAfter($issuedAt)
-            ->expiresAt($issuedAt + $this->lifetime);
+            ->expiresAt($issuedAt + $this->lifetime)
+        ;
 
         foreach ($claims as $name => $value) {
             $builder = $builder->withClaim($name, $value);
@@ -104,9 +105,9 @@ final class JwtAuth
      *
      * @param string $token The JWT
      *
-     * @return Token The parsed token
      * @throws InvalidArgumentException
      *
+     * @return string Token The parsed token
      */
     public function createParsedToken(string $token): Token
     {

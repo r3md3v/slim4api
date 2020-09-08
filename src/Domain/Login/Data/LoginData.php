@@ -26,14 +26,15 @@ final class LoginData
 
     /**
      * LoginData constructor.
-     * @param int $id
-     * @param string $username
-     * @param string $email
-     * @param string $description
-     * @param string $lasttoken
-     * @param string $status
+     *
+     * @param mixed $id
+     * @param mixed $username
+     * @param mixed $email
+     * @param mixed $description
+     * @param mixed $lasttoken
+     * @param mixed $status
      */
-    public function __construct(int $id, string $username, string $email, string $description, string $lasttoken, string $status)
+    public function __construct($id, $username, $email, $description, $lasttoken, $status)
     {
         $this->id = $id;
         $this->username = $username;
@@ -42,6 +43,4 @@ final class LoginData
         $this->lasttoken = $lasttoken;
         $this->status = $status;
     }
-
-
 }

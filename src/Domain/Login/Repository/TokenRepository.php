@@ -31,9 +31,9 @@ class TokenRepository
      *
      * @param string $token The token
      *
-     * @return TokenData The token data
      * @throws DomainException
      *
+     * @return TokenData The token data
      */
     public function getTokenByJwt(string $token): TokenData
     {
@@ -51,22 +51,24 @@ class TokenRepository
             $tokens = explode('.', $token);
             //throw new DomainException(sprintf('Token not found: %s', $tokens[0])); // only show header of token for security reason
 
-            $token = new TokenData();
-            $token->id = (int)0;
-            $token->username = (string)'No active token';
-            $token->token = (string)$tokens[0];
-            $token->status = (string)1;
-            $token->issued = (string)'na';
-            $token->expired = (string)'na';
+            $token = new TokenData(
+                (int) 0,
+                (string) 'No active token',
+                (string) $tokens[0],
+                (string) 1,
+                (string) 'na',
+                (string) 'na',
+            );
         } else {
             // Map array to data object
-            $token = new TokenData();
-            $token->id = (int)$row['TOKID'];
-            $token->username = (string)$row['TOKUSERNAME'];
-            $token->token = (string)$row['TOKTOKEN'];
-            $token->status = (string)$row['TOKSTATUS'];
-            $token->issued = (string)$row['TOKISSUEDAT'];
-            $token->expired = (string)$row['TOKEXPIREDAT'];
+            $token = new TokenData(
+                (int) $row['TOKID'],
+                (string) $row['TOKUSERNAME'],
+                (string) $row['TOKTOKEN'],
+                (string) $row['TOKSTATUS'],
+                (string) $row['TOKISSUEDAT'],
+                (string) $row['TOKEXPIREDAT'],
+            );
         }
 
         return $token;
@@ -76,7 +78,7 @@ class TokenRepository
      * Save token.
      *
      * @param string $username The login username
-     * @param string $token The Token
+     * @param string $token    The Token
      * @param string $lifetime The lifetime
      *
      * @return tokenid The token id
@@ -94,11 +96,11 @@ class TokenRepository
             TOKTOKEN=:token,
             TOKSTATUS=:status,
             TOKISSUEDAT=NOW(),
-            TOKEXPIREDAT= DATE_ADD(NOW(), INTERVAL ' . $lifetime . ' SECOND);';
+            TOKEXPIREDAT= DATE_ADD(NOW(), INTERVAL '.$lifetime.' SECOND);';
 
         $this->connection->prepare($sql)->execute($paramSql);
 
-        return (int)$this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 
     /**
@@ -106,9 +108,9 @@ class TokenRepository
      *
      * @param string $token The Token
      *
-     * @return nbrow The nb of rows
      * @throws DomainException
      *
+     * @return nbrow The nb of rows
      */
     public function revokeTokenByJwt(string $token): int
     {
@@ -120,14 +122,14 @@ class TokenRepository
 
         $nbrows = $statement->rowCount();
 
-        if (!$nbrows = 0) {
+        if (0 == !$nbrows) {
             // Show only header of token for security reason
             $tokens = explode('.', $token);
             // Remove this warning to show only "Unauthorized"
             throw new DomainException(sprintf('Token not found: %s', $tokens[0]));
         }
 
-        return (int)$nbrows;
+        return (int) $nbrows;
     }
 
     /**
@@ -142,6 +144,21 @@ class TokenRepository
         $statement = $this->connection->prepare($sql);
         $statement->execute();
 
-        return (int)$statement->rowCount();
+        return (int) $statement->rowCount();
+    }
+
+    /**
+     * Get token log count.
+     *
+     * @return nb Nb of tokens
+     */
+    public function countTokens(): int
+    {
+        $sql = 'SELECT COUNT(*) AS nb FROM logtokens;';
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['nb'];
     }
 }

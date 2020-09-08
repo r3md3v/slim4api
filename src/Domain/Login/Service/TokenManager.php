@@ -97,4 +97,14 @@ final class TokenManager
     {
         return $this->repository->deleteExpiredTokens();
     }
+
+    /**
+     * Count tokens.
+     *
+     * @return int nb
+     */
+    public function getTokenCount(): int
+    {
+        return $this->repository->countTokens();
+    }
 }

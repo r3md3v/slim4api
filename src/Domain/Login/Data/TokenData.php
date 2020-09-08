@@ -26,14 +26,15 @@ final class TokenData
 
     /**
      * TokenData constructor.
-     * @param int $id
+     *
+     * @param int    $id
      * @param string $username
-     * @param string $token
-     * @param string $status
-     * @param string $updated
-     * @param string $expired
+     * @param mixed  $token
+     * @param mixed  $status
+     * @param mixed  $updated
+     * @param mixed  $expired
      */
-    public function __construct(int $id, string $username, string $token, string $status, string $updated, string $expired)
+    public function __construct($id, $username, $token, $status, $updated, $expired)
     {
         $this->id = $id;
         $this->username = $username;
@@ -42,6 +43,4 @@ final class TokenData
         $this->updated = $updated;
         $this->expired = $expired;
     }
-
-
 }

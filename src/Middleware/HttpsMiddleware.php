@@ -33,8 +33,8 @@ final class HttpsMiddleware implements MiddlewareInterface
      * The constructor.
      *
      * @param ResponseFactoryInterface $responseFactory The response factory
-     * @param ContainerInterface $ci
-     * @param $lf
+     * @param ContainerInterface       $ci              The container interface
+     * @param LoggerFactory            $lf              The logger factory
      */
     public function __construct(ResponseFactoryInterface $responseFactory, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -42,13 +42,13 @@ final class HttpsMiddleware implements MiddlewareInterface
         $this->container = $ci;
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
         $settings = $this->container->get('settings')['redirection'];
-        $this->port = (int)$settings['port'];
+        $this->port = (int) $settings['port'];
     }
 
     /**
      * Invoke middleware.
      *
-     * @param ServerRequestInterface $request The request
+     * @param ServerRequestInterface  $request The request
      * @param RequestHandlerInterface $handler The handler
      *
      * @return ResponseInterface The response
@@ -56,20 +56,20 @@ final class HttpsMiddleware implements MiddlewareInterface
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $uri = $request->getUri();
 
-        if ($uri->getHost() !== 'localhost' && $uri->getScheme() !== 'https') {
-            $this->logger->info("HttpsMiddleware: current uri: $uri, scheme: " . $uri->getScheme());
-            $this->logger->debug("Host: " . $uri->getHost() . ",protocol: " . $uri->getScheme() . ",  url: $uri");
-            $url = (string)$uri->withScheme('https')->withPort($this->port);
+        if ('localhost' !== $uri->getHost() && 'https' !== $uri->getScheme()) {
+            $url = (string) $uri->withScheme('https')->withPort($this->port);
 
-            $this->logger->info("HTTPS redirecting to $url");
+            // $this->logger->info("HttpsMiddleware: current uri: $uri, settings: " . $this->port);
+            $this->logger->info("HttpsMiddleware: current uri: {$uri}, scheme: ".$uri->getScheme().', settings: '.$this->port);
+            $this->logger->debug('Host: '.$uri->getHost().',protocol: '.$uri->getScheme().",  url: {$uri}");
+            $this->logger->info("HTTPS redirecting to {$url}");
+
             //unknown methods withRedirect for ResponseInterface
             //return $this->responseFactory->createResponse()->withRedirect($url);
-            return $this->responseFactory->createResponse()->withHeader('Location', (string)$url)->withStatus(301);
-
+            return $this->responseFactory->createResponse()->withHeader('Location', (string) $url)->withStatus(301);
         }
 
         return $handler->handle($request);

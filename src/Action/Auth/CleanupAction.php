@@ -2,7 +2,7 @@
 
 namespace App\Action\Auth;
 
-use App\Domain\Login\Service\LoginReader;
+use App\Domain\Login\Service\LoginManager;
 use App\Domain\Login\Service\TokenManager;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
@@ -18,9 +18,9 @@ final class CleanupAction
     private $tokenManager;
 
     /**
-     * @var LoginReader
+     * @var LoginManager
      */
-    private $loginReader;
+    private $loginManager;
 
     /**
      * @var LoggerInterface
@@ -31,14 +31,14 @@ final class CleanupAction
      * Constructor.
      *
      * @param TokenManager       $tokenManager The token manager
-     * @param LoginReader        $loginReader  The login reader/manager
+     * @param LoginManager       $loginManager The login Manager/manager
      * @param ContainerInterface $ci           The container interface
      * @param LoggerFactory      $lf           The loggerFactory
      */
-    public function __construct(TokenManager $tokenManager, LoginReader $loginReader, ContainerInterface $ci, LoggerFactory $lf)
+    public function __construct(TokenManager $tokenManager, LoginManager $loginManager, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->tokenManager = $tokenManager;
-        $this->loginReader = $loginReader;
+        $this->loginManager = $loginManager;
         $this->retention = $ci->get('settings')['jwt']['retention'];
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
@@ -49,12 +49,14 @@ final class CleanupAction
     ): ResponseInterface {
         //$token = explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? ''; // if header is used
 
-        $logincleanup = $this->loginReader->cleanupLogins($this->retention);
+        $loginnb = $this->loginManager->getLoginCount();
+        $tokennb = $this->tokenManager->getTokenCount();
+        $logincleanup = $this->loginManager->cleanupLogins($this->retention);
         $tokencleanup = $this->tokenManager->cleanupTokens();
 
         // Build JSON representation
         $result = [
-            'message' => 'Cleanup result: '.$logincleanup.' login(s), '.$tokencleanup.' token(s)',
+            'message' => 'Cleanup result: '.$logincleanup.' / '.$loginnb.' login(s) and '.$tokencleanup.' / '.$tokennb.' token(s)',
             'class' => 'CleanupAction',
             'status' => 'ok',
             'code' => 422,

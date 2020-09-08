@@ -44,16 +44,12 @@ final class UserSearcher
      * @param mixed  $page     Page number
      * @param mixed  $pagesize Nb of lines
      *
-     * @return UserSearch
      * @throws ValidationException
      *
+     * @return UserSearch
      */
     public function getUserSearch(string $keyword, int $in, int $page, int $pagesize): array
     {
-        // Validation
-        $this->logger->debug("UserSearcher.getUser: input: keyword: $keyword, in: $in, page: $page, size: $pagesize");
-
-        if (!is_numeric($page) || $page < 1 || $page < $this->defaultPage)
         // Feed the logger
         $this->logger->debug("UserSearcher.getUserSearch: input: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
 
@@ -76,9 +72,8 @@ final class UserSearcher
         if (empty($keyword)) {
             throw new ValidationException('Keyword required');
         }
-        $this->logger->debug("UserSearcher.getUser: output: keyword: $keyword, in: $in, page: $page, size: $pagesize");
-        $users = $this->repository->getUsers($keyword, $in, $page, $pagesize);
+        $this->logger->debug("UserSearcher.getUser: output: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
 
-        return $users;
+        return $this->repository->getUsers($keyword, $in, $page, $pagesize);
     }
 }
