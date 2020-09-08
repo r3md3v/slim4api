@@ -20,8 +20,8 @@ class CustomerSearcherRepository
     /**
      * The constructor.
      *
-     * @param PDO $connection The database connection
-     * @param LoggerFactory $lf The logger Factory
+     * @param PDO           $connection The database connection
+     * @param LoggerFactory $lf         The logger Factory
      */
     public function __construct(PDO $connection, LoggerFactory $lf)
     {
@@ -30,16 +30,16 @@ class CustomerSearcherRepository
     }
 
     /**
-     * Get customer search
+     * Get customer search.
      *
-     * @param string keyword Word to search
-     * @param String in Field exact name/human name
-     * @param int $page
-     * @param int $pagesize
+     * @param string $keyword  Word to search
+     * @param string $in       Field exact name/human name
+     * @param int    $page     page number
+     * @param int    $pagesize page size
      *
-     * @return array Search of Customers
      * @throws DomainException
      *
+     * @return customers Search of Customers
      */
     public function getCustomers(string $keyword, string $in, int $page, int $pagesize): array
     {
@@ -50,6 +50,7 @@ class CustomerSearcherRepository
 
         if (0 == $customernb) {
             $this->logger->info("CustomerSearcherRepository.getCustomers: no results for {$keyword}");
+
             throw new DomainException(sprintf('No customer!'));
         }
         $pagemax = ceil($customernb / $pagesize);
@@ -75,12 +76,13 @@ class CustomerSearcherRepository
         $customers = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $customer = new CustomerData(
-                (int)$row['CUSID'],
-                (string)$row['CUSNAME'],
-                (string)$row['CUSADDRESS'],
-                (string)$row['CUSCITY'],
-                (string)$row['CUSPHONE'],
-                (string)$row['CUSEMAIL']);
+                (int) $row['CUSID'],
+                (string) $row['CUSNAME'],
+                (string) $row['CUSADDRESS'],
+                (string) $row['CUSCITY'],
+                (string) $row['CUSPHONE'],
+                (string) $row['CUSEMAIL']
+            );
 
             array_push($customers, $customer);
         }
@@ -89,10 +91,12 @@ class CustomerSearcherRepository
             if (-1 != $in) {
                 $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
                 $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
+
                 throw new DomainException($msg);
             }
             $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
             $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
+
             throw new DomainException($msg);
         }
 
@@ -105,6 +109,7 @@ class CustomerSearcherRepository
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
+
         return $row['nb'];
     }
 }

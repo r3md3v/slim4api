@@ -18,6 +18,7 @@ final class CustomerReader
 
     /**
      * The constructor.
+     *
      * @codeCoverageIgnore
      *
      * @param CustomerReaderRepository $repository The repository
@@ -32,9 +33,9 @@ final class CustomerReader
      *
      * @param int $CustomerId The Customer id
      *
-     * @return CustomerData The Customer data
      * @throws ValidationException
      *
+     * @return CustomerData The Customer data
      */
     public function getCustomerDetails($CustomerId): CustomerData
     {
@@ -43,8 +44,6 @@ final class CustomerReader
             throw new ValidationException('Customer ID required');
         }
 
-        $Customer = $this->repository->getCustomerById($CustomerId);
-
-        return $Customer;
+        return $this->repository->getCustomerById($CustomerId);
     }
 }

@@ -33,7 +33,6 @@ class CustomerCreatorRepository
      */
     public function insertCustomer(array $customer): int
     {
-
         $paramSql = [
             'cusname' => $customer['cusname'],
             'address' => $customer['address'],
@@ -50,33 +49,30 @@ class CustomerCreatorRepository
                 CUSEMAIL=:email, 
                 CUSUPDATEDBY='slim4api', 
                 CUSUPDATEDAT=now();";
-		
+
         $this->connection->prepare($sql)->execute($paramSql);
 
-        return (int)$this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
-
 
     /**
      * check if email is already in database.
      *
      * @param email
      *
-     * @return boolean
+     * @return bool rowCount
      */
     public function customerExists(string $email): bool
     {
-
         $params = [];
         $params['email'] = $email;
 
-        $sql = "SELECT * FROM customers AS u 
-                WHERE u.CUSEMAIL =:email;";
+        $sql = 'SELECT * FROM customers AS u 
+                WHERE u.CUSEMAIL =:email;';
 
         $statement = $this->connection->prepare($sql);
         $statement->execute($params);
 
         return $statement->rowCount() > 0;
-
     }
 }

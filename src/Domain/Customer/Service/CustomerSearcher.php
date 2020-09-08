@@ -6,6 +6,7 @@ use App\Domain\Customer\Repository\CustomerSearcherRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -17,24 +18,28 @@ final class CustomerSearcher
      */
     private $repository;
     /**
-     * @var int
+     * @var mixed
+     */
+    private $defaultPageSize;
+    /**
+     * @var mixed
      */
     private $defaultPage;
     /**
      * @var int
      */
-    private $defaultPageSize;
-    /**
-     * @var int
-     */
     private $defaultSearchField;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * The constructor.
      *
      * @param CustomerSearcherRepository $repository The repository
-     * @param ContainerInterface $ci The container interface
-     * @param LoggerFactory $lf The logger Factory
+     * @param ContainerInterface         $ci         The container interface
+     * @param LoggerFactory              $lf         The logger Factory
      *
      * @codeCoverageIgnore
      */
@@ -50,19 +55,19 @@ final class CustomerSearcher
     /**
      * Search customer list.
      *
-     * @param string $keyword Word to search
-     * @param mixed $in Field number
-     * @param mixed $page Page number
-     * @param mixed $pagesize Nb of lines
+     * @param string $keyword  Word to search
+     * @param mixed  $in       Field number
+     * @param mixed  $page     Page number
+     * @param mixed  $pagesize Nb of lines
      *
-     * @return array []
      * @throws ValidationException
      *
+     * @return array CustomerSearch
      */
     public function getCustomerSearch(string $keyword, $in, $page, $pagesize): array
     {
         // Feed the logger
-        $this->logger->debug("CustomerSearcher.getCustomerSearch: keyword: {$keyword}, input: page: {$page}, size: {$pagesize}");
+        $this->logger->debug("CustomerSearcher.getCustomerSearch: keyword: {$keyword}, field: {$in}, page: {$page}, size: {$pagesize}");
 
         // Validation
         if (!is_numeric($page) || $page < $this->defaultPage) {

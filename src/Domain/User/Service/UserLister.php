@@ -23,8 +23,8 @@ final class UserLister
      * The constructor.
      *
      * @param UserListerRepository $repository The repository
-     * @param ContainerInterface $ci The container interface
-     * @param LoggerFactory $lf The logger Factory
+     * @param ContainerInterface   $ci         The container interface
+     * @param LoggerFactory        $lf         The logger Factory
      */
     public function __construct(UserListerRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -37,12 +37,12 @@ final class UserLister
     /**
      * Read user list.
      *
-     * @param mixed $page Page number
+     * @param mixed $page     Page number
      * @param mixed $pagesize Nb of lines
      *
-     * @return array
      * @throws ValidationException
      *
+     * @return array Users
      */
     public function getUserList($page, $pagesize): array
     {
@@ -58,11 +58,10 @@ final class UserLister
         if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize) {
             $pagesize = $this->defaultPageSize;
         }
+        // Feed the logger
+        $this->logger->debug("UserLister.getUser: page: {$page}, size: {$pagesize}");
 
-        $this->logger->debug("UserLister.getUserList: page: $page, size: $pagesize");
         return $this->repository->getUsers($page, $pagesize);
-
-
     }
 
     /**

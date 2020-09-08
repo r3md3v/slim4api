@@ -37,7 +37,7 @@ class UserReaderRepository
      */
     public function getUserById(int $userId): UserData
     {
-        $sql = "SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRID = :id;";
+        $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRID = :id;';
         $statement = $this->connection->prepare($sql);
         $statement->execute(['id' => $userId]);
 
@@ -48,14 +48,13 @@ class UserReaderRepository
         }
 
         // Map array to data object
-        $user = new UserData();
-        $user->id = (int)$row['USRID'];
-        $user->username = (string)$row['USRNAME'];
-        $user->firstName = (string)$row['USRFIRSTNAME'];
-        $user->lastName = (string)$row['USRLASTNAME'];
-        $user->email = (string)$row['USREMAIL'];
-		$user->profile = (string)$row['USRPROFILE'];
-
-        return $user;
+        return new UserData(
+            (int) $row['USRID'],
+            (string) $row['USRNAME'],
+            (string) $row['USRFIRSTNAME'],
+            (string) $row['USRLASTNAME'],
+            (string) $row['USREMAIL'],
+            (string) $row['USRPROFILE']
+        );
     }
 }

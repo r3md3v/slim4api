@@ -33,7 +33,6 @@ class UserCreatorRepository
      */
     public function insertUser(array $user): int
     {
-
         $paramSql = [
             'username' => $user['username'],
             'password' => $user['password'],
@@ -55,9 +54,8 @@ class UserCreatorRepository
 
         $this->connection->prepare($sql)->execute($paramSql);
 
-        return (int)$this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
-
 
     /**
      * check if userid or email is already in database.
@@ -65,17 +63,16 @@ class UserCreatorRepository
      * @param username
      * @param email
      *
-     * @return boolean
+     * @return bool rowCount
      */
     public function userExists(string $username, string $email): bool
     {
-
         $params = [];
         $params['username'] = $username;
         $params['email'] = $email;
 
-        $sql = "SELECT * FROM users AS u 
-                WHERE u.USRNAME =:username OR u.USREMAIL =:email;";
+        $sql = 'SELECT * FROM users AS u 
+                WHERE u.USRNAME =:username OR u.USREMAIL =:email;';
 
         $statement = $this->connection->prepare($sql);
         $statement->execute($params);
