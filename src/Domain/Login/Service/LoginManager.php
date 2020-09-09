@@ -105,7 +105,7 @@ final class LoginManager
     public function getLoginList($page, $pagesize): array
     {
         // Feed the logger
-        $this->logger->debug("LoginLister.getLoginList: input: page: {$page}, size: {$pagesize}");
+        $this->logger->debug("LoginManager.getLoginList: input: page: {$page}, size: {$pagesize}");
 
         // Validation
 

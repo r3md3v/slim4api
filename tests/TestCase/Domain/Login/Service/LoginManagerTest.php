@@ -3,13 +3,13 @@
 namespace Tests\Domain\Login\Service;
 
 use App\Domain\Login\Data\LoginData;
-use App\Domain\Login\Repository\LoginListerRepository;
-use App\Domain\Login\Service\LoginLister;
+use App\Domain\Login\Repository\LoginManagerRepository;
+use App\Domain\Login\Service\LoginManager;
 use DomainException;
 use PHPUnit\Framework\TestCase;
 use Tests\AppTestTrait;
 
-class LoginListerTest extends TestCase
+class LoginManagerTest extends TestCase
 {
 
     use AppTestTrait;
@@ -23,9 +23,9 @@ class LoginListerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginListerRepository::class)->method("getLogins")
+        $this->mock(LoginManagerRepository::class)->method("getLogins")
             ->with(1, 1)->willReturn($logins);
-        $service = $this->container->get(LoginLister::class);
+        $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, 1);
         static::assertEquals($logins, $actual);
     }
@@ -34,9 +34,9 @@ class LoginListerTest extends TestCase
     public function testGetLoginListOkNoLogin()
     {
         $this->expectException(DomainException::class);
-        $this->mock(LoginListerRepository::class)->method("getLogins")
+        $this->mock(LoginManagerRepository::class)->method("getLogins")
             ->willThrowException(new DomainException(sprintf('No login!')));
-        $service = $this->container->get(LoginLister::class);
+        $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, 1);
 
         $msg = $this->getExpectedExceptionMessage();
@@ -52,9 +52,9 @@ class LoginListerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginListerRepository::class)->method("getLogins")->with(1, 1)
+        $this->mock(LoginManagerRepository::class)->method("getLogins")->with(1, 1)
             ->willReturn($logins);
-        $service = $this->container->get(LoginLister::class);
+        $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList("a", 1);
         static::assertEquals($logins, $actual);
     }
@@ -68,9 +68,9 @@ class LoginListerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginListerRepository::class)->method("getLogins")->with(1, 5)
+        $this->mock(LoginManagerRepository::class)->method("getLogins")->with(1, 5)
             ->willReturn($logins);
-        $service = $this->container->get(LoginLister::class);
+        $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, "e");
         static::assertEquals($logins, $actual);
     }
@@ -78,9 +78,9 @@ class LoginListerTest extends TestCase
 
     public function testGetLoginCountOk()
     {
-        $this->mock(LoginListerRepository::class)->method("countLogins")
+        $this->mock(LoginManagerRepository::class)->method("countLogins")
             ->willReturn(15);
-        $service = $this->container->get(LoginLister::class);
+        $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginCount();
         static::assertEquals(15, $actual);
     }

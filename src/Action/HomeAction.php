@@ -3,7 +3,7 @@
 namespace App\Action;
 
 use App\Domain\Customer\Service\CustomerLister;
-use App\Domain\Login\Service\LoginLister;
+use App\Domain\Login\Service\LoginManager;
 use App\Domain\User\Service\UserLister;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
@@ -66,7 +66,7 @@ final class HomeAction
     private $customerLister;
 
     /**
-     * @var LoginLister
+     * @var LoginManager
      */
     private $loginLister;
 
@@ -85,11 +85,11 @@ final class HomeAction
      *
      * @param UserLister         $userLister     The user lister
      * @param CustomerLister     $customerLister The customer lister
-     * @param LoginLister        $loginLister    The login lister
+     * @param LoginManager        $loginLister    The login lister
      * @param ContainerInterface $ci             The Container
      * @param LoggerFactory      $lf             The loggerFactory
      */
-    public function __construct(UserLister $userLister, CustomerLister $customerLister, LoginLister $loginLister, ContainerInterface $ci, LoggerFactory $lf)
+    public function __construct(UserLister $userLister, CustomerLister $customerLister, LoginManager $loginLister, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->userLister = $userLister;
         $this->customerLister = $customerLister;
