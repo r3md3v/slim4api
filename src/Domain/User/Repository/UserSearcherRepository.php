@@ -32,14 +32,10 @@ class UserSearcherRepository
     /**
      * Get user search.
      *
-     * @param string keyword Word to search
-     * @param string in Field name
-     * @param int page Page number
-     * @param int pagesize Nb of lines
-     * @param mixed $keyword
-     * @param mixed $in
-     * @param mixed $page
-     * @param mixed $pagesize
+     * @param string $keyword  Word to search
+     * @param array  $in       Field exact name/human name
+     * @param int    $page     page number
+     * @param int    $pagesize page size
      *
      * @throws DomainException
      *
@@ -47,24 +43,24 @@ class UserSearcherRepository
      */
     public function getUsers($keyword, $in, $page, $pagesize): array
     {
-        // Feed the logger
-        $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
-
         $usernb = $this->countUsers();
 
         if (0 == $usernb) {
+            $this->logger->info('UserSearcherRepository.getUsers: no user in table');
+
             throw new DomainException(sprintf('No user!'));
         }
         $pagemax = ceil($usernb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        if (-1 != $in) {
+        if (-1 != $in[0]) {
             $sql = "SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE {$in[1]}  LIKE :keyword LIMIT :limit, :pagesize ;";
         } else {
             $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :limit, :pagesize ;';
         }
 
-        $this->logger->debug("UserSearcherRepository.getUser: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$usernb}");
+        // Feed the logger
+        $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$usernb}");
 
         $statement = $this->connection->prepare($sql);
 
@@ -87,20 +83,29 @@ class UserSearcherRepository
                 (string) $row['USREMAIL'],
                 (string) $row['USRPROFILE']
             );
+
             array_push($users, $user);
         }
 
         if (0 == count($users)) {
             if (-1 != $in) {
-                throw new DomainException(sprintf('No user with keyword [%s] in field [%s] page %d / %d', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax));
+                $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
+            } else {
+                $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
             }
+            $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
 
-            throw new DomainException(sprintf('No user with keyword [%s] in any field page %d / %d', str_replace('%', '', $keyword), $page + 1, $pagemax));
+            throw new DomainException($msg);
         }
 
         return $users;
     }
 
+    /**
+     * Count number of users.
+     *
+     * @return int nb of users
+     */
     public function countUsers(): int
     {
         $sql = 'SELECT COUNT(*) AS nb FROM users;';

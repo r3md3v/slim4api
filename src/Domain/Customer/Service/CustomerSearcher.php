@@ -17,18 +17,22 @@ final class CustomerSearcher
      * @var CustomerSearcherRepository
      */
     private $repository;
+
     /**
-     * @var mixed
+     * @var int
      */
     private $defaultPage;
+
     /**
      * @var mixed
      */
     private $defaultPageSize;
+
     /**
-     * @var int
+     * @var array
      */
     private $defaultSearchField;
+
     /**
      * @var LoggerInterface
      */
@@ -62,7 +66,7 @@ final class CustomerSearcher
      *
      * @throws ValidationException
      *
-     * @return array CustomerSearch
+     * @return CustomerSearch
      */
     public function getCustomerSearch(string $keyword, $in, $page, $pagesize): array
     {
@@ -70,6 +74,7 @@ final class CustomerSearcher
         $this->logger->debug("CustomerSearcher.getCustomerSearch: keyword: {$keyword}, field: {$in}, page: {$page}, size: {$pagesize}");
 
         // Validation
+
         if (!is_numeric($page) || $page < $this->defaultPage) {
             $page = $this->defaultPage;
         }
@@ -79,7 +84,7 @@ final class CustomerSearcher
         }
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
-            $in = -1;
+            $in = [-1, -1];
         } else {
             $in = $this->defaultSearchField[$in - 1];
         }

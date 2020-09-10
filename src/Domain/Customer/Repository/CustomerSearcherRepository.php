@@ -33,7 +33,7 @@ class CustomerSearcherRepository
      * Get customer search.
      *
      * @param string $keyword  Word to search
-     * @param string $in       Field exact name/human name
+     * @param array  $in       Field exact name/human name
      * @param int    $page     page number
      * @param int    $pagesize page size
      *
@@ -41,26 +41,26 @@ class CustomerSearcherRepository
      *
      * @return customers Search of Customers
      */
-    public function getCustomers(string $keyword, string $in, int $page, int $pagesize): array
+    public function getCustomers(string $keyword, array $in, int $page, int $pagesize): array
     {
-        // Feed the logger
-        $this->logger->debug("CustomerSearcherRepository.getCustomers: page: {$page}, size: {$pagesize}");
-
         $customernb = $this->countCustomers();
 
         if (0 == $customernb) {
-            $this->logger->info("CustomerSearcherRepository.getCustomers: no results for {$keyword}");
+            $this->logger->info('CustomerSearcherRepository.getCustomers: no customers in table');
 
             throw new DomainException(sprintf('No customer!'));
         }
         $pagemax = ceil($customernb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        if (-1 != $in) {
+        if (-1 != $in[0]) {
             $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;";
         } else {
             $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :limit, :pagesize ;';
         }
+
+        // Feed the logger
+        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
 
         $statement = $this->connection->prepare($sql);
 
@@ -90,11 +90,9 @@ class CustomerSearcherRepository
         if (0 == count($customers)) {
             if (-1 != $in) {
                 $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
-                $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
-
-                throw new DomainException($msg);
+            } else {
+                $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
             }
-            $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
             $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
 
             throw new DomainException($msg);
@@ -103,6 +101,11 @@ class CustomerSearcherRepository
         return $customers;
     }
 
+    /**
+     * Count number of customers.
+     *
+     * @return int nb of users
+     */
     public function countCustomers(): int
     {
         $sql = 'SELECT COUNT(*) AS nb FROM customers;';

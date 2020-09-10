@@ -17,18 +17,22 @@ final class UserSearcher
      * @var UserSearcherRepository
      */
     private $repository;
+
     /**
-     * @var mixed
+     * @var int
      */
     private $defaultPage;
+
     /**
      * @var mixed
      */
     private $defaultPageSize;
+
     /**
-     * @var mixed
+     * @var array
      */
     private $defaultSearchField;
+
     /**
      * @var LoggerInterface
      */
@@ -60,12 +64,12 @@ final class UserSearcher
      *
      * @throws ValidationException
      *
-     * @return array UserSearch
+     * @return UserSearch
      */
     public function getUserSearch(string $keyword, $in, $page, $pagesize): array
     {
         // Feed the logger
-        $this->logger->debug("UserSearcher.getUserSearch: input: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
+        $this->logger->debug("UserSearcher.getUserSearch: keyword: {$keyword}, field: {$in}, page: {$page}, size: {$pagesize}");
 
         // Validation
 
@@ -78,7 +82,7 @@ final class UserSearcher
         }
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
-            $in = -1;
+            $in = [-1, -1];
         } else {
             $in = $this->defaultSearchField[$in - 1];
         }
@@ -86,9 +90,6 @@ final class UserSearcher
         if (empty($keyword)) {
             throw new ValidationException('Keyword required');
         }
-
-        // Feed the logger
-        $this->logger->debug("UserSearcher.getUsers: output: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize}");
 
         return $this->repository->getUsers($keyword, $in, $page, $pagesize);
     }
