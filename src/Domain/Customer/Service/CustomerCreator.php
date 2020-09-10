@@ -5,7 +5,7 @@ namespace App\Domain\Customer\Service;
 use App\Domain\Customer\Repository\CustomerCreatorRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
-use Slim\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -18,7 +18,7 @@ final class CustomerCreator
     private $repository;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -51,9 +51,9 @@ final class CustomerCreator
         // Insert customer
         $customerId = $this->repository->insertCustomer($data);
 
-        // Logging here: Customer created successfully
-        $this->logger->debug(sprintf('customer %s created with id: %s', $data['cusname'], $customerId));
-        $this->logger->info(sprintf('Customer created successfully: %s', $customerId));
+        // Feed the logger
+        $this->logger->debug(sprintf('CustomerCreator.createCustomer: %s created with id: %s', $data['cusname'], $customerId));
+        $this->logger->info(sprintf('CustomerCreator.createCustomer: created successfully %s', $customerId));
 
         return $customerId;
     }
@@ -79,13 +79,17 @@ final class CustomerCreator
             $errors['email'] = 'Invalid email address for customer';
         }
 
-        if (sizeof($errors) > 0) {
-            $this->logger->debug(sprintf('createCustomer: errors not null: %i,error: %s', sizeof($errors), $errors['mandatory']));
+        if (!empty($errors)) {
+            $this->logger->debug(sprintf(
+                'createCustomer: errors not null: %i,error: %s',
+                sizeof($errors),
+                (isset($errors['mandatory']) ? $errors['mandatory'].' ' : '').(isset($errors['email']) ? $errors['email'] : '')
+            ));
 
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if (true == $this->repository->customerExists($data['email'])) {
+        if ($this->repository->customerExists($data['email'])) {
             throw new ValidationException('Customer already exists with email '.$data['email'].'.', $errors);
         }
     }

@@ -5,7 +5,7 @@ namespace App\Domain\User\Service;
 use App\Domain\User\Repository\UserCreatorRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
-use Slim\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -18,7 +18,7 @@ final class UserCreator
     private $repository;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -38,19 +38,22 @@ final class UserCreator
      *
      * @param array $data The form data
      *
+     * @throws ValidationException
+     *
      * @return int The new user ID
      */
     public function createUser(array $data): int
     {
         // Input validation
         $this->validateNewUser($data);
+        //$this->logger->debug(sprintf("createUser: %s",var_dump($data)));
 
         // Insert user
         $userId = $this->repository->insertUser($data);
 
-        // Logging here: User created successfully
-        $this->logger->debug(sprintf('user %s created with id: %s', $data['username'], $userId));
-        $this->logger->info(sprintf('User created successfully: %s', $userId));
+        // Feed the logger
+        $this->logger->debug(sprintf('UserCreator.createUser: %s created with id: %s', $data['username'], $userId));
+        $this->logger->info(sprintf('UserCreator.createUser: created successfully: %s', $userId));
 
         return $userId;
     }
@@ -89,7 +92,7 @@ final class UserCreator
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if (true == $this->repository->userExists($data['username'], $data['email'])) {
+        if ($this->repository->userExists($data['username'], $data['email'])) {
             throw new ValidationException('User name already exists with name '.$data['username'].' or email '.$data['email'].'.', $errors);
         }
     }
