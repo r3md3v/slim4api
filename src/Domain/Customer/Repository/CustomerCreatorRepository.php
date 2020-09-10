@@ -60,7 +60,7 @@ class CustomerCreatorRepository
      *
      * @param email
      *
-     * @return bool rowCount
+     * @return bool rowCount exists
      */
     public function customerExists(string $email): bool
     {

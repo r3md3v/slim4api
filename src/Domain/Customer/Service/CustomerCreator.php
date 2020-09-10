@@ -26,6 +26,7 @@ final class CustomerCreator
      * The constructor.
      *
      * @param CustomerCreatorRepository $repository The repository
+     * @param LoggerFactory             $lf         The logger Factory
      */
     public function __construct(CustomerCreatorRepository $repository, LoggerFactory $lf)
     {
@@ -46,7 +47,6 @@ final class CustomerCreator
     {
         // Input validation
         $this->validateNewCustomer($data);
-        //$this->logger->debug(sprintf("createCustomer: %s",var_dump($data)));
 
         // Insert customer
         $customerId = $this->repository->insertCustomer($data);
@@ -86,11 +86,20 @@ final class CustomerCreator
                 (isset($errors['mandatory']) ? $errors['mandatory'].' ' : '').(isset($errors['email']) ? $errors['email'] : '')
             ));
 
+            // Feed the logger
+            $this->logger->debug(sprintf(
+                'CustomerCreator:createCustomer: missing params .name:%s, addr: %s, city: %s, ln: %s, eml: %s',
+                $data['cusname'],
+                $data['address'],
+                $data['city'],
+                $data['email'],
+            ));
+
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if ($this->repository->customerExists($data['email'])) {
-            throw new ValidationException('Customer already exists with email '.$data['email'].'.', $errors);
+        if (true == $this->repository->customerExists($data['email'])) {
+            throw new ValidationException('Customer already exists with email ['.$data['email'].']', $errors);
         }
     }
 }

@@ -26,6 +26,7 @@ final class UserCreator
      * The constructor.
      *
      * @param UserCreatorRepository $repository The repository
+     * @param LoggerFactory         $lf         The logger Factory
      */
     public function __construct(UserCreatorRepository $repository, LoggerFactory $lf)
     {
@@ -46,7 +47,6 @@ final class UserCreator
     {
         // Input validation
         $this->validateNewUser($data);
-        //$this->logger->debug(sprintf("createUser: %s",var_dump($data)));
 
         // Insert user
         $userId = $this->repository->insertUser($data);
@@ -72,16 +72,7 @@ final class UserCreator
         // Here you can also use your preferred validation library
 
         if (empty($data['username']) || empty($data['password']) || empty($data['first_name']) || empty($data['last_name']) || empty($data['email']) || empty($data['profile'])) {
-            $errors['mandatory'] = 'Input [User  Name] [Password] [Firstname] [Lastname] [Email] [Profile] required';
-            $this->logger->debug(sprintf(
-                'UserCreator:createUSer: missing params .names:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s',
-                $data['username'],
-                $data['password'],
-                $data['first_name'],
-                $data['last_name'],
-                $data['email'],
-                $data['profile']
-            ));
+            $errors['mandatory'] = 'Input [User Name] [Password] [Firstname] [Lastname] [Email] [Profile] required';
         }
 
         if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -89,11 +80,28 @@ final class UserCreator
         }
 
         if (!empty($errors)) {
+            $this->logger->debug(sprintf(
+                'createUser: errors not null: %i,error: %s',
+                sizeof($errors),
+                (isset($errors['mandatory']) ? $errors['mandatory'].' ' : '').(isset($errors['email']) ? $errors['email'] : '')
+            ));
+
+            // Feed the logger
+            $this->logger->debug(sprintf(
+                'UserCreator:createUser: missing params .un:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s',
+                $data['username'],
+                '[hidden]',
+                $data['first_name'],
+                $data['last_name'],
+                $data['email'],
+                $data['profile']
+            ));
+
             throw new ValidationException('Please check your input.', $errors);
         }
 
-        if ($this->repository->userExists($data['username'], $data['email'])) {
-            throw new ValidationException('User name already exists with name '.$data['username'].' or email '.$data['email'].'.', $errors);
+        if (true == $this->repository->userExists($data['username'], $data['email'])) {
+            throw new ValidationException('User already exists with name ['.$data['username'].'] or email ['.$data['email'].']', $errors);
         }
     }
 }

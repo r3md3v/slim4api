@@ -63,7 +63,7 @@ class UserCreatorRepository
      * @param username
      * @param email
      *
-     * @return bool rowCount
+     * @return bool rowCount exists
      */
     public function userExists(string $username, string $email): bool
     {
