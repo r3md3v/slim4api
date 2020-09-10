@@ -17,19 +17,19 @@
 
         <p>
             <label for="username">* Username:</label><br />
-            <input type="text" class="form" name="username" placeholder="username" /><br />
+            <input type="text" class="form" name="username" placeholder="Username" /><br />
 
             <label for="password">* Password:</label><br />
-            <input type="password" class="form" name="password" placeholder="password" /><br />
+            <input type="password" class="form" name="password" placeholder="Password" /><br />
 
             <label for="first_name">* First name:</label><br />
-            <input type="text" class="form" name="first_name" placeholder="firstname" /><br />
+            <input type="text" class="form" name="first_name" placeholder="First name" /><br />
 
             <label for="last_name">* Last name:</label><br />
-            <input type="text" class="form" name="last_name" placeholder="lastname" /><br />
+            <input type="text" class="form" name="last_name" placeholder="Last name" /><br />
 
             <label for="email">* Email:</label><br />
-            <input type="email" class="form" name="email" placeholder="user1@domain.com" /><br />
+            <input type="email" class="form" name="email" placeholder="email.me@domain.com" /><br />
 
             <label for="profile">* Profile:</label><br />
             <input type="text" class="form" name="profile" placeholder="customers users" /><br />
