@@ -17,14 +17,17 @@ final class CustomerLister
      * @var CustomerListerRepository
      */
     private $repository;
+
     /**
-     * @var mixed
+     * @var int
      */
     private $defaultPage;
+
     /**
-     * @var mixed
+     * @var int
      */
     private $defaultPageSize;
+
     /**
      * @var LoggerInterface
      */
