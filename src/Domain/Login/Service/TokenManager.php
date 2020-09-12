@@ -9,6 +9,7 @@ use App\Domain\Login\Repository\TokenRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -19,13 +20,21 @@ final class TokenManager
      * @var TokenRepository
      */
     private $repository;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var mixed
+     */
+    private $tokenlifetime;
 
     /**
      * The constructor.
      *
-     * @param TokenRepository    $repository The repository
-     * @param ContainerInterface $ci         The container interface
-     * @param LoggerFactory      $lf         The logger Factory
+     * @param TokenRepository $repository The repository
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(TokenRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
