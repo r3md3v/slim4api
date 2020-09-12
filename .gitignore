@@ -11,3 +11,4 @@ tmp/
 tests/reports
 **.r3md3v
 **.edgd1er
+.phpunit*
