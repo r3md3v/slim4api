@@ -61,7 +61,7 @@ class CustomerSearcherRepository
         }
 
         // Feed the logger
-        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
+        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
 
         $statement = $this->connection->prepare($sql);
 
