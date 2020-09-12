@@ -30,35 +30,47 @@ final class TokenCreateAction
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var bool
+     */
+    private $logtokens;
+    /**
+     * @var bool
+     */
+    private $loglogins;
+    /**
+     * @var LoginManager
+     */
+    private $LoginManager;
 
     /**
      * Constructor.
      *
-     * @param LoginManager       $loginManager The login manager
-     * @param TokenManager       $tokenManager The token manager
-     * @param JwtAuth            $jwtAuth      The JWT authentifier
-     * @param ContainerInterface $ci           The container interface
-     * @param LoggerFactory      $lf           The loggerFactory
+     * @param LoginManager $loginManager The login manager
+     * @param TokenManager $tokenManager The token manager
+     * @param JwtAuth $jwtAuth The JWT authentifier
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The loggerFactory
      */
     public function __construct(LoginManager $loginManager, TokenManager $tokenManager, JwtAuth $jwtAuth, ContainerInterface $ci, LoggerFactory $lf)
     {
         $this->jwtAuth = $jwtAuth;
         $this->LoginManager = $loginManager;
         $this->tokenManager = $tokenManager;
-        $this->logtokens = $ci->get('settings')['jwt']['logtokens'];
-        $this->loglogins = $ci->get('settings')['jwt']['loglogins'];
+        $this->logtokens = (bool)$ci->get('settings')['jwt']['logtokens'];
+        $this->loglogins = (bool)$ci->get('settings')['jwt']['loglogins'];
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response
-    ): ResponseInterface {
-        $data = (array) $request->getParsedBody();
+    ): ResponseInterface
+    {
+        $data = (array)$request->getParsedBody();
 
-        $username = (string) ($data['username'] ?? '');
-        $password = (string) ($data['password'] ?? '');
-        $sourceip = (string) $this->LoginManager->getUserIpAddr();
+        $username = (string)($data['username'] ?? '');
+        $password = (string)($data['password'] ?? '');
 
         // Feed the logger
         $this->logger->debug("TokenCreateAction: username: {$username}");
@@ -69,17 +81,15 @@ final class TokenCreateAction
 
         // Build the HTTP response
         $response = $response
-            ->withHeader('Content-Type', 'application/json')
-        ;
+            ->withHeader('Content-Type', 'application/json');
 
         // Check for valid authentication credentials
-        if ('ok' != $this->LoginManager->getLoginDetails($username, $password, $sourceip, $this->loglogins)->status) {
+        if ('ok' != $this->LoginManager->getLoginDetails($username, $password, $this->loglogins)->status) {
             $this->logger->debug('TokenCreateAction: invalid login/password');
             $response->getBody()->write(json_encode('Unauthorized access'));
 
             return $response
-                ->withStatus(401, 'Unauthorized')
-            ;
+                ->withStatus(401, 'Unauthorized');
         }
 
         // Check for valid existing tokefor user
@@ -112,14 +122,13 @@ final class TokenCreateAction
             // add cookie
             ->withHeader(
                 'Set-Cookie',
-                'Authorization='.$result['access_token'].'; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age='.$lifetime
-            )
-        ;
+                'Authorization=' . $result['access_token'] . '; HttpOnly; Secure; Path=/; SameSite=Strict; Max-Age=' . $lifetime
+            );
 
         // Feed the logger
         $this->logger->debug("TokenCreateAction: JWT created for [{$username}]");
 
-        $response->getBody()->write((string) json_encode($result));
+        $response->getBody()->write((string)json_encode($result));
 
         return $response->withStatus(201);
     }
