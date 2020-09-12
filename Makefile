@@ -51,6 +51,7 @@ log:
 
 test:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm composer test
+		#docker-compose -f docker-compose-nginx.yml exec php-fpm vendor/bin/phpunit
 
 sonarstart:
 		docker-compose -f docker-compose-sonarsvr.yaml up -d
