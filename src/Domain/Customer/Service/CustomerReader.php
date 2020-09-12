@@ -37,7 +37,7 @@ final class CustomerReader
      *
      * @return CustomerData The Customer data
      */
-    public function getCustomerDetails($CustomerId): CustomerData
+    public function getCustomerDetails(?int $CustomerId): CustomerData
     {
         // Validation
         if (empty($CustomerId)) {

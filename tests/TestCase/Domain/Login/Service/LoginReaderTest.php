@@ -15,11 +15,6 @@ class LoginReaderTest extends TestCase
 
     use AppTestTrait;
 
-    public function testGetUserIpAddr()
-    {
-        self::assertEquals('1', '2');
-    }
-
     public function testGetLoginDetailsOKStatus1()
     {
         $login = new LoginData(0, "username", 'na', 'na', 'lasttoken', '1');

@@ -6,6 +6,7 @@ use App\Domain\Customer\Data\CustomerData;
 use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * Repository.
@@ -33,15 +34,15 @@ class CustomerSearcherRepository
      * Get customer search.
      *
      * @param string $keyword  Word to search
-     * @param array  $in       Field exact name/human name
+     * @param string $in       Field exact name/human name
      * @param int    $page     page number
      * @param int    $pagesize page size
      *
      * @throws DomainException
      *
-     * @return customers Search of Customers
+     * @return array customers Search of Customers
      */
-    public function getCustomers(string $keyword, array $in, int $page, int $pagesize): array
+    public function getCustomers(string $keyword, $in, int $page, int $pagesize): array
     {
         $customernb = $this->countCustomers();
 
@@ -53,10 +54,10 @@ class CustomerSearcherRepository
         $pagemax = ceil($customernb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        if (-1 != $in[0]) {
-            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;";
-        } else {
+        if ( isEmpty($in)) {
             $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :limit, :pagesize ;';
+        } else {
+            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in} LIKE :keyword LIMIT :limit, :pagesize ;";
         }
 
         // Feed the logger
@@ -88,8 +89,8 @@ class CustomerSearcherRepository
         }
 
         if (0 == count($customers)) {
-            if (-1 != $in) {
-                $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
+            if ($in='') {
+                $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in, $page + 1, $pagemax);
             } else {
                 $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
             }
