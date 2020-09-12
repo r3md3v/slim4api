@@ -49,7 +49,7 @@ class CustomerCreatorTest extends TestCase
         $service = $this->container->get(CustomerCreator::class);
 
         $this->expectException(ValidationException::class);
-        $this->expectErrorMessage('Customer already exists with email ' . $customer['email'] . '.');
+        $this->expectErrorMessage('Customer already exists with email [' . $customer['email'] . ']');
 
         $actual = $service->createCustomer($customer);
 
