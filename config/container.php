@@ -1,6 +1,7 @@
 <?php
 
 use App\Auth\JwtAuth;
+use App\Domain\Login\Service\Tools;
 use App\Factory\LoggerFactory;
 use App\Middleware\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
@@ -17,6 +18,10 @@ use Twig\Loader\FilesystemLoader;
 return [
     'settings' => function () {
         return require __DIR__.'/settings.php';
+    },
+
+    Tools::class  =>function(){
+        return new Tools();
     },
 
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
@@ -95,5 +100,5 @@ return [
         $trailingSetting = $container->get('settings')['trail'];
 
         return new TrailingSlashMiddleware((bool) $trailingSetting);
-    },
+    }
 ];

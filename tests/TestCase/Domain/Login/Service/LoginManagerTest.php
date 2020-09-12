@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Domain\Login\Service;
+namespace Tests\TestCase\Domain\Login\Service;
 
 use App\Domain\Login\Data\LoginData;
-use App\Domain\Login\Repository\LoginManagerRepository;
+use App\Domain\Login\Repository\LoginRepository;
 use App\Domain\Login\Service\LoginManager;
 use DomainException;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class LoginManagerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginManagerRepository::class)->method("getLogins")
+        $this->mock(LoginRepository::class)->method("getLogins")
             ->with(1, 1)->willReturn($logins);
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, 1);
@@ -34,7 +34,7 @@ class LoginManagerTest extends TestCase
     public function testGetLoginListOkNoLogin()
     {
         $this->expectException(DomainException::class);
-        $this->mock(LoginManagerRepository::class)->method("getLogins")
+        $this->mock(LoginRepository::class)->method("getLogins")
             ->willThrowException(new DomainException(sprintf('No login!')));
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, 1);
@@ -52,7 +52,7 @@ class LoginManagerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginManagerRepository::class)->method("getLogins")->with(1, 1)
+        $this->mock(LoginRepository::class)->method("getLogins")->with(1, 1)
             ->willReturn($logins);
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList("a", 1);
@@ -68,7 +68,7 @@ class LoginManagerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginManagerRepository::class)->method("getLogins")->with(1, 5)
+        $this->mock(LoginRepository::class)->method("getLogins")->with(1, 5)
             ->willReturn($logins);
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, "e");
@@ -78,7 +78,7 @@ class LoginManagerTest extends TestCase
 
     public function testGetLoginCountOk()
     {
-        $this->mock(LoginManagerRepository::class)->method("countLogins")
+        $this->mock(LoginRepository::class)->method("countLogins")
             ->willReturn(15);
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginCount();
