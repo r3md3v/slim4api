@@ -100,5 +100,5 @@ return [
         $trailingSetting = $container->get('settings')['trail'];
 
         return new TrailingSlashMiddleware((bool) $trailingSetting);
-    }
+    },
 ];
