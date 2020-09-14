@@ -150,9 +150,9 @@ final class JwtAuth
      *
      * @param string $token The JWT
      *
-     * @return string Token The decoded token
      * @throws InvalidArgumentException
      *
+     * @return string Token The decoded token
      */
     public function decodeToken(string $token): Token
     {

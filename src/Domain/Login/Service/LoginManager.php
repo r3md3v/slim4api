@@ -71,9 +71,11 @@ final class LoginManager
      *
      * @return LoginData The login data
      */
-    public function getLoginDetails(string $username, string $password,bool $logLogin): LoginData
+    public function getLoginDetails(string $username, string $password, bool $logLogin): LoginData
     {
+        // Get the IP address
         $sourceIp=$this->tools->getUserIpAddr();
+
         // Feed the logger
         $this->logger->debug("Login.getLoginDetails: input: username: {$username}, sourceip: {$sourceIp}");
 
@@ -108,9 +110,9 @@ final class LoginManager
      * @param mixed $page
      * @param mixed $pagesize
      *
-     * @return array LoginList
      * @throws ValidationException
      *
+     * @return array LoginList
      */
     public function getLoginList($page, $pagesize): array
     {
