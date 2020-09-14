@@ -15,7 +15,14 @@ use Psr\Log\LoggerInterface;
 final class TokenCreateAction
 {
     private $jwtAuth;
-
+    /**
+     * @var bool
+     */
+    private $logtokens;
+    /**
+     * @var bool
+     */
+    private $loglogins;
     /**
      * @var LoginManager
      */
@@ -30,18 +37,6 @@ final class TokenCreateAction
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var bool
-     */
-    private $logtokens;
-    /**
-     * @var bool
-     */
-    private $loglogins;
-    /**
-     * @var LoginManager
-     */
-    private $LoginManager;
 
     /**
      * Constructor.
@@ -128,7 +123,7 @@ final class TokenCreateAction
         // Feed the logger
         $this->logger->debug("TokenCreateAction: JWT created for [{$username}]");
 
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string) json_encode($result));
 
         return $response->withStatus(201);
     }
