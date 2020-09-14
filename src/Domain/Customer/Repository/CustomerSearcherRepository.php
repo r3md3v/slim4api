@@ -54,10 +54,10 @@ class CustomerSearcherRepository
         $pagemax = ceil($customernb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        if ( isEmpty($in)) {
+        if (isEmpty($in)) {
             $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :limit, :pagesize ;';
         } else {
-            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;";
+            $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;';
         }
 
         // Feed the logger

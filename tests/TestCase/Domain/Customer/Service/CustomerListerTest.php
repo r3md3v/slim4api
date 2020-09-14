@@ -65,7 +65,7 @@ class CustomerListerTest extends TestCase
                 'user')];
 
         // Mock the required repository method
-        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 5)->willReturn($users);
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 50)->willReturn($users);
         $service = $this->container->get(CustomerLister::class);
         $actual = $service->getCustomerList(1, 100);
         static::assertEquals($users, $actual);
@@ -97,7 +97,7 @@ class CustomerListerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         // Mock the required repository method
-        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 5)->willReturn();
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 50)->willReturn();
         $service = $this->container->get(CustomerLister::class);
         $actual = $service->getCustomerList('a', 1);
     }
@@ -109,7 +109,7 @@ class CustomerListerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         // Mock the required repository method
-        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 5)->willThrowException(TypeError::class);
+        $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(1, 50)->willThrowException(TypeError::class);
         $service = $this->container->get(CustomerLister::class);
         $actual = $service->getCustomerList(1, 'a');
     }

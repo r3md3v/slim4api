@@ -18,6 +18,7 @@ class UserSearcherTest extends TestCase
 
     public function testGetUserSearchOkFound()
     {
+		$in = array('User name','USRNAME');
         $user = new UserData(1, 'john.doe',
             'fname',
             'lname',
@@ -28,7 +29,7 @@ class UserSearcherTest extends TestCase
         ];
 
         $this->mock(UserSearcherRepository::class)->method('getUsers')
-            ->with('testOk', 'USRNAME', 1, 1)->willReturn($users);
+            ->with('testOk', $in, 1, 1)->willReturn($users);
         $service = $this->container->get(UserSearcher::class);
         $actual = $service->getUserSearch("testOk", '1', 1, 1);
 
@@ -38,10 +39,10 @@ class UserSearcherTest extends TestCase
     public function testGetUserSearchOkNobody(): void
     {
         $keyword = 'testOkNobody';
-        $in = 'USRNAME';
+        $in = array('User name','USRNAME');
         $page = 1;
         $pagemax = 1;
-        $msgExpected = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in, $page + 1, $pagemax);
+        $msgExpected = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
 
         $this->mock(UserSearcherRepository::class)->expects(self::once())-> method("getUsers")
             ->with($keyword, $in ,$page , $pagemax)->willThrowException(new DomainException($msgExpected));
@@ -60,7 +61,7 @@ class UserSearcherTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $this->mock(UserSearcherRepository::class)->method("getUsers")
-            ->with('', -1, 1, 1);
+            ->with('', array(), 1, 1);
 
         $service = $this->container->get(UserSearcher::class);
         $actual = $service->getUserSearch('', '1', 1, 1);
@@ -81,7 +82,7 @@ class UserSearcherTest extends TestCase
                 'email')];
 
         $this->mock(UserSearcherRepository::class)->expects(once())->method("getUsers")
-            ->with('testPage', '', 1, 1)->willReturn($users);
+            ->with('testPage', array(), 1, 1)->willReturn($users);
         $service = $this->container->get(UserSearcher::class);
         $actual = $service->getUserSearch('testPage', '', 'a', 1);
 
@@ -100,9 +101,9 @@ class UserSearcherTest extends TestCase
                 'email')];
 
         $this->mock(UserSearcherRepository::class)->method("getUsers")
-            ->with('testPage', '', 1, 1)->willReturn($users);
+            ->with('testPage', array(), 1, 1)->willReturn($users);
         $service = $this->container->get(UserSearcher::class);
-        $actual = $service->getUserSearch('testPage', "", 0, 1);
+        $actual = $service->getUserSearch('testPage', '', 0, 1);
 
         static::assertSame($users, $actual);
 
@@ -119,7 +120,7 @@ class UserSearcherTest extends TestCase
                 'email')];
 
         $this->mock(UserSearcherRepository::class)->method("getUsers")
-            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', array(), 1, 50)->willReturn($users)->willReturn($users);
         $service = $this->container->get(UserSearcher::class);
         $actual = $service->getUserSearch('testSize', '', 1, "a");
 
@@ -137,9 +138,9 @@ class UserSearcherTest extends TestCase
                 'email')];
 
         $this->mock(UserSearcherRepository::class)->method("getUsers")
-            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', array(), 1, 50)->willReturn($users)->willReturn($users);
         $service = $this->container->get(UserSearcher::class);
-        $actual = $service->getUserSearch('testSize', "a", 1, 90000);
+        $actual = $service->getUserSearch('testSize', '', 1, 90000);
 
         static::assertSame($users, $actual);
     }

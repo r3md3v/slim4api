@@ -17,6 +17,7 @@ class CustomerSearcherTest extends TestCase
 
     public function testGetCustomerSearchOkFound(): void
     {
+		$in = array('Customer name','CUSNAME');
         $user = new CustomerData(1, 'john.doe',
             'address',
             'city',
@@ -27,7 +28,7 @@ class CustomerSearcherTest extends TestCase
         ];
 
         $this->mock(CustomerSearcherRepository::class)->method('getCustomers')
-            ->with('testOk', 'CUSNAME', 1, 1)->willReturn($users);
+            ->with('testOk', $in, 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
         $actual = $service->getCustomerSearch("testOk", '1', 1, 1);
 
@@ -39,10 +40,10 @@ class CustomerSearcherTest extends TestCase
     public function testGetCustomerSearchOkNobody(): void
     {
         $keyword = 'testOkNobody';
-        $in = 'CUSNAME';
+        $in = array('Customer name','CUSNAME');
         $page = 1;
         $pagemax = 1;
-        $msgExpected = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in, $page + 1, $pagemax);
+        $msgExpected = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
 
         $this->mock(CustomerSearcherRepository::class)->expects(self::once())-> method("getCustomers")
             ->with($keyword, $in ,$page , $pagemax)->willThrowException(new DomainException($msgExpected));
@@ -61,7 +62,7 @@ class CustomerSearcherTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('', -1, 1, 1);
+            ->with('', array(), 1, 1);
 
         $service = $this->container->get(CustomerSearcher::class);
         $actual = $service->getCustomerSearch('', '1', 1, 1);
@@ -73,7 +74,6 @@ class CustomerSearcherTest extends TestCase
 
     public function testGetCustomerSearchKoPageIsNotNumeric()
     {
-
         $users = [
             new CustomerData(1, 'john.doe',
                 'address',
@@ -82,9 +82,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testPage', '', 1, 1)->willReturn($users);
+            ->with('testPage', array(), 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testPage', "", 'a', 1);
+        $actual = $service->getCustomerSearch('testPage', '', 'a', 1);
 
         static::assertSame($users, $actual);
 
@@ -92,7 +92,7 @@ class CustomerSearcherTest extends TestCase
 
     public function testGetCustomerSearchKoPageIsZero()
     {
-
+		$in = array('Customer name','CUSNAME');
         $users = [
             new CustomerData(1, 'john.doe',
                 'address',
@@ -101,9 +101,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testPage', '', 1, 1)->willReturn($users);
+            ->with('testPage', array(), 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testPage', "", 0, 1);
+        $actual = $service->getCustomerSearch('testPage', '', 0, 1);
 
         static::assertSame($users, $actual);
 
@@ -111,7 +111,7 @@ class CustomerSearcherTest extends TestCase
 
     public function testGetCustomerSearchKoPSizeIsNotNumeric()
     {
-
+		$in = array('Customer name','CUSNAME');
         $users = [
             new CustomerData(1, 'john.doe',
                 'address',
@@ -120,7 +120,7 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', array(), 1, 50)->willReturn($users)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
         $actual = $service->getCustomerSearch('testSize', '', 1, "a");
 
@@ -138,9 +138,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', array(), 1, 50)->willReturn($users)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testSize', "a", 1, 90000);
+        $actual = $service->getCustomerSearch('testSize', '', 1, 90000);
 
         static::assertSame($users, $actual);
     }

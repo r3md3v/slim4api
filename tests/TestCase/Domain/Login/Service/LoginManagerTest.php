@@ -68,7 +68,7 @@ class LoginManagerTest extends TestCase
                 'last token',
                 'status')];
 
-        $this->mock(LoginRepository::class)->method("getLogins")->with(1, 5)
+        $this->mock(LoginRepository::class)->method("getLogins")->with(1, 50)
             ->willReturn($logins);
         $service = $this->container->get(LoginManager::class);
         $actual = $service->getLoginList(1, "e");
