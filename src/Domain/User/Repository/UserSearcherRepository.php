@@ -33,14 +33,15 @@ class UserSearcherRepository
      * Get user search.
      *
      * @param string $keyword Word to search
-     * @param string $in Field exact name/human name
+     * @param array $in Field exact name/human name
      * @param int $page page number
      * @param int $pagesize page size
      *
-     * @return array users Search of Users
      * @throws DomainException
+     *
+     * @return users Search of Users
      */
-    public function getUsers(string $keyword, string $in, int $page, int $pagesize): array
+    public function getUsers(string $keyword, array $in, int $page, int $pagesize): array
     {
         $usernb = $this->countUsers();
 
@@ -52,10 +53,10 @@ class UserSearcherRepository
         $pagemax = ceil($usernb / $pagesize);
         $limit = (--$page) * $pagesize;
 
-        if ( '' == $in) {
+        if (empty($in[0])) {
             $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :limit, :pagesize ;';
         } else {
-            $sql = "SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE {$in}  LIKE :keyword LIMIT :limit, :pagesize ;";
+            $sql = "SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE {$in[1]}  LIKE :keyword LIMIT :limit, :pagesize ;";
         }
 
         // Feed the logger

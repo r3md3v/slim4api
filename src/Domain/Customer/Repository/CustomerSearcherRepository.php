@@ -34,7 +34,7 @@ class CustomerSearcherRepository
      * Get customer search.
      *
      * @param string $keyword  Word to search
-     * @param string $in       Field exact name/human name
+     * @param array  $in       Field exact name/human name
      * @param int    $page     page number
      * @param int    $pagesize page size
      *
@@ -42,7 +42,7 @@ class CustomerSearcherRepository
      *
      * @return array customers Search of Customers
      */
-    public function getCustomers(string $keyword, $in, int $page, int $pagesize): array
+    public function getCustomers(string $keyword, array $in, int $page, int $pagesize): array
     {
         $customernb = $this->countCustomers();
 
@@ -57,11 +57,11 @@ class CustomerSearcherRepository
         if ( isEmpty($in)) {
             $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :limit, :pagesize ;';
         } else {
-            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in} LIKE :keyword LIMIT :limit, :pagesize ;";
+            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;";
         }
 
         // Feed the logger
-        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
+        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
 
         $statement = $this->connection->prepare($sql);
 
@@ -89,10 +89,10 @@ class CustomerSearcherRepository
         }
 
         if (0 == count($customers)) {
-            if ($in='') {
-                $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in, $page + 1, $pagemax);
-            } else {
+            if (empty($in)) {
                 $msg = sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax);
+            } else {
+                $msg = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax);
             }
             $this->logger->info("CustomerSearcherRepository.getCustomers: {$msg}");
 

@@ -64,9 +64,9 @@ final class CustomerSearcher
      * @param mixed $page Page number
      * @param mixed $pagesize Nb of lines
      *
-     * @return array CustomerSearch
      * @throws ValidationException
      *
+     * @return CustomerSearch
      */
     public function getCustomerSearch(string $keyword, $in, $page, $pagesize): array
     {
@@ -84,7 +84,7 @@ final class CustomerSearcher
         }
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
-            $in = "";
+            $in = array();
         } else {
             $in = $this->defaultSearchField[$in - 1];
         }

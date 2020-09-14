@@ -82,7 +82,7 @@ final class UserSearcher
         }
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
-            $in = "";
+            $in = array();
         } else {
             $in = $this->defaultSearchField[$in - 1];
         }
