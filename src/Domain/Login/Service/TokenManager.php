@@ -9,6 +9,7 @@ use App\Domain\Login\Repository\TokenRepository;
 use App\Exception\ValidationException;
 use App\Factory\LoggerFactory;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -19,13 +20,21 @@ final class TokenManager
      * @var TokenRepository
      */
     private $repository;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var mixed
+     */
+    private $tokenlifetime;
 
     /**
      * The constructor.
      *
-     * @param TokenRepository    $repository The repository
-     * @param ContainerInterface $ci         The container interface
-     * @param LoggerFactory      $lf         The logger Factory
+     * @param TokenRepository $repository The repository
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      */
     public function __construct(TokenRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -55,9 +64,9 @@ final class TokenManager
      *
      * @throws ValidationException
      *
-     * @return result The result
+     * @return int result The result
      */
-    public function revokeToken(string $token)
+    public function revokeToken(string $token): int
     {
         return $this->repository->revokeTokenByJwt($token);
     }
@@ -69,7 +78,7 @@ final class TokenManager
      * @param string $token    The Token
      * @param string $lifetime The lifetime
      *
-     * @return token The row id
+     * @return int token The row id
      */
     public function logTokenDetails(string $username, string $token, string $lifetime)
     {
@@ -91,7 +100,7 @@ final class TokenManager
     /**
      * Cleanup token log.
      *
-     * @return row Nb of rows
+     * @return int row Nb of rows
      */
     public function cleanupTokens(): int
     {

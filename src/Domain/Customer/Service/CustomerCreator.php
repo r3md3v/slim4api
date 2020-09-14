@@ -88,11 +88,12 @@ final class CustomerCreator
 
             // Feed the logger
             $this->logger->debug(sprintf(
-                'CustomerCreator:createCustomer: missing params .name:%s, addr: %s, city: %s, ln: %s, eml: %s',
+                'CustomerCreator:createCustomer: missing params .name:%s, addr: %s, city: %s, phone: %s, eml: %s',
                 $data['cusname'],
                 $data['address'],
                 $data['city'],
-                $data['email'],
+                $data['phone'],
+                $data['email']
             ));
 
             throw new ValidationException('Please check your input.', $errors);

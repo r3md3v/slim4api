@@ -42,8 +42,8 @@ final class CustomerSearcher
      * The constructor.
      *
      * @param CustomerSearcherRepository $repository The repository
-     * @param ContainerInterface         $ci         The container interface
-     * @param LoggerFactory              $lf         The logger Factory
+     * @param ContainerInterface $ci The container interface
+     * @param LoggerFactory $lf The logger Factory
      *
      * @codeCoverageIgnore
      */
@@ -59,14 +59,14 @@ final class CustomerSearcher
     /**
      * Search customer list.
      *
-     * @param string $keyword  Word to search
-     * @param mixed  $in       Field number
-     * @param mixed  $page     Page number
-     * @param mixed  $pagesize Nb of lines
+     * @param string $keyword Word to search
+     * @param mixed $in Field number
+     * @param mixed $page Page number
+     * @param mixed $pagesize Nb of lines
      *
+     * @return array CustomerSearch
      * @throws ValidationException
      *
-     * @return CustomerSearch
      */
     public function getCustomerSearch(string $keyword, $in, $page, $pagesize): array
     {
@@ -84,7 +84,7 @@ final class CustomerSearcher
         }
 
         if (!is_numeric($in) || $in < 1 || $in > count($this->defaultSearchField)) {
-            $in = [-1, -1];
+            $in = "";
         } else {
             $in = $this->defaultSearchField[$in - 1];
         }

@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" bootstrap="vendor/autoload.php"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-    <coverage cacheDirectory="tmp/phpunitCache/"
+    <coverage cacheDirectory="./tmp/phpunitCache/"
               includeUncoveredFiles="true"
               processUncoveredFiles="true"
               pathCoverage="false"
               ignoreDeprecatedCodeUnits="true"
               disableCodeCoverageIgnore="true">
+        <report>
+            <clover outputFile="tests/reports/codeCoverage/clover.xml"/>
+            <crap4j outputFile="tests/reports/codeCoverage/crap4j.xml" threshold="50"/>
+            <html outputDirectory="tests/reports/codeCoverage" lowUpperBound="35" highLowerBound="70"/>
+            <php outputFile="tests/reports/codeCoverage/coverage.php"/>
+            <text outputFile="tests/reports/codeCoverage/coverage.txt" showUncoveredFiles="false"
+                  showOnlySummary="false"/>
+            <xml outputDirectory="tests/reports/codeCoverage/xml-coverage"/>
+        </report>
         <include>
             <directory suffix=".php">src</directory>
         </include>
@@ -22,25 +31,12 @@
         </exclude>
     </coverage>
     <logging>
-        <log type="coverage-html" target="tests/reports/codeCoverage" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="tests/reports/codeCoverage/coverage.xml"/>
-        <log type="coverage-php" target="tests/reports/codeCoverage/coverage.serialized"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-        <log type="junit" target="tests/reports/junit/logfile.xml" logIncompleteSkipped="false"/>
-        <log type="testdox-html" target="tests/reports/dox/testdox.html"/>
-        <log type="testdox-text" target="tests/reports/dox/testdox.txt"/>
-        <junit outputFile="tests/reports/junit/test.xml"/>
-        <testdoxHtml outputFile="tests/reports/dox/testdox.html"/>
-        <testdoxText outputFile="tests/reports/dox/testdox.txt"/>
+        <junit outputFile="tests/reports/junit/junit.xml"/>
+        <text outputFile="tests/reports/logfile.txt"/>
     </logging>
     <testsuites>
         <testsuite name="slim4api">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
 </phpunit>

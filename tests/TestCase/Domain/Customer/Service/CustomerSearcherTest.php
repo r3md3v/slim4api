@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Domain\Customer\Service;
+namespace Tests\TestCase\Domain\Customer\Service;
 
 use App\Domain\Customer\Data\CustomerData;
 use App\Domain\Customer\Repository\CustomerSearcherRepository;
@@ -27,26 +27,31 @@ class CustomerSearcherTest extends TestCase
         ];
 
         $this->mock(CustomerSearcherRepository::class)->method('getCustomers')
-            ->with('testOk', '1', 1, 1)->willReturn($users);
+            ->with('testOk', 'CUSNAME', 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch("testOk", 1, 1, 1);
+        $actual = $service->getCustomerSearch("testOk", '1', 1, 1);
 
         static::assertSame($users, $actual);
 
     }
 
-    public function testGetCustomerSearchOkNobody()
+
+    public function testGetCustomerSearchOkNobody(): void
     {
+        $keyword = 'testOkNobody';
+        $in = 'CUSNAME';
+        $page = 1;
+        $pagemax = 1;
+        $msgExpected = sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in, $page + 1, $pagemax);
+
+        $this->mock(CustomerSearcherRepository::class)->expects(self::once())-> method("getCustomers")
+            ->with($keyword, $in ,$page , $pagemax)->willThrowException(new DomainException($msgExpected));
+
+        $service = $this->container->get(CustomerSearcher::class);
 
         $this->expectException(DomainException::class);
-
-
-        $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testOkNobody', 1, 1, 1);
-        $service = $this->container->get(CustomerSearcher::class);
-        $service->getCustomerSearch('testOk', '1', 1, 1);
-        $msg = $this->getExpectedExceptionMessage();
-        static::assertEquals('No customer!', $msg);
+        $this->expectExceptionMessage($msgExpected);
+        $actual= $service->getCustomerSearch($keyword, '1', $page, $pagemax);
 
     }
 
@@ -77,9 +82,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testPage', -1, 1, 1)->willReturn($users);
+            ->with('testPage', '', 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testPage', "a", 1, 1);
+        $actual = $service->getCustomerSearch('testPage', "", 'a', 1);
 
         static::assertSame($users, $actual);
 
@@ -96,9 +101,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testPage', '-1', 1, 1)->willReturn($users);
+            ->with('testPage', '', 1, 1)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testPage', "a", 0, 1);
+        $actual = $service->getCustomerSearch('testPage', "", 0, 1);
 
         static::assertSame($users, $actual);
 
@@ -115,9 +120,9 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testSize', -1, 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
-        $actual = $service->getCustomerSearch('testSize', "a", 1, "a");
+        $actual = $service->getCustomerSearch('testSize', '', 1, "a");
 
         static::assertSame($users, $actual);
 
@@ -133,7 +138,7 @@ class CustomerSearcherTest extends TestCase
                 'email')];
 
         $this->mock(CustomerSearcherRepository::class)->method("getCustomers")
-            ->with('testSize', -1, 1, 5)->willReturn($users)->willReturn($users);
+            ->with('testSize', '', 1, 5)->willReturn($users)->willReturn($users);
         $service = $this->container->get(CustomerSearcher::class);
         $actual = $service->getCustomerSearch('testSize', "a", 1, 90000);
 

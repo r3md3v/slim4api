@@ -45,17 +45,18 @@ final class JwtAuth
     /**
      * The constructor.
      *
-     * @param string $issuer     The issuer name
-     * @param int    $lifetime   The max lifetime
+     * @param string $issuer The issuer name
+     * @param int $lifetime The max lifetime
      * @param string $privateKey The private key as string
-     * @param string $publicKey  The public key as string
+     * @param string $publicKey The public key as string
      */
     public function __construct(
         string $issuer,
         int $lifetime,
         string $privateKey,
         string $publicKey
-    ) {
+    )
+    {
         $this->issuer = $issuer;
         $this->lifetime = $lifetime;
         $this->privateKey = $privateKey;
@@ -130,6 +131,11 @@ final class JwtAuth
             return false;
         }
 
+        if ($token->isExpired()) {
+            // Token is expired
+            return false;
+        }
+
         // Check whether the token has not expired
         $data = new ValidationData();
         $data->setCurrentTime(Chronos::now()->getTimestamp());
@@ -144,9 +150,9 @@ final class JwtAuth
      *
      * @param string $token The JWT
      *
+     * @return string Token The decoded token
      * @throws InvalidArgumentException
      *
-     * @return string Token The decoded token
      */
     public function decodeToken(string $token): Token
     {

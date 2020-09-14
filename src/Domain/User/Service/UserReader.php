@@ -35,7 +35,7 @@ final class UserReader
      *
      * @return UserData The user data
      */
-    public function getUserDetails(int $userId): UserData
+    public function getUserDetails(?int $userId): UserData
     {
         // Validation
         if (empty($userId)) {
