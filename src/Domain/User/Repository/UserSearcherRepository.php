@@ -6,7 +6,6 @@ use App\Domain\User\Data\UserData;
 use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * Repository.
@@ -52,16 +51,20 @@ class UserSearcherRepository
             throw new DomainException(sprintf('No user!'));
         }
         $pagemax = ceil($usernb / $pagesize);
-        $limit = (--$page) * $pagesize;
+        $pagestart = (--$page) * $pagesize;
 
-        if (isEmpty($in)) {
-            $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :limit, :pagesize ;';
+        if (empty($in)) {
+            $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRNAME LIKE :keyword OR USRFIRSTNAME LIKE :keyword OR USRLASTNAME LIKE :keyword OR USREMAIL LIKE :keyword OR USRPROFILE LIKE :keyword LIMIT :pagestart, :pagesize ;';
         } else {
-            $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE {$in[1]}  LIKE :keyword LIMIT :limit, :pagesize ;';
+            $sql = "SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE {$in[1]} LIKE :keyword LIMIT :pagestart, :pagesize ;";
         }
 
         // Feed the logger
-        $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$usernb}");
+        if (empty($in)) {
+            $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: any, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$usernb}");
+        } else {
+            $this->logger->debug("UserSearcherRepository.getUsers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$usernb}");
+        }
 
         $statement = $this->connection->prepare($sql);
 
@@ -69,7 +72,7 @@ class UserSearcherRepository
         $keyword = "%{$keyword}%";
 
         $statement->bindParam(':keyword', $keyword);
-        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':pagestart', $pagestart, PDO::PARAM_INT);
         $statement->bindParam(':pagesize', $pagesize, PDO::PARAM_INT);
 
         $statement->execute();

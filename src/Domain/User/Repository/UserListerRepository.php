@@ -50,12 +50,12 @@ class UserListerRepository
             throw new DomainException(sprintf('No user!'));
         }
         $pagemax = ceil($usernb / $pagesize);
-        $limit = (--$page) * $pagesize;
+        $pagestart = (--$page) * $pagesize;
 
         $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users LIMIT ?, ?;';
         $statement = $this->connection->prepare($sql);
 
-        $statement->bindParam(1, $limit, PDO::PARAM_INT);
+        $statement->bindParam(1, $pagestart, PDO::PARAM_INT);
         $statement->bindParam(2, $pagesize, PDO::PARAM_INT);
 
         $statement->execute();

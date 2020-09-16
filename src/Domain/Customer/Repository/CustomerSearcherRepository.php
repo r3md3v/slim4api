@@ -6,7 +6,6 @@ use App\Domain\Customer\Data\CustomerData;
 use App\Factory\LoggerFactory;
 use DomainException;
 use PDO;
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * Repository.
@@ -52,24 +51,27 @@ class CustomerSearcherRepository
             throw new DomainException(sprintf('No customer!'));
         }
         $pagemax = ceil($customernb / $pagesize);
-        $limit = (--$page) * $pagesize;
+        $pagestart = (--$page) * $pagesize;
 
-        if (isEmpty($in)) {
-            $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :limit, :pagesize ;';
+        if (empty($in)) {
+            $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :pagestart, :pagesize ;';
         } else {
-            $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :limit, :pagesize ;';
+            $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :pagestart, :pagesize ;";
         }
 
         // Feed the logger
-        $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
-
+        if (empty($in)) {
+            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: any, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
+        } else {
+            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
+        }
         $statement = $this->connection->prepare($sql);
 
         $keyword = htmlspecialchars(strip_tags($keyword));
         $keyword = "%{$keyword}%";
 
         $statement->bindParam(':keyword', $keyword);
-        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':pagestart', $pagestart, PDO::PARAM_INT);
         $statement->bindParam(':pagesize', $pagesize, PDO::PARAM_INT);
 
         $statement->execute();

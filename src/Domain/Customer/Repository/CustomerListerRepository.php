@@ -50,12 +50,12 @@ class CustomerListerRepository
             throw new DomainException(sprintf('No customer!'));
         }
         $pagemax = ceil($customernb / $pagesize);
-        $limit = (--$page) * $pagesize;
+        $pagestart = (--$page) * $pagesize;
 
         $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL  FROM customers LIMIT ?, ?;';
         $statement = $this->connection->prepare($sql);
 
-        $statement->bindParam(1, $limit, PDO::PARAM_INT);
+        $statement->bindParam(1, $pagestart, PDO::PARAM_INT);
         $statement->bindParam(2, $pagesize, PDO::PARAM_INT);
 
         $statement->execute();
