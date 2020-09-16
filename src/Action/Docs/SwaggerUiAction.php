@@ -36,8 +36,8 @@ final class SwaggerUiAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface{
         // Path to the yaml file
-        //$yamlFile = __DIR__ . '/../../../resources/docs/swagger.yaml';
-        $yamlFile = __DIR__ . '/../../../resources/docs/petstore.yaml';
+        //$yamlFile = __DIR__ . '/../../../resources/docs/petstore.yaml';
+		$yamlFile = __DIR__ . '/../../../resources/docs/slim4api.yaml';
 
         $viewData = [
             'spec' => json_encode(Yaml::parseFile($yamlFile)),

@@ -1,0 +1,638 @@
+openapi: 3.0.2
+info:
+  description: |-
+    This is a sample Customer and User Server based on the OpenAPI 3.0 specification.
+    You can find out more about Swagger at [http://swagger.io](http://swagger.io).
+    
+    These specs are still under development to match API's
+    POST /token not working and response not accurate
+    
+
+    Realted to these projects:
+    - https://github.com/r3md3v/slim4api
+    - https://github.com/edgd1er/slim4api
+  version: 0.5.0-SNAPSHOT
+  title: Slim4API - OpenAPI 3.0
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: hello
+    description: Basic hello for testing
+  - name: status
+    description: App status
+  - name: customers
+    description: Everything about Customers
+  - name: users
+    description: Everything about Users / JWT protected
+    externalDocs:
+      description: Find out more about JWT
+      url: 'https://jwt.io/'
+  - name: logins
+    description: Everything about Logins
+
+paths:
+  /hello/{name}:
+    get:
+      tags:
+        - hello
+      summary: Hello world
+      description: Simple 'Hello world!' or 'Hello {name}!'
+      operationId: sayHello
+      parameters:
+        - name: name
+          in: path
+          description: Optionnal name to say hello to.
+          required: false
+          schema:
+            type: string
+            example: Bob
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Hello'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hello'
+
+
+  /status:
+    get:
+      tags:
+        - status
+      summary: Hello world
+      description: Status of the application
+      operationId: status
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Status'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+
+
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: Add a new customer
+      description: Add a new customer with name/address/city/phone/email
+      operationId: addCustomer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customers'
+        '405':
+          description: Invalid input
+        '422':
+          description: Customer already exists with email
+      requestBody:
+        description: Create a new customer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customers'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Customers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customers'
+  /customers/id/{id}:
+    get:
+      tags:
+        - customers
+      summary: Finds a customer by id
+      description: Find a single customer by id
+      operationId: findCustomerById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched. Use 564 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+        '400':
+          description: Invalid id value
+  /customers/:
+    get:
+      tags:
+        - customers
+      summary: List customers
+      description: Return a list of customers
+      operationId: listCustomers
+      parameters:
+        - name: page
+          in: query
+          description: Start page (min 1)
+          required: false
+          schema :
+            type: integer
+            example: 5
+        - name: size
+          in: query
+          description: Lines per page (max 50)
+          required: false
+          schema :
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+        '400':
+          description: No customers found
+  /customers/search/{keyword}:
+    get:
+      tags:
+        - customers
+      summary: Search in customers
+      description: Return a list of customers
+      operationId: searchCustomers
+      parameters:
+        - name: keyword
+          in: path
+          description: Word to search
+          required: true
+          schema:
+            type: string
+            example: boulevard
+        - name: in
+          in: query
+          description: Field number to search (1 Name, 2 Address, 3 City, 4 Phone, 5 Email)
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - name: page
+          in: query
+          description: Start page (min 1)
+          required: false
+          schema :
+            type: integer
+            example: 5
+        - name: size
+          in: query
+          description: Lines per page (max 50)
+          required: false
+          schema :
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+        '400':
+          description: No customers found with keyword
+
+
+  /users:
+    post:
+      tags:
+        - users
+      summary: Add a new user
+      description: Add a new user with name/password/firstname/lastname/email/profile
+      operationId: addUser
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '405':
+          description: Invalid input
+        '422':
+          description: User already exists with this name or email
+
+      requestBody:
+        description: Create a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Users'
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+  /users/id/{id}:
+    get:
+      tags:
+        - users
+      summary: Finds a user by id
+      description: Find a single user by id
+      operationId: findUserById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched. Use 564 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+        '400':
+          description: Invalid id value
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+  /users/:
+    get:
+      tags:
+        - users
+      summary: List users
+      description: Return a list of users
+      operationId: listUsers
+      parameters:
+        - name: page
+          in: query
+          description: Start page (min 1)
+          required: false
+          schema :
+            type: integer
+            example: 5
+        - name: size
+          in: query
+          description: Lines per page (max 50)
+          required: false
+          schema :
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+        '400':
+          description: No users found
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+  /users/search/{keyword}:
+    get:
+      tags:
+        - users
+      summary: Search in users
+      description: Return a list of users
+      operationId: searchUsers
+      parameters:
+        - name: keyword
+          in: path
+          description: Word to search
+          required: true
+          schema:
+            type: string
+            example: martin
+        - name: in
+          in: query
+          description: Field number to search (1 Username, 2 First name, 3 Last name, 4 Email, 5 Profile)
+          required: false
+          schema:
+            type: integer
+            example: 4
+        - name: page
+          in: query
+          description: Start page (min 1)
+          required: false
+          schema :
+            type: integer
+            example: 5
+        - name: size
+          in: query
+          description: Lines per page (max 50)
+          required: false
+          schema :
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+        '400':
+          description: No users found with keyword
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+
+  /tokens:
+    post:
+      tags:
+        - logins
+      summary: Logs user into the system and issue a JWT access token
+      description: 
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name or email for login
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            access-token:
+              description: The JWT JSON Web Token
+              schema:
+                type: string
+            token_type:
+              description: Bearer
+              schema:
+                type: string
+            expires_in:
+              description: 14400 = 60 x 60 x 4 = 4 hours
+              schema:
+                type: integer
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /logout:
+    get:
+      tags:
+        - logins
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /cleanup:
+    get:
+      tags:
+        - logins
+      summary: Clear the log of logins attempts and expired tokens
+      description: ''
+      operationId: cleanupLogins
+      parameters: []
+      responses:
+        default:
+          description: Cleanup result x login(s) and y token(s)
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+components:
+  schemas:
+    Customers:
+      required:
+        - cusname
+        - address
+        - city
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 654
+        cusname:
+          type: string
+          example: Remi MARTIN / Quick delivery
+        address:
+          type: string
+          example: 21 jump street
+        city:
+          type: string
+          example: Velociped
+        phone:
+          type: string
+          example: +1 234 56 78 99
+        email:
+          type: string
+          example: remi.martin@quickd.org
+      xml:
+        name: customers
+      type: object
+
+    Users:
+      required:
+        - username
+        - password
+        - firt_name
+        - last_name
+        - email
+        - profile
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        password:
+          type: string
+          example: 12345
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        profile:
+          type: string
+          example: users customers
+          enum:
+              - users
+              - customers
+      xml:
+        name: users
+      type: object
+
+    TokenX:
+      properties:
+        message:
+          type: string
+          example: 'Active JWT canceled and revoked'
+        token_type:
+          type: string
+          example: Bearer
+        access_token:
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJkMGM1NzBkLWM3YWQtNGQ1Yi05OGFmLWVkNjA0MWJiYWMyZSJ9
+    TokenC:
+      properties:
+        access_token:
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJkMGM1NzBkLWM3YWQtNGQ1Yi05OGFmLWVkNjA0MWJiYWMyZSJ9
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: int
+          example: 14400
+
+    Hello:
+      properties:
+        name:
+          type: string
+          example: Bob
+      xml:
+        name: hello
+      type: object
+
+    Status:
+      properties:
+        name:
+          type: string
+          example: slim4api
+        version:
+          type: string
+          example: 0.75 2020-09-01
+        url:
+          type: string
+          example: http://localhost:8080
+        datetime:
+          type: string
+          example: 2020-09-16 10:14:25 Europe/Paris
+        timestamp:
+          type: integer
+          example: 1600244065
+        endpoints:
+          type: string
+          example:
+              /hello /status /users /customers /tokens / cleanup /logout
+        tables:
+          type: string
+          example:
+            Users - Customers - Logins
+      xml:
+        name: status
+      type: object
+
+  requestBodies:
+    CustomerArray:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Customers'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Customers'
+      description: Customer data object
+    UserArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Users'
+      description: User data object
+  securitySchemes:
+    slim4api_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'localhost:8080/tokens'
+          scopes:
+            'write:users': modify users
+            'read:users': read users
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
