@@ -4,14 +4,14 @@ info:
     This is a sample Customer and User Server based on the OpenAPI 3.0 specification.
     You can find out more about Swagger at [http://swagger.io](http://swagger.io).
     
-    These specs are still under development to match API's
-    POST /token not working and response not accurate
-    
+    These specs are still under development to match API's - 80% done
+    - eg POST on endpoint /token not working and response not accurate
+    - eg GET /users/ or /customers/ should return a list or search list
 
     Realted to these projects:
     - https://github.com/r3md3v/slim4api
     - https://github.com/edgd1er/slim4api
-  version: 0.5.0-SNAPSHOT
+  version: 0.8.5-SNAPSHOT
   title: Slim4API - OpenAPI 3.0
   license:
     name: Apache 2.0
@@ -116,13 +116,82 @@ paths:
     get:
       tags:
         - customers
-      summary: Finds a customer by id
+      summary: Find a customer by id
       description: Find a single customer by id
       operationId: findCustomerById
       parameters:
         - name: id
           in: path
           description: The id that needs to be fetched. Use 564 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+        '400':
+          description: Invalid id value
+    put:
+      tags:
+        - customers
+      summary: Modify an existing customer
+      description: Modify a customer name/address/city/phone/email
+      operationId: modCustomer
+      parameters:
+        - name: id
+          in: path
+          description: customer id to be modifed
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customers'
+        '405':
+          description: Invalid input
+        '422':
+          description: Customer already exists with email
+      requestBody:
+        description: Update an existing customer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customers'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Customers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customers'
+    delete:
+      tags:
+        - customers
+      summary: Delete a customer by id
+      description: Delete a single customer by id
+      operationId: deleteCustomerById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be deleted.
           required: true
           schema:
             type: string
@@ -233,7 +302,6 @@ paths:
         '400':
           description: No customers found with keyword
 
-
   /users:
     post:
       tags:
@@ -277,13 +345,90 @@ paths:
     get:
       tags:
         - users
-      summary: Finds a user by id
+      summary: Find a user by id
       description: Find a single user by id
       operationId: findUserById
       parameters:
         - name: id
           in: path
           description: The id that needs to be fetched. Use 564 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+        '400':
+          description: Invalid id value
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+    put:
+      tags:
+        - users
+      summary: Modify an existing user
+      description: Update user name/password/firstname/lastname/email/profile
+      operationId: modUser
+      parameters:
+        - name: id
+          in: path
+          description: user id to be modifed
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '405':
+          description: Invalid input
+        '422':
+          description: User already exists with this name or email
+      requestBody:
+        description: Update a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Users'
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
+    delete:
+      tags:
+        - users
+      summary: Delete a user by id
+      description: Delete a single user by id
+      operationId: deleteUserById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be deleted.
           required: true
           schema:
             type: string
@@ -411,7 +556,7 @@ paths:
       tags:
         - logins
       summary: Logs user into the system and issue a JWT access token
-      description: 
+      description: ''
       operationId: loginUser
       parameters:
         - name: username
@@ -564,7 +709,7 @@ components:
           type: string
           example: Bearer
         expires_in:
-          type: int
+          type: integer
           example: 14400
 
     Hello:
@@ -634,5 +779,5 @@ components:
             'read:users': read users
     api_key:
       type: apiKey
-      name: api_key
-      in: header
+      name: Authorization
+      in: cookie
