@@ -43,28 +43,25 @@ class CustomerSearcherRepository
      */
     public function getCustomers(string $keyword, array $in, int $page, int $pagesize): array
     {
-        $customernb = $this->countCustomers();
+        $customernb = $this->countCustomers($keyword, $in);
 
         if (0 == $customernb) {
-            $this->logger->info('CustomerSearcherRepository.getCustomers: no customers in table');
+            $this->logger->info('CustomerSearcherRepository.getCustomers: no customers with keyword ['.$keyword.']'.(!empty($in) ? ' in '.$in[0] : ''));
 
-            throw new DomainException(sprintf('No customer!'));
+            throw new DomainException(sprintf('No customer with keyword ['.$keyword.']'.(!empty($in) ? ' in '.$in[0] : '')));
         }
         $pagemax = ceil($customernb / $pagesize);
         $pagestart = (--$page) * $pagesize;
 
+        // Feed the logger & build query
         if (empty($in)) {
+            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: any, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
             $sql = 'SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword LIMIT :pagestart, :pagesize ;';
         } else {
+            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
             $sql = "SELECT CUSID, CUSNAME, CUSADDRESS, CUSCITY, CUSPHONE, CUSEMAIL FROM customers WHERE {$in[1]} LIKE :keyword LIMIT :pagestart, :pagesize ;";
         }
 
-        // Feed the logger
-        if (empty($in)) {
-            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: any, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
-        } else {
-            $this->logger->debug("CustomerSearcherRepository.getCustomers: keyword: {$keyword}, in: {$in[0]}, page: {$page}, size: {$pagesize},pagemax: {$pagemax}, nbusers: {$customernb}");
-        }
         $statement = $this->connection->prepare($sql);
 
         $keyword = htmlspecialchars(strip_tags($keyword));
@@ -105,14 +102,27 @@ class CustomerSearcherRepository
     }
 
     /**
-     * Count number of customers.
+     * Count number of customers in search.
      *
-     * @return int nb of users
+     * @param string $keyword Word to search
+     * @param array  $in      Field exact name/human name
+     *
+     * @return int nb of customers
      */
-    public function countCustomers(): int
+    public function countCustomers(string $keyword, array $in): int
     {
-        $sql = 'SELECT COUNT(*) AS nb FROM customers;';
+        if (empty($in)) {
+            $sql = 'SELECT count(*) AS nb FROM customers WHERE CUSNAME LIKE :keyword OR CUSADDRESS LIKE :keyword OR CUSCITY LIKE :keyword OR CUSPHONE LIKE :keyword OR CUSEMAIL LIKE :keyword;';
+        } else {
+            $sql = "SELECT count(*) AS nb FROM customers WHERE {$in[1]} LIKE :keyword;";
+        }
         $statement = $this->connection->prepare($sql);
+
+        $keyword = htmlspecialchars(strip_tags($keyword));
+        $keyword = "%{$keyword}%";
+
+        $statement->bindParam(':keyword', $keyword);
+
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
