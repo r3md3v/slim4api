@@ -37,7 +37,7 @@ class UserReaderRepository
      */
     public function getUserById(int $userId): UserData
     {
-        $sql = 'SELECT USRID, USRNAME, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRID = :id;';
+        $sql = 'SELECT USRID, USRNAME, USRPASS, USRFIRSTNAME, USRLASTNAME, USREMAIL, USRPROFILE FROM users WHERE USRID = :id;';
         $statement = $this->connection->prepare($sql);
         $statement->execute(['id' => $userId]);
 
@@ -51,6 +51,7 @@ class UserReaderRepository
         return new UserData(
             (int) $row['USRID'],
             (string) $row['USRNAME'],
+            (string) $row['USRPASS'],
             (string) $row['USRFIRSTNAME'],
             (string) $row['USRLASTNAME'],
             (string) $row['USREMAIL'],

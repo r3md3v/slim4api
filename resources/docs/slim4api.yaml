@@ -20,7 +20,7 @@ tags:
   - name: hello
     description: Basic hello for testing
   - name: status
-    description: App status
+    description: Application status
   - name: customers
     description: Everything about Customers
   - name: users
@@ -36,8 +36,8 @@ paths:
     get:
       tags:
         - hello
-      summary: Hello world
-      description: Simple 'Hello world!' or 'Hello {name}!'
+      summary: Hello World!
+      description: Simple 'Hello world!' or 'Hello:{name}!'
       operationId: sayHello
       parameters:
         - name: name
@@ -63,8 +63,8 @@ paths:
     get:
       tags:
         - status
-      summary: Hello world
-      description: Status of the application
+      summary: Application status
+      description: Status of the application with all details
       operationId: status
       responses:
         '200':

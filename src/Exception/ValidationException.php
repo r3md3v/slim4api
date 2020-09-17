@@ -6,7 +6,7 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Validation Exception
+ * Validation Exception.
  */
 final class ValidationException extends RuntimeException
 {
@@ -18,10 +18,10 @@ final class ValidationException extends RuntimeException
     /**
      * The constructor.
      *
-     * @param array $errors The errors
-     * @param string $message The error message
-     * @param int $code The error code
-     * @param Throwable|null $previous The previous exception
+     * @param array          $errors   The errors
+     * @param string         $message  The error message
+     * @param int            $code     The error code
+     * @param null|Throwable $previous The previous exception
      */
     public function __construct(string $message, array $errors = [], int $code = 422, Throwable $previous = null)
     {

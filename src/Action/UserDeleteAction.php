@@ -2,7 +2,7 @@
 
 namespace App\Action;
 
-use App\Domain\User\Service\UserReader;
+use App\Domain\User\Service\UserDeletor;
 use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -11,12 +11,12 @@ use Slim\Logger;
 /**
  * Action.
  */
-final class UserReadAction
+final class UserDeleteAction
 {
     /**
-     * @var UserReader
+     * @var UserDeletor
      */
-    private $userReader;
+    private $userDeletor;
 
     /**
      * @var Logger
@@ -26,12 +26,12 @@ final class UserReadAction
     /**
      * The constructor.
      *
-     * @param UserReader    $userReader The user reader
-     * @param LoggerFactory $lf         The loggerFactory
+     * @param UserDeletor   $userDeletor The user deletor
+     * @param LoggerFactory $lf          The loggerFactory
      */
-    public function __construct(UserReader $userReader, LoggerFactory $lf)
+    public function __construct(UserDeletor $userDeletor, LoggerFactory $lf)
     {
-        $this->userReader = $userReader;
+        $this->userDeletor = $userDeletor;
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -53,25 +53,19 @@ final class UserReadAction
         $userId = (int) $args['id'];
 
         // Feed the logger
-        $this->logger->debug("UserReadAction: id: {$userId}");
+        $this->logger->debug("UserDeleteAction: id: {$userId}");
 
         // Invoke the Domain with inputs and retain the result
-        $userData = $this->userReader->getUserDetails($userId);
+        $result = $this->userDeletor->deleteUser($userId);
 
         // Transform the result into the JSON representation
         $result = [
-            'user_id' => $userData->id,
-            'username' => $userData->username,
-            'password' => $userData->password,
-            'first_name' => $userData->firstName,
-            'last_name' => $userData->lastName,
-            'email' => $userData->email,
-            'profile' => $userData->profile,
+            'user_id' => $result,
         ];
 
         // Build the HTTP response
         $response->getBody()->write((string) json_encode($result));
 
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }

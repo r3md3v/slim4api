@@ -2,7 +2,7 @@
 
 namespace App\Action;
 
-use App\Domain\User\Service\UserReader;
+use App\Domain\Customer\Service\CustomerDeletor;
 use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -11,12 +11,12 @@ use Slim\Logger;
 /**
  * Action.
  */
-final class UserReadAction
+final class CustomerDeleteAction
 {
     /**
-     * @var UserReader
+     * @var CustomerDeletor
      */
-    private $userReader;
+    private $customerDeletor;
 
     /**
      * @var Logger
@@ -26,12 +26,12 @@ final class UserReadAction
     /**
      * The constructor.
      *
-     * @param UserReader    $userReader The user reader
-     * @param LoggerFactory $lf         The loggerFactory
+     * @param CustomerDeletor $customerDeletor The customer deletor
+     * @param LoggerFactory   $lf              The loggerFactory
      */
-    public function __construct(UserReader $userReader, LoggerFactory $lf)
+    public function __construct(CustomerDeletor $customerDeletor, LoggerFactory $lf)
     {
-        $this->userReader = $userReader;
+        $this->customerDeletor = $customerDeletor;
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -50,28 +50,22 @@ final class UserReadAction
         array $args = []
     ): ResponseInterface {
         // Collect input from the HTTP request
-        $userId = (int) $args['id'];
+        $customerId = (int) $args['id'];
 
         // Feed the logger
-        $this->logger->debug("UserReadAction: id: {$userId}");
+        $this->logger->debug("CustomerDeleteAction: id: {$customerId}");
 
         // Invoke the Domain with inputs and retain the result
-        $userData = $this->userReader->getUserDetails($userId);
+        $result = $this->customerDeletor->deleteCustomer($customerId);
 
         // Transform the result into the JSON representation
         $result = [
-            'user_id' => $userData->id,
-            'username' => $userData->username,
-            'password' => $userData->password,
-            'first_name' => $userData->firstName,
-            'last_name' => $userData->lastName,
-            'email' => $userData->email,
-            'profile' => $userData->profile,
+            'customer_id' => $result,
         ];
 
         // Build the HTTP response
         $response->getBody()->write((string) json_encode($result));
 
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }

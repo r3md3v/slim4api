@@ -5,16 +5,20 @@ use App\Action\Auth\LogoutAction;
 use App\Action\Auth\TokenCreateAction;
 use App\Action\Auth\TokenListAction;
 use App\Action\CustomerCreateAction;
+use App\Action\CustomerDeleteAction;
 use App\Action\CustomerListAction;
 use App\Action\CustomerReadAction;
 use App\Action\CustomerSearchAction;
+use App\Action\CustomerUpdateAction;
 use App\Action\Docs\SwaggerUiAction;
 use App\Action\HelloAction;
 use App\Action\HomeAction;
 use App\Action\UserCreateAction;
+use App\Action\UserDeleteAction;
 use App\Action\UserListAction;
 use App\Action\UserReadAction;
 use App\Action\UserSearchAction;
+use App\Action\UserUpdateAction;
 use App\Middleware\JwtAuthMiddleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -51,6 +55,9 @@ return function (App $app) {
         $group2->get('/id/{id:[0-9]+}', CustomerReadAction::class);
         $group2->get('/search/{keyword}', CustomerSearchAction::class);
         $group2->post('', CustomerCreateAction::class);
+        //$group2->post('/id/{id:[0-9]+}', CustomerUpdateAction::class); // used by html form
+        $group2->put('/id/{id:[0-9]+}', CustomerUpdateAction::class);
+        $group2->delete('/id/{id:[0-9]+}', CustomerDeleteAction::class);
     });
 
     // Users - group3
@@ -59,6 +66,9 @@ return function (App $app) {
         $group3->get('/id/{id:[0-9]+}', UserReadAction::class);
         $group3->get('/search/{keyword}', UserSearchAction::class);
         $group3->post('', UserCreateAction::class);
+        //$group3->post('/id/{id:[0-9]+}', UserUpdateAction::class); // used by html form
+        $group3->put('/id/{id:[0-9]+}', UserUpdateAction::class);
+        $group3->delete('/id/{id:[0-9]+}', UserDeleteAction::class);
     })->add(JwtAuthMiddleware::class);
 
     // Docs - Swagger

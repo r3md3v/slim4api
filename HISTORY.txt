@@ -29,8 +29,7 @@ $settings['redirection'] = [
     'servername' => 'localhost',
 ];
 
-
-Add middleware CORS as per https://www.slimframework.com/docs/v4/cookbook/enable-cors.html
+Added middleware CORS as per https://www.slimframework.com/docs/v4/cookbook/enable-cors.html
 with options *
 	$settings['cors'] = '*';
 
@@ -45,7 +44,7 @@ Added loggerFactory as per https://odan.github.io/2020/05/25/slim4-logging.html
 
 Added Faker for users and customers
 
-createUserForm.php to trigger POST /users
+Added createUserForm.php to trigger POST /users
 
 
 [v 0.5]
@@ -54,8 +53,7 @@ Added middleware JWT/JAVA Web Tokens as per https://odan.github.io/2019/12/02/sl
 
 Added Swagger rendering as per https://odan.github.io/2020/06/12/slim4-swagger-ui.html
 with template file petstore V3
-Investigation on open annotations and zircote/swagger-php
-
+>> Investigation on open annotations and zircote/swagger-php
 Use local copy in public\js\swagger-ui-bundle.js + swagger-ui-standalone-preset.js + public\css\swagger-ui.css
 
 Added page+size options in list/search, and $settings['db'] = ['defaultPage' => '1','defaultPageSize' => '50']
@@ -128,12 +126,12 @@ New table usersjwt with id/name/pass/mail/token/status/created/updated filled up
 HomeAction, shows endpoints/verbs as per list defined in settings.php 
 
 Table 'userjwt' renammed 'logins' (best practice would be singular, lowercase, same for tables).
-Login Form takes email in addition to email as identifier/username.
+Login form accepts email in addition to username as identifier.
 
 New table loglogins and scripts to log attempts (username/mail+ipsource+resultat+timestamp)
 New table logtokens and scripts to log tokens generated (username/mail+token+status+issuedat+expiredat)
 
-Logout action marks oken as revoked (status=0)
+Logout action marks token as revoked (status=0)
 Middleware JwtAuthMiddleware verifies blacklist (table logtokens where status=0)
 
 Added logger for list/search in Service+Repo (removed in v0.5).
@@ -147,4 +145,10 @@ and cleanup logtoken for all expired.
 Added Faker for loglogins and logtokens
 
 Added history.txt and 2do.txt
+
+Moved getIpAddress to a new class Tools
+
+Clarified use of $in as array
+
+Added 50 unit tests
 

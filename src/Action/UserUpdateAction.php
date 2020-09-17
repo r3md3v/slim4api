@@ -2,21 +2,44 @@
 
 namespace App\Action;
 
-use App\Domain\User\Service\UserReader;
+use App\Domain\User\Service\UserUpdator;
 use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Logger;
 
 /**
+ * @OA\Post(
+ *     path="/api/users",
+ *     summary="update user",
+ *     description="update user according to posted data ",
+ *     @OA\RequestBody(
+ *         description="Client side search object",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Success",
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Could Not Find Resource",
+ *  )
+ * )
+ */
+
+/**
  * Action.
  */
-final class UserReadAction
+final class UserUpdateAction
 {
     /**
-     * @var UserReader
+     * @var UserUpdator
      */
-    private $userReader;
+    private $userUpdator;
 
     /**
      * @var Logger
@@ -26,12 +49,12 @@ final class UserReadAction
     /**
      * The constructor.
      *
-     * @param UserReader    $userReader The user reader
-     * @param LoggerFactory $lf         The loggerFactory
+     * @param UserUpdator   $userUpdator The user updator
+     * @param LoggerFactory $lf          The loggerFactory
      */
-    public function __construct(UserReader $userReader, LoggerFactory $lf)
+    public function __construct(UserUpdator $userUpdator, LoggerFactory $lf)
     {
-        $this->userReader = $userReader;
+        $this->userUpdator = $userUpdator;
         $this->logger = $lf->addFileHandler('error.log')->addConsoleHandler()->createInstance('error');
     }
 
@@ -51,27 +74,22 @@ final class UserReadAction
     ): ResponseInterface {
         // Collect input from the HTTP request
         $userId = (int) $args['id'];
-
-        // Feed the logger
-        $this->logger->debug("UserReadAction: id: {$userId}");
+        $data = (array) $request->getParsedBody();
 
         // Invoke the Domain with inputs and retain the result
-        $userData = $this->userReader->getUserDetails($userId);
+        $this->userUpdator->updateUser($userId, $data);
+
+        // Feed the logger
+        $this->logger->debug("UserUpdateAction: id: {$userId}");
 
         // Transform the result into the JSON representation
         $result = [
-            'user_id' => $userData->id,
-            'username' => $userData->username,
-            'password' => $userData->password,
-            'first_name' => $userData->firstName,
-            'last_name' => $userData->lastName,
-            'email' => $userData->email,
-            'profile' => $userData->profile,
+            'user_id' => $userId,
         ];
 
         // Build the HTTP response
         $response->getBody()->write((string) json_encode($result));
 
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
     }
 }
