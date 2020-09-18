@@ -4,9 +4,10 @@ info:
     This is a sample Customer and User Server based on the OpenAPI 3.0 specification.
     You can find out more about Swagger at [http://swagger.io](http://swagger.io).
     
-    These specs are still under development to match API's - 80% done
-    - eg POST on endpoint /token not working and response not accurate
-    - eg GET /users/ or /customers/ should return a list or search list
+    These specs are under development to match API's - 90% done
+    - Recheck Schema va requestBodies for ArrayOfCustomers and Users
+    - Global review of satutuss for esponses
+        200 OK, 201 ?, 222 ?, 400 Bad request, 401 Unauthorized, 404 Not found, 5XX Unexpected error.
 
     Realted to these projects:
     - https://github.com/r3md3v/slim4api
@@ -43,7 +44,6 @@ paths:
         - name: name
           in: path
           description: Optionnal name to say hello to.
-          required: false
           schema:
             type: string
             example: Bob
@@ -122,7 +122,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: The id that needs to be fetched. Use 564 for testing.
+          description: The id that needs to be fetched.
           required: true
           schema:
             type: string
@@ -222,14 +222,12 @@ paths:
         - name: page
           in: query
           description: Start page (min 1)
-          required: false
           schema :
             type: integer
             example: 5
         - name: size
           in: query
           description: Lines per page (max 50)
-          required: false
           schema :
             type: integer
             example: 10
@@ -241,14 +239,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customers'
+                  $ref: '#/components/schemas/ArrayOfCustomers'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customers'
+                  $ref: '#/components/schemas/ArrayOfCustomers'
         '400':
-          description: No customers found
+          description: No customer found
   /customers/search/{keyword}:
     get:
       tags:
@@ -267,21 +265,18 @@ paths:
         - name: in
           in: query
           description: Field number to search (1 Name, 2 Address, 3 City, 4 Phone, 5 Email)
-          required: false
           schema:
             type: integer
             example: 2
         - name: page
           in: query
           description: Start page (min 1)
-          required: false
           schema :
             type: integer
             example: 5
         - name: size
           in: query
           description: Lines per page (max 50)
-          required: false
           schema :
             type: integer
             example: 10
@@ -293,14 +288,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customers'
+                  $ref: '#/components/schemas/ArrayOfCustomers'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customers'
+                  $ref: '#/components/schemas/ArrayOfCustomers'
         '400':
-          description: No customers found with keyword
+          description: No customer found with keyword
 
   /users:
     post:
@@ -463,14 +458,12 @@ paths:
         - name: page
           in: query
           description: Start page (min 1)
-          required: false
           schema :
             type: integer
             example: 5
         - name: size
           in: query
           description: Lines per page (max 50)
-          required: false
           schema :
             type: integer
             example: 10
@@ -482,14 +475,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Users'
+                  $ref: '#/components/schemas/ArrayOfUsers'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Users'
+                  $ref: '#/components/schemas/ArrayOfUsers'
         '400':
-          description: No users found
+          description: No user found
       security:
         - slim4api_auth:
             - 'write:users'
@@ -512,21 +505,18 @@ paths:
         - name: in
           in: query
           description: Field number to search (1 Username, 2 First name, 3 Last name, 4 Email, 5 Profile)
-          required: false
           schema:
             type: integer
             example: 4
         - name: page
           in: query
           description: Start page (min 1)
-          required: false
           schema :
             type: integer
             example: 5
         - name: size
           in: query
           description: Lines per page (max 50)
-          required: false
           schema :
             type: integer
             example: 10
@@ -538,14 +528,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Users'
+                  $ref: '#/components/schemas/ArrayOfUsers'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Users'
+                  $ref: '#/components/schemas/ArrayOfUsers'
         '400':
-          description: No users found with keyword
+          description: No user found with keyword
       security:
         - slim4api_auth:
             - 'write:users'
@@ -556,42 +546,36 @@ paths:
       tags:
         - logins
       summary: Logs user into the system and issue a JWT access token
-      description: ''
+      description: 'Defaut login user/secret'
       operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name or email for login
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
       responses:
         '200':
           description: successful operation
-          headers:
-            access-token:
-              description: The JWT JSON Web Token
-              schema:
-                type: string
-            token_type:
-              description: Bearer
-              schema:
-                type: string
-            expires_in:
-              description: 14400 = 60 x 60 x 4 = 4 hours
-              schema:
-                type: integer
           content:
             application/xml:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenCreate'
             application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenCreate'
         '400':
           description: Invalid username/password supplied
   /logout:
@@ -605,6 +589,17 @@ paths:
       responses:
         default:
           description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenCancel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenCancel'
   /cleanup:
     get:
       tags:
@@ -619,99 +614,36 @@ paths:
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
+
 components:
+
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            
   schemas:
-    Customers:
-      required:
-        - cusname
-        - address
-        - city
-        - email
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 654
-        cusname:
-          type: string
-          example: Remi MARTIN / Quick delivery
-        address:
-          type: string
-          example: 21 jump street
-        city:
-          type: string
-          example: Velociped
-        phone:
-          type: string
-          example: +1 234 56 78 99
-        email:
-          type: string
-          example: remi.martin@quickd.org
-      xml:
-        name: customers
-      type: object
 
-    Users:
-      required:
-        - username
-        - password
-        - firt_name
-        - last_name
-        - email
-        - profile
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        username:
-          type: string
-          example: theUser
-        password:
-          type: string
-          example: 12345
-        first_name:
-          type: string
-          example: John
-        last_name:
-          type: string
-          example: James
-        email:
-          type: string
-          example: john@email.com
-        profile:
-          type: string
-          example: users customers
-          enum:
-              - users
-              - customers
-      xml:
-        name: users
+    Error:
       type: object
-
-    TokenX:
       properties:
+        code:
+          type: string
         message:
           type: string
-          example: 'Active JWT canceled and revoked'
-        token_type:
-          type: string
-          example: Bearer
-        access_token:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJkMGM1NzBkLWM3YWQtNGQ1Yi05OGFmLWVkNjA0MWJiYWMyZSJ9
-    TokenC:
-      properties:
-        access_token:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJkMGM1NzBkLWM3YWQtNGQ1Yi05OGFmLWVkNjA0MWJiYWMyZSJ9
-        token_type:
-          type: string
-          example: Bearer
-        expires_in:
-          type: integer
-          example: 14400
-
+      required:
+        - code
+        - message
+        
     Hello:
       properties:
         name:
@@ -750,8 +682,107 @@ components:
         name: status
       type: object
 
+    Customers:
+      required:
+        - cusname
+        - address
+        - city
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 654
+        cusname:
+          type: string
+          example: Remi MARTIN / Quick delivery
+        address:
+          type: string
+          example: 21 jump street
+        city:
+          type: string
+          example: Velociped
+        phone:
+          type: string
+          example: +1 234 56 78 99
+        email:
+          type: string
+          example: remi.martin@quickd.org
+      xml:
+        name: customers
+      type: object
+    ArrayOfCustomers:
+      type: array
+      items:
+       $ref: '#/components/schemas/Customers'
+
+    Users:
+      required:
+        - username
+        - password
+        - first_name
+        - last_name
+        - email
+        - profile
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        password:
+          type: string
+          example: 12345
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        profile:
+          type: string
+          example: users customers
+          enum:
+              - users
+              - customers
+      xml:
+        name: users
+      type: object
+    ArrayOfUsers:
+      type: array
+      items:
+       $ref: '#/components/schemas/Users'
+
+    TokenCreate:
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ1c2VyIiwiaWF0IjoxNTE2MjM5MDIyfQ.ljVXzPoLyXbokfpiht4XAYJC-jyqXOMYDw5q1Lvkjkg
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          example: 14400
+    TokenCancel:
+      properties:
+        message:
+          type: string
+          example: 'Active JWT canceled and revoked'
+        token_type:
+          type: string
+          example: Bearer
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ1c2VyIiwiaWF0IjoxNTE2MjM5MDIyfQ.ljVXzPoLyXbokfpiht4XAYJC-jyqXOMYDw5q1Lvkjkg
+
   requestBodies:
-    CustomerArray:
+   Customers:
       content:
         application/json:
           schema:
@@ -759,21 +790,51 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Customers'
-      description: Customer data object
-    UserArray:
+      description: Customer object
+   # Recheck these ArrayOfCustomers+Users
+   ArrayOfCustomers:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+             $ref: '#/components/schemas/Customers'
+        application/xml:
+          schema:
+            type: array
+            items:
+             $ref: '#/components/schemas/Customers'
+      description: Array of customer data objects
+
+   Users:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Users'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Users'
+      description: User object
+   # Recheck these ArrayOfCustomers+Users
+   ArrayOfUsers:
       content:
         application/json:
           schema:
             type: array
             items:
               $ref: '#/components/schemas/Users'
-      description: User data object
+        application/xml:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Users'
+      description: Array of user data objects
   securitySchemes:
     slim4api_auth:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: 'localhost:8080/tokens'
+          authorizationUrl: '/tokens'
           scopes:
             'write:users': modify users
             'read:users': read users
