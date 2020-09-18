@@ -108,7 +108,7 @@ if ('Read' == $action && is_numeric($id)) {
 }
 if ('' == $action || 'Cancel' == $action) {
     $endpoint = '/customers';
-    $msg = 'Select CRUD action Create/Post Read/Get Update/Post Delete';
+    $msg = 'Select action Create (Post), Read (Get), Update (Put) or Delete';
     $action = 'Create';
 }
 
@@ -125,7 +125,7 @@ if ('' == $action || 'Cancel' == $action) {
     <div class="flex-container">
     <div class="container">
 
-    <h1>Slim4API - Customer API CRUD</h1>
+    <h1>Slim4API - CRUD endpoint /customers</h1>
 
     <form method="post" class="form" action="createCustomerForm.php?action=<?php echo $action."&amp;id={$id}"; ?>"
         onsubmit="return verifForm([cusname,address,city,email],'Error : fields marked with an asterisk are mandatory!') && validateEmail(email,'Error : email format invalid!');">

@@ -4,7 +4,7 @@ require_once '../vendor/autoload.php';
 require '../config/settings.php';
 
 // https://weichie.com/blog/curl-api-calls-with-php/
-function CallAPI($method, $url, $data = false, $jwt = false)
+function CallAPI($method, $url, $data = false)
 {
     $curl = curl_init();
 
@@ -111,7 +111,7 @@ if ('Read' == $action && is_numeric($id)) {
 }
 if ('' == $action || 'Cancel' == $action) {
     $endpoint = '/users';
-    $msg = 'Select CRUD action Create/Post Read/Get Update/Post Delete';
+    $msg = 'Select action Create (Post), Read (Get), Update (Put) or Delete';
     $action = 'Create';
 }
 
@@ -128,7 +128,7 @@ if ('' == $action || 'Cancel' == $action) {
     <div class="flex-container">
     <div class="container">
 
-    <h1>Slim4API - User API CRUD</h1>
+    <h1>Slim4API - CRUD endpoint /users</h1>
 
     <form class="form" method="post" action="createUserForm.php?action=<?php echo $action."&amp;id={$id}"; ?>"
         onsubmit="return verifForm([username,password,first_name,last_name,email,profile],'Error : fields marked with an asterisk are mandatory!') && validateEmail(email,'Error : email format invalid!');">
@@ -182,7 +182,7 @@ if ('' == $action || 'Cancel' == $action) {
     <?php
         echo '' != $msg ? "Info : {$msg}" : '';
         if (!isset($_COOKIE['Authorization'])) {
-            echo 'Error : unauthorized - no JWT found';
+            echo '<br /><font color="red">Error : unauthorized - no JWT found</font>';
         }
     ?>
 
