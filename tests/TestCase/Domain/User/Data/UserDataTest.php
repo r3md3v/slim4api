@@ -10,18 +10,21 @@ class UserDataTest extends TestCase
 
     public function test__construct()
     {
-        $user = new UserData(1, 'john.doe',
+        $user = new UserData(1,
+            'jdoe',
+            'John password',
             'John',
             'Doe',
             'john.doe@example.com',
-            'user');
+            'user profile'
+        );
 
         static::assertEquals(1, $user->id);
-        static::assertEquals('john.doe', $user->username);
+        static::assertEquals('jdoe', $user->username);
         static::assertEquals('John', $user->firstName);
         static::assertEquals('Doe', $user->lastName);
         static::assertEquals('john.doe@example.com', $user->email);
-        static::assertEquals('user', $user->profile);
+        static::assertEquals('user profile', $user->profile);
 
     }
 }
