@@ -62,7 +62,7 @@ final class LogoutAction
                 ];
             } else {
                 $result = [
-                    'message' => 'Active JWT canceled but NOT foune/revoked',
+                    'message' => 'Active JWT canceled but NOT found/revoked',
                     'token_type' => 'Bearer',
                     'access_token' => $token,
                 ];
