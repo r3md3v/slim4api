@@ -80,8 +80,12 @@ final class UserUpdator
             $errors['mandatory'] = 'Input [User Name] [Password] [Firstname] [Lastname] [Email] [Profile] required';
         }
 
-        if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Invalid email address';
+        if (isset($data['email'])) {
+            if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Invalid email address';
+            }
+        } else {
+            $data['email'] = '';
         }
 
         if (!empty($errors)) {

@@ -70,13 +70,18 @@ final class UserCreator
         $errors = [];
 
         // Here you can also use your preferred validation library
-
-        if (empty($data['username']) || empty($data['password']) || empty($data['first_name']) || empty($data['last_name']) || empty($data['email']) || empty($data['profile'])) {
+        if (!isset($data['username']) || !isset($data['password']) || !isset($data['first_name']) || !isset($data['last_name']) || !isset($data['email']) || !isset($data['profile'])) {
+            $errors['mandatory'] = 'All fields are not defined';
+        } elseif (empty($data['username']) || empty($data['password']) || empty($data['first_name']) || empty($data['last_name']) || empty($data['email']) || empty($data['profile'])) {
             $errors['mandatory'] = 'Input [User Name] [Password] [Firstname] [Lastname] [Email] [Profile] required';
         }
 
-        if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Invalid email address';
+        if (isset($data['email'])) {
+            if (false === filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Invalid email address';
+            }
+        } else {
+            $data['email'] = '';
         }
 
         if (!empty($errors)) {
