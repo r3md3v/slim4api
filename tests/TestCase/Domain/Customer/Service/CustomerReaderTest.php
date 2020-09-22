@@ -16,7 +16,7 @@ class CustomerReaderTest extends TestCase
 
     public function testGetCustomerDetailsOK()
     {
-        $cd = new CustomerData(1, "name", "adress", "city", "phone", "email");
+        $cd = new CustomerData(1, "name", "address", "city", "phone", "email");
         // Mock the required repository method
         $this->mock(CustomerReaderRepository::class)->method('getCustomerById')->with('1')->willReturn($cd);
 
