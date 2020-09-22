@@ -29,11 +29,11 @@ class UserCreatorTest extends TestCase
 
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
 
         $actual = $service->createUser($user);
@@ -45,11 +45,11 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class)->method('UserExists')->with($user['username'], $user['email'])->willReturn(true);
@@ -67,11 +67,11 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => '',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -92,7 +92,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -109,11 +109,11 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => '',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -130,11 +130,11 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => '',
             'email' => 'john.doe@example.com',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -152,11 +152,11 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => '',
-            'profile' => 'user'
+            'profile' => 'users customers'
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -173,7 +173,7 @@ class UserCreatorTest extends TestCase
     {
         $user = [
             'username' => 'john.doe',
-            'password' => 'passwd',
+            'password' => '1234567',
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
