@@ -9,6 +9,9 @@ use Tests\AppTestTrait;
 
 /**
  * Test.
+ *
+ * @internal
+ * @coversNothing
  */
 class UserReaderActionTest extends TestCase
 {
@@ -19,10 +22,8 @@ class UserReaderActionTest extends TestCase
      *
      * @dataProvider provideUserReaderAction
      *
-     * @param UserData $user The user
-     * @param array $expected The expected result
-     *
-     * @return void
+     * @param UserData $user     The user
+     * @param array    $expected The expected result
      */
     public function testUserReaderAction(UserData $user, array $expected): void
     {
@@ -47,18 +48,21 @@ class UserReaderActionTest extends TestCase
      */
     public function provideUserReaderAction(): array
     {
-        $user = new UserData(1, 'admin', 'john', 'Doe', 'john.doe@example.com', 'user');
+        $user = new UserData(1, 'admin', 'password', 'john', 'Doe', 'john.doe@example.com', 'users customers');
+
         return [
             'User' => [
                 $user,
                 [
-                    'user_id' => 1,
+                    'id' => 1,
                     'username' => 'admin',
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
+                    'password' => 'password',
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
                     'email' => 'john.doe@example.com',
-                ]
-            ]
+                    'profile' => 'users customers',
+                ],
+            ],
         ];
     }
 }
