@@ -128,19 +128,20 @@ $ composer fakerlg (loglogins and logtokens tables)
 
 ### Default:
 
-- Status: `GET /`
-- Status: `GET /status`
+- Status: `GET /` or `GET /status`
 
 ### Hello:
 - Hello World: `GET /hello`
 - Hello Name: `GET /hello/{name}`
 
 ### Swagger:
-- SwaggerUI: `GET /docs/v1` (with demo file petstore.yaml v3)
+- SwaggerUI: `GET /docs/v1` (targeting slim4api.yaml and previously petstore.yaml v3)
 
 ### Customers:
 - Get customer by id: `GET /customers/id/{id}`
-- Create user with data `POST /customers` cusname,address,city,phone,email
+- Delete customer by id: `DELETE /customers/id/{id}`
+- Create customer with data: `POST /customers` cusname,address,city,phone,email
+- Update customer with data: `PUT /customers/id/{id}` cusname,address,city,phone,email
 - List of customers: `GET /customers`
 	- option page = startpage (default 1)
 	- option size = page size (default 50)
@@ -150,7 +151,10 @@ $ composer fakerlg (loglogins and logtokens tables)
 
 ### Users:
 - Get user by id: `GET /users/id/{id}`
-- Create user with data `POST /users` username,password,firstname,lastname,email,profile
+- Delete user by id: `DELETE /users/id/{id}`
+- Create user with data: `POST /users` username,password,firstname,lastname,email,profile
+- Update user with data: `PUT /users/id/{id}` username,password,firstname,lastname,email,profile
+- List of users: `GET /users`
 	- option page = startpage (default 1)
 	- option size = page size (default 50)
 - Search user: `GET /users/search/{keyword}?page=1&size=50&in=2`
@@ -160,22 +164,22 @@ $ composer fakerlg (loglogins and logtokens tables)
 ### Logins:
 - Create token: `POST /tokens` username or email/password
 - Delete token: `GET /logout`
-- CLeanup logins+token: `GET /cleanup`
+- Cleanup logins+token: `GET /cleanup`
 
 
 ## FORMS:
 
-- createUserForm.php = triggers `POST /users` username,password,firstname,lastname,email,profile 
-- createCustomerForm.php = triggers `POST /customers` cusname,address,city,phone,email
-- login.php = required to trigger `/users` endpoint
+- createUserForm.php = CRUD call to API for actions Create/Read/Update/Delete (PHP curl required)
+- createCustomerForm.php = CRUD call to API for actions Create/Read/Update/Delete (PHP curl required)
+- login.php = triggers `/users` endpoint
 - checkJWTForm.php = gives detail about a JSON Web Token
 - hashPWDForm.php = returns a BCRYPT hashed version of a string
 
 
 ## JWT IN ACTION:
 
-- Access to endpoint /users is protected by JWT and require issuance of a token via endpoint /tokens or form login.php.
-- Each login attempt is recorded in table loginlog
+- Access to endpoint /users is protected by JWT and requires issuance of a token via endpoint /tokens or form login.php.
+- Each login attempt is recorded in table loglogins and each token issued is recorded table logtokens
 
 
 ## Docker
