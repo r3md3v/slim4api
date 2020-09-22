@@ -58,7 +58,12 @@ if ('' == $id) {
 }
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $val = ['', '', '', '', '', ''];
-//$val = ['John Doe', 'Doe Street', 'Metropolis', '+1 234 567 899', 'john@doe.com']
+//$val = ['john.doe', '1234567', 'John', 'Doe', 'john@doe.com', 'users, customers']
+
+// 'Create', 'POST','/users', $_POST, 'Error', 'Ok - id #','Create' // retireve id
+// 'Update', 'PUT', '/users/id/{$id}', $_POST, 'Error', 'Ok - id #', 'Create'
+// 'Delete', 'DELETE', '/users/id/{$id}', '', 'Error', 'Ok - id #', 'Create'
+// 'Read', 'GET', '/users/id/{$id}', '', 'Error', 'Ok - id #', 'Create'
 
 if ('Create' == $action) {
     $endpoint = '/users';
@@ -109,7 +114,7 @@ if ('Read' == $action && is_numeric($id)) {
         }
     }
 }
-if ('' == $action || 'Cancel' == $action) {
+if (!in_array($action, ['Create', 'Read', 'Update', 'Delete']) || !is_numeric($id)) {
     $endpoint = '/users';
     $msg = 'Select action Create (Post), Read (Get), Update (Put) or Delete';
     $action = 'Create';

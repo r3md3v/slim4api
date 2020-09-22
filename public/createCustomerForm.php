@@ -57,6 +57,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $val = ['', '', '', '', ''];
 //$val = ['John Doe', 'Doe Street', 'Metropolis', '+1 234 567 899', 'john@doe.com']
 
+// 'Create', 'POST','/customers', $_POST, 'Error', 'Ok - id #','Create' // retireve id
+// 'Update', 'PUT', '/customers/id/{$id}', $_POST, 'Error', 'Ok - id #', 'Create'
+// 'Delete', 'DELETE', '/customers/id/{$id}', '', 'Error', 'Ok - id #', 'Create'
+// 'Read', 'GET', '/customers/id/{$id}', '', 'Error', 'Ok - id #', 'Create'
+
 if ('Create' == $action) {
     $endpoint = '/customers';
     $response = json_decode(CallAPI('POST', $url.$endpoint, $_POST));
@@ -106,7 +111,7 @@ if ('Read' == $action && is_numeric($id)) {
         }
     }
 }
-if ('' == $action || 'Cancel' == $action) {
+if (!in_array($action, ['Create', 'Read', 'Update', 'Delete']) || !is_numeric($id)) {
     $endpoint = '/customers';
     $msg = 'Select action Create (Post), Read (Get), Update (Put) or Delete';
     $action = 'Create';

@@ -15,29 +15,28 @@
 	<table>
         <thead><tr bgcolor="white"><th>URL</th><th>Desc</th></tr></thead>
         <tbody>
-        <tr><td><a target="new" href="/">GET /</a></td><td>Get status</td></tr>
-        <tr><td><a target="new" href="/status">GET /status</a></td><td>Get status</td></tr>
+        <tr><td><a target="new" href="/">GET /</a> or <a target="new" href="/status">GET /status</a></td><td>Show API status</td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td><a target="new" href="/hello">GET /hello</a></td><td>Hello World</td></tr>
         <tr><td><a target="new" href="/hello/Bob">GET /hello/Bob</a></td><td>Hello Bob</td></tr>
-        <tr><td></td></tr>
+        <tr><td>&nbsp;</td></tr>
         <tr><td><a target="new" href="/docs/v1">GET /docs/v1</a></td><td>SwaggerUI</td></tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td><a target="new" href="/createCustomerForm.php">POST PUT DELETE /customers</a></td><td>Create/Update/Delete customer*</td></tr>
-        <tr><td><a target="new" href="/customers/id/1">GET /customers/id/1</a></td><td>Get customer by id</td></tr>
-        <tr><td><a target="new" href="/customers?page=1&size=2">GET /customers?page=1&size=2</a></td><td>List of 2 customers page 1</td></tr>
-        <tr><td><a target="new" href="/customers/search/place?in=2&size=5">GET /customers/search/place?in=2&size=5</a></td><td>Search 5 customers with address=place</td></tr>
+        <tr><td><a target="new" href="/createCustomerForm.php">POST GET PUT DELETE /customers</a></td><td>Create/Read/Update/Delete customer*</td></tr>
+        <tr><td><a target="new" href="/customers/id/59">GET /customers/id/59</a></td><td>Get customer #59 by id</td></tr>
+        <tr><td><a target="new" href="/customers?page=3&size=10">GET /customers?page=3&size=10</a></td><td>List 10 customers page 3</td></tr>
+        <tr><td><a target="new" href="/customers/search/place?in=2&size=5">GET /customers/search/place?in=2&size=5</a></td><td>Search 5 customers with 'place' in address</td></tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td><a target="new" href="/createUserForm.php">POST PUT DELETE /users</a></td><td>Create/Update/Delete user* (JWT required)</td></tr>
-        <tr><td><a target="new" href="/users/id/2">GET /users/id/2</a></td><td>Get user 2 by id (JWT required)</td></tr>
-        <tr><td><a target="new" href="/users?page=1&size=2">GET /users?page=1&size=2</a></td><td>List of 2 users page 1 (JWT required)</td></tr>
-        <tr><td><a target="new" href="/users/search/com?in=4">GET /users/search/com?in=4</a></td><td>Search user with email=com (JWT required)</td></tr>
+        <tr><td><a target="new" href="/createUserForm.php">POST GET PUT DELETE /users</a></td><td>Create/Read/Update/Delete user* (JWT required)</td></tr>
+        <tr><td><a target="new" href="/users/id/2">GET /users/id/95</a></td><td>Get user #95 by id (JWT required)</td></tr>
+        <tr><td><a target="new" href="/users?page=4&size=20">GET /users?page=4&size=20</a></td><td>List 20 users page 4 (JWT required)</td></tr>
+        <tr><td><a target="new" href="/users/search/com?in=4&size=6">GET /users/search/com?in=4&size=5</a></td><td>Search 6 users with 'com' in email (JWT required)</td></tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td><a target="new" href="login.php">POST /tokens</a></td><td>Create token*</td></tr>
-        <tr><td><a target="new" href="/logout">GET /logout</a></td><td>Delete JWT</td></tr>
-        <tr><td><a target="new" href="/cleanup">GET /cleanup</a></td><td>Cleanup logins and token log</td></tr>
+        <tr><td><a target="new" href="login.php">POST /tokens</a></td><td>Log in and create JWT access token*</td></tr>
+        <tr><td><a target="new" href="/logout">GET /logout</a></td><td>Delete JWT access token</td></tr>
+        <tr><td><a target="new" href="/cleanup">GET /cleanup</a></td><td>Cleanup login and token logs</td></tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td colspan="2">* for these endpoints, verbs POST PUT DELETE are triggers via html forms</td></tr>
+        <tr><td colspan="2">* these endpoints are triggers via HTML forms and CURL extension of PHP</td></tr>
     </tbody>
     </table>
 
