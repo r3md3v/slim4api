@@ -7,7 +7,10 @@ use App\Domain\Customer\Repository\CustomerListerRepository;
 use Monolog\Test\TestCase;
 use Tests\AppTestTrait;
 
-
+/**
+ * @internal
+ * @coversNothing
+ */
 class CustomerListActionTest extends TestCase
 {
     use AppTestTrait;
@@ -18,9 +21,7 @@ class CustomerListActionTest extends TestCase
      * @dataProvider provideCustomerListerAction
      *
      * @param CustomerData $customer The user
-     * @param array $expected The expected result
-     *
-     * @return void
+     * @param array        $expected The expected result
      */
     public function testCustomerListAction(CustomerData $customer, array $expected): void
     {
@@ -45,27 +46,30 @@ class CustomerListActionTest extends TestCase
      */
     public function provideCustomerListerAction(): array
     {
-        $customer = new CustomerData(1, 'admin', '25 rue des arbres', 'Lille',
-            "0102030405", 'john.doe@example.com');
+        $customer = new CustomerData(
+            0,
+            'Customer SARL',
+            '25 rue des arbres',
+            '59000 Lille',
+            '0102030405',
+            'john@doe.com'
+        );
 
-        $customer->lastName = 'Doe';
-        $customer->updatedby = "roger";
-        $customer->updatedat = "123456789";
+        $customer->updatedby = 'slim4api';
+        $customer->updatedat = '2020-10-05 04:03:02';
 
         return [
             'Customer' => [
                 $customer,
                 [
-                    'user_id' => 1,
-                    'username' => 'admin',
-                    'name' => 'Doe',
-                    'email' => 'john.doe@example.com',
-                    'city' => 'Lille',
-                    'address' => '025 rue des arbres',
-                    'phone' => '0102030405'
-                ]
-            ]
+                    'id' => 0,
+                    'name' => 'Customer SARL',
+                    'address' => '25 rue des arbres',
+                    'city' => '59000 Lille',
+                    'phone' => '0102030405',
+                    'email' => 'john@doe.com',
+                ],
+            ],
         ];
     }
-
 }
