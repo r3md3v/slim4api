@@ -8,9 +8,12 @@ use App\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 use Tests\AppTestTrait;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CustomerCreatorTest extends TestCase
 {
-
     use AppTestTrait;
 
     public function testCreateCustomerOk()
@@ -31,7 +34,6 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
 
         static::assertSame(1, $actual);
-
     }
 
     public function testCreateCustomerKOCustomerExists(): void
@@ -49,10 +51,9 @@ class CustomerCreatorTest extends TestCase
         $service = $this->container->get(CustomerCreator::class);
 
         $this->expectException(ValidationException::class);
-        $this->expectErrorMessage('Customer already exists with email [' . $customer['email'] . ']');
+        $this->expectErrorMessage('Customer already exists with email ['.$customer['email'].']');
 
         $actual = $service->createCustomer($customer);
-
     }
 
     public function testCreateCustomerKOFormMissingCusName(): void
@@ -73,7 +74,6 @@ class CustomerCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createCustomer($customer);
-
     }
 
     public function testCreateCustomerKOFormMissingAddress(): void
@@ -94,7 +94,6 @@ class CustomerCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createCustomer($customer);
-
     }
 
     public function testCreateCustomerKOFormMissingCityName(): void
@@ -104,7 +103,7 @@ class CustomerCreatorTest extends TestCase
             'address' => 'address field',
             'city' => '',
             'phone' => 'phone field',
-            'email' => 'john.doe@example.com'
+            'email' => 'john.doe@example.com',
         ];
 
         // Mock the required repository method
@@ -115,7 +114,6 @@ class CustomerCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createCustomer($customer);
-
     }
 
     public function testCreateCustomerOKFormMissingPhone(): void
@@ -134,12 +132,9 @@ class CustomerCreatorTest extends TestCase
 
         $service = $this->container->get(CustomerCreator::class);
 
-
         $actual = $service->createCustomer($customer);
         static::assertSame(1, $actual);
-
     }
-
 
     public function testCreateCustomerKOFormMissingEmail(): void
     {
@@ -148,7 +143,7 @@ class CustomerCreatorTest extends TestCase
             'address' => 'address field',
             'city' => 'city field',
             'phone' => 'phone field',
-            'email' => ''
+            'email' => '',
         ];
 
         // Mock the required repository method
@@ -159,6 +154,25 @@ class CustomerCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createCustomer($customer);
+    }
 
+    public function testCreateCustomerKOFormFormatEmail(): void
+    {
+        $customer = [
+            'cusname' => 'Customer SARL',
+            'address' => '25 rue des arbres',
+            'city' => '59000 Lille',
+            'phone' => '0102030405',
+            'email' => 'john@doe',
+        ];
+
+        // Mock the required repository method
+        $this->mock(CustomerCreatorRepository::class);
+        $service = $this->container->get(CustomerCreator::class);
+
+        $this->expectException(ValidationException::class);
+        $this->expectErrorMessage('Please check your input.');
+
+        $actual = $service->createCustomer($customer);
     }
 }

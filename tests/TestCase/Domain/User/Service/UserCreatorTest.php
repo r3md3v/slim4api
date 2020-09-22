@@ -10,6 +10,9 @@ use Tests\AppTestTrait;
 
 /**
  * Tests.
+ *
+ * @internal
+ * @coversNothing
  */
 class UserCreatorTest extends TestCase
 {
@@ -17,8 +20,6 @@ class UserCreatorTest extends TestCase
 
     /**
      * Test.
-     *
-     * @return void
      */
     public function testCreateUser(): void
     {
@@ -33,7 +34,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
 
         $actual = $service->createUser($user);
@@ -49,18 +50,17 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class)->method('UserExists')->with($user['username'], $user['email'])->willReturn(true);
         $service = $this->container->get(UserCreator::class);
 
         $this->expectException(ValidationException::class);
-        $msg= 'User already exists with name ['.$user['username'].'] or email ['.$user['email'].']';
+        $msg = 'User already exists with name ['.$user['username'].'] or email ['.$user['email'].']';
         $this->expectErrorMessage($msg);
 
         $actual = $service->createUser($user);
-
     }
 
     public function testCreateUserKOFormMissingUsrName(): void
@@ -71,7 +71,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -81,7 +81,6 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
-
     }
 
     public function testCreateUserKOFormMissingPassword(): void
@@ -92,7 +91,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -102,7 +101,6 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
-
     }
 
     public function testCreateUserKOFormMissingFirstName(): void
@@ -113,7 +111,7 @@ class UserCreatorTest extends TestCase
             'first_name' => '',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -123,7 +121,6 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
-
     }
 
     public function testCreateUserOKFormMissingLastName(): void
@@ -134,7 +131,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => '',
             'email' => 'john.doe@example.com',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -144,9 +141,7 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
-
     }
-
 
     public function testCreateUserKOFormMissingEmail(): void
     {
@@ -156,7 +151,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => '',
-            'profile' => 'users customers'
+            'profile' => 'users customers',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -166,7 +161,6 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
-
     }
 
     public function testCreateUserKOFormMissingProfile(): void
@@ -177,7 +171,7 @@ class UserCreatorTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
-            'profile' => ''
+            'profile' => '',
         ];
         // Mock the required repository method
         $this->mock(UserCreatorRepository::class);
@@ -187,6 +181,26 @@ class UserCreatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->createUser($user);
+    }
 
+    public function testCreateUserKOFormFormatEmail(): void
+    {
+        $user = [
+            'username' => 'john.doe',
+            'password' => '1234567',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'profile' => '',
+        ];
+
+        // Mock the required repository method
+        $this->mock(UserCreatorRepository::class);
+        $service = $this->container->get(UserCreator::class);
+
+        $this->expectException(ValidationException::class);
+        $this->expectErrorMessage('Please check your input.');
+
+        $actual = $service->createUser($user);
     }
 }
