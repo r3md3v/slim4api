@@ -55,7 +55,7 @@ final class CustomerUpdator
         }
 
         // Feed the logger
-        $this->logger->debug(sprintf('CustomerUpdator.updateCustomer: %s updated with id: %s', $data['cusname'], $customerId));
+        $this->logger->debug(sprintf('CustomerUpdator.updateCustomer: %s updated for id: %s', $data['cusname'], $customerId));
         $this->logger->info(sprintf('CustomerUpdator.updateCustomer: updated successfully %s', $customerId));
 
         return $customerId;

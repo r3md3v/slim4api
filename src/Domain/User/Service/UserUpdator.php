@@ -55,7 +55,7 @@ final class UserUpdator
         }
 
         // Feed the logger
-        $this->logger->debug(sprintf('UserUpdator.updateUser: %s updated with id: %s', $data['username'], $userId));
+        $this->logger->debug(sprintf('UserUpdator.updateUser: %s updated for id: %s', $data['username'], $userId));
         $this->logger->info(sprintf('UserUpdator.updateUser: updated successfully: %s', $userId));
 
         return $userId;
@@ -95,7 +95,7 @@ final class UserUpdator
             $this->logger->debug(sprintf(
                 'UserUpdator:updateUser: missing params .un:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s',
                 isset($data['username']) ? $data['username'] : '',
-                '[hidden]',
+                isset($data['password']) ? '[Hidden]' : '',
                 isset($data['first_name']) ? $data['first_name'] : '',
                 isset($data['last_name']) ? $data['last_name'] : '',
                 isset($data['email']) ? $data['email'] : '',

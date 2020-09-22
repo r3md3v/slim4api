@@ -88,13 +88,13 @@ final class UserCreator
 
             // Feed the logger
             $this->logger->debug(sprintf(
-                'UserCreator:createUser: missing params .un:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s',
-                $data['username'],
-                '[hidden]',
-                $data['first_name'],
-                $data['last_name'],
-                $data['email'],
-                $data['profile']
+                'UserUpdator:updateUser: missing params .un:%s, pwd: %s, fn: %s, ln: %s, eml: %s, prof: %s',
+                isset($data['username']) ? $data['username'] : '',
+                isset($data['password']) ? '[Hidden]' : '',
+                isset($data['first_name']) ? $data['first_name'] : '',
+                isset($data['last_name']) ? $data['last_name'] : '',
+                isset($data['email']) ? $data['email'] : '',
+                isset($data['profile']) ? $data['profile'] : ''
             ));
 
             throw new ValidationException('Please check your input.', $errors);

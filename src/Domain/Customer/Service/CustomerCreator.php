@@ -89,11 +89,11 @@ final class CustomerCreator
             // Feed the logger
             $this->logger->debug(sprintf(
                 'CustomerCreator:createCustomer: missing params .name:%s, addr: %s, city: %s, phone: %s, eml: %s',
-                $data['cusname'],
-                $data['address'],
-                $data['city'],
-                $data['phone'],
-                $data['email']
+                isset($data['cusname']) ? $data['cusname'] : '',
+                isset($data['address']) ? $data['address'] : '',
+                isset($data['city']) ? $data['city'] : '',
+                isset($data['phone']) ? $data['phone'] : '',
+                isset($data['email']) ? $data['email'] : ''
             ));
 
             throw new ValidationException('Please check your input.', $errors);
