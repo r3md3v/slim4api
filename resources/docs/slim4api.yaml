@@ -4,9 +4,9 @@ info:
     This is a sample Customer and User Server based on the OpenAPI 3.0 specification.
     You can find out more about Swagger at [http://swagger.io](http://swagger.io).
     
-    These specs are under development to match API's - 90% done
-    - Recheck Schema va requestBodies for ArrayOfCustomers and Users
-    - Global review of satutuss for esponses
+    These specs are mostly ready to match API's - 95% done
+    - Recheck Schema vs requestBodies for ArrayOfCustomers and ArrayOfUsers
+    - Global review of statuses in responses
         200 OK, 201 ?, 222 ?, 400 Bad request, 401 Unauthorized, 404 Not found, 5XX Unexpected error.
 
     Realted to these projects:
@@ -58,7 +58,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Hello'
 
-
   /status:
     get:
       tags:
@@ -76,7 +75,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-
 
   /customers:
     post:
