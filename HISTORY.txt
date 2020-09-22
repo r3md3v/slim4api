@@ -34,9 +34,9 @@ with options *
 	$settings['cors'] = '*';
 
 
-[v 0.4]
+[v 0.4] aug 2020
 
-Added [customers] table with all same endpoints as [users]
+Added [customers] table with same endpoints as [users]
 
 Added user/search/keyword customer user/search/keyword
 
@@ -80,29 +80,14 @@ Added TrailkingSLash middleware to delete useless ending / according to new $set
 
 Added id in endpoint users and customers, and routes specified with regex to avoid shadowed endpoints
 	$group3->get('/id/{id:[0-9]+}',
-	\App\Action\UserReadAction::class);
 
-$_GET unified for page/size in Action
-Values are validated in Service
-	if (!is_numeric($page) || $page < $this->defaultPage)
-	$page = $this->defaultPage;
-	if (!is_numeric($pagesize) || $pagesize < 1 || $pagesize > $this->defaultPageSize)
-	$pagesize = $this->defaultPageSize;
+$_GET unified for page/size in Action, and values validated in Service
 
 Loggers removed from Service+Repository and unified in Action
-	$this->logger->debug("CustomerSearchAction: page: $page, size: $size, in: $in, keyword: $keyword");
 
 In Repo/Search users/customers, responses are according to targeted field or not
 
-        if (0 == count($customers)) {
-            if (-1 != $in) {
-                throw new DomainException(sprintf('No customer with keyword [%s] in field [%s] page %d / %d!', str_replace('%', '', $keyword), $in[0], $page + 1, $pagemax));
-            }
-
-            throw new DomainException(sprintf('No customer with keyword [%s] in any field page %d / %d!', str_replace('%', '', $keyword), $page + 1, $pagemax));
-        }
-
-Validations : In User+CustomerCreator.php, added validation of mandatory fields + unique email for both + Unique username for User.
+Validations : In User+CustomerCreator.php, added validation of mandatory fields + unique email for both + Unique username for User
 Validations : In createUser+CustomerForm.php, added a js control on email format
 
 Favicon works only if stored in css/ and targeted with <link href="css/favicon.ico" rel="icon" />
@@ -121,12 +106,12 @@ Endpoint logout to cancel active token
 New table usersjwt with id/name/pass/mail/token/status/created/updated filled uppon login
 
 
-[v 0.75]
+[v 0.75] sep 2020
 
 HomeAction, shows endpoints/verbs as per list defined in settings.php 
 
-Table 'userjwt' renammed 'logins' (best practice would be singular, lowercase, same for tables).
-Login form accepts email in addition to username as identifier.
+Table 'userjwt' renammed 'logins' (best practice would be singular, lowercase, same for tables)
+Login form accepts email in addition to username as identifier
 
 New table loglogins and scripts to log attempts (username/mail+ipsource+resultat+timestamp)
 New table logtokens and scripts to log tokens generated (username/mail+token+status+issuedat+expiredat)
@@ -137,10 +122,10 @@ Middleware JwtAuthMiddleware verifies blacklist (table logtokens where status=0)
 Added logger for list/search in Service+Repo (removed in v0.5).
 
 New endpoint /cleanup to purge loglogin table as per $settings['jwt'] = ['settings'] = 60*60*24*30; (30 days)
-and cleanup logtoken for all expired.
+and cleanup logtoken for all expired
 
 
-[v 0.8] sep 2020
+[v 0.8]
 
 Added Faker for loglogins and logtokens
 
@@ -151,4 +136,15 @@ Moved getIpAddress to a new class Tools
 Clarified use of $in as array
 
 Added 50 unit tests
+
+
+[v 0.85]
+
+Create slim4api.yaml file for swagger (95% OK except recheck Schema vs requestBodies & review statuses in responses)
+
+New endpoints DELETE + PUT/Update for users+customers (return id on success or validation exception if not found/cannot be updated)
+
+On search, count pagmaxsize based on keyword iso count all rows no params
+
+createUserForm.php and createCustomerForm.php make call to API for endpoints POST READ PUT DELETE
 
