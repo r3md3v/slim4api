@@ -32,7 +32,7 @@ class CustomerUpdatorRepository
      *
      * @return bool row updated
      */
-    public function updateCustomer(int $customerId, array $customer): int
+    public function updateCustomer(int $customerId, array $customer): bool
     {
         $paramSql = [
             'cusname' => $customer['cusname'],
