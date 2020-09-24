@@ -50,7 +50,7 @@ final class UserUpdator
         $this->validateUser($userId, $data);
 
         // Update user
-        if (false == $this->repository->updatetUser($userId, $data)) {
+        if (false == $this->repository->updateUser($userId, $data)) {
             throw new ValidationException('User '.$userId.' not found and cannot be updated.');
         }
 

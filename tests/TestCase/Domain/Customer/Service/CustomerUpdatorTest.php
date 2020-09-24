@@ -24,7 +24,7 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->once())->method('updateCustomer')->with(1,$customer)->willReturn(true);
 
         $service = $this->container->get(CustomerUpdator::class);
         $actual = $service->updateCustomer(1, $customer);
@@ -65,7 +65,7 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->never())->method('updateCustomer');
         $service = $this->container->get(CustomerUpdator::class);
 
         $this->expectException(ValidationException::class);
@@ -86,7 +86,7 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->never())->method('updateCustomer');;
         $service = $this->container->get(CustomerUpdator::class);
 
         $this->expectException(ValidationException::class);
@@ -107,7 +107,7 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->never())->method('updateCustomer');
 
         $service = $this->container->get(CustomerUpdator::class);
 
@@ -129,7 +129,11 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class)
+            ->expects($this->once())
+            ->method('updateCustomer')
+            ->with(1,$customer)
+            ->willReturn(true);
 
         $service = $this->container->get(CustomerUpdator::class);
 
