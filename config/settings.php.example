@@ -32,17 +32,19 @@ $settings['redirection'] = [
 // API Name and version
 $settings['api'] = [
     'name' => 'slim4api',
-    'version' => '0.7',
+    'version' => '0.90',
     'url' => 'http://localhost:8080',
-    'build' => '2020-08-26',
+    'testpage' => 'testapi.html',
+    'build' => '2020-09-24',
     'endpoints' => [
-        '/' => 'Get, Get /status',
+        '/status' => 'Get /status same as Get /',
         '/hello' => 'Get, Get /{name}',
-        '/users' => 'Get, Get /id/{id], Get /search/{keyword}, Post',
-        '/customers' => 'Get, Get /id/{id], Get /search/{keyword}, Post',
+        '/users' => 'Get, Get /id/{id], Post /id/{id], Put /id/{id], Delete /id/{id], Get /search/{keyword}',
+        '/customers' => 'Get, Get /id/{id], Post /id/{id], Put /id/{id], Delete /id/{id], Get /search/{keyword}',
         '/doc/v1' => 'Get (Swager)',
-        '/tokens' => 'Post',
+        '/tokens' => 'Post (Login)',
         '/logout' => 'Get',
+        '/cleanup' => 'Get',
     ],
 ];
 
@@ -62,8 +64,10 @@ $settings['jwt'] = [
     'issuer' => 'www.slim4api.com',
     // Max lifetime in seconds
     'lifetime' => 14400, // 14400 seconds = 4 hours (86400 = 24 hours)
-    // Token log cleanup
-    'cleanup' => 60 * 60 * 24 * 30, // 30 days
+    // Log logins & tokens param
+    'loglogins' => true, // true or false
+    'logtokens' => true, // true or false (to keep stateless)
+    'retention' => 60 * 60 * 24 * 30, // Loglogins cleanup 30 days (logtokens awlays upon expiration)
     // The private key
     'private_key' => '-----BEGIN RSA PRIVATE KEY-----
 ...paste you key here...
@@ -90,7 +94,7 @@ $settings['db'] = [
         ['First name', 'USRFIRSTNAME'],
         ['Last name', 'USRLASTNAME'],
         ['Email', 'USREMAIL'],
-        ['Profile', 'USRPROFILE'], ],
+        ['Profile', 'USRPROFILE', ['Users', 'Customers', 'Products', 'Stocks']], ],
     'defaultSearchFieldCustomer' => [
         ['Customer name', 'CUSNAME'],
         ['Address', 'CUSADDRESS'],

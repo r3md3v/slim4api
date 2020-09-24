@@ -38,6 +38,11 @@ final class HomeAction
     /**
      * @var string
      */
+    private $testpage;
+
+    /**
+     * @var string
+     */
     private $build;
 
     /**
@@ -85,7 +90,7 @@ final class HomeAction
      *
      * @param UserLister         $userLister     The user lister
      * @param CustomerLister     $customerLister The customer lister
-     * @param LoginManager        $loginLister    The login lister
+     * @param LoginManager       $loginLister    The login lister
      * @param ContainerInterface $ci             The Container
      * @param LoggerFactory      $lf             The loggerFactory
      */
@@ -106,8 +111,9 @@ final class HomeAction
         $this->version = $apiSettings['version'];
         $this->url = $apiSettings['url'];
         $this->build = $apiSettings['build'];
-        $this->datetime = date('Y-m-d H:i:s') . ' ' . date_default_timezone_get();
+        $this->datetime = date('Y-m-d H:i:s').' '.date_default_timezone_get();
         $this->timestamp = time();
+        $this->testpage = $apiSettings['testpage'];
         $this->endpoints = $apiSettings['endpoints'];
     }
 
@@ -121,7 +127,7 @@ final class HomeAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        //$response->getBody()->write((string)json_encode(['success' => true]));
+        // Feed the logger
         $this->logger->info('HomeAction: get infos');
 
         $tables['users'] = $this->userLister->getUserCount();
@@ -132,13 +138,13 @@ final class HomeAction
             'name' => $this->name,
             'version' => $this->version.' '.$this->build,
             'url' => $this->url,
+            'testpage' => $this->url.'/'.$this->testpage,
             'datetime' => $this->datetime,
             'timestamp' => $this->timestamp,
             'endpoints' => $this->endpoints,
             'tables' => $tables,
         ];
 
-        //$response->getBody()->write((string)json_encode(['success' => true]));
         $response->getBody()->write((string) json_encode($message));
 
         return $response->withHeader('Content-Type', 'application/json');
