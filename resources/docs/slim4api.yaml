@@ -6,13 +6,13 @@ info:
     
     These specs are mostly ready to match API's - 95% done
     - Recheck Schema vs requestBodies for ArrayOfCustomers and ArrayOfUsers
-    - Global review of statuses in responses
-        200 OK, 201 ?, 222 ?, 400 Bad request, 401 Unauthorized, 404 Not found, 5XX Unexpected error.
+    - Global review of statuses in responses as per https://restfulapi.net/http-status-codes/
+        200 success, 201 Created, 202 Accepted, 204 No Content, 222 ?, 400 Bad request, 401 Unauthorized, 404 Not found, 5XX Unexpected error.
 
     Realted to these projects:
     - https://github.com/r3md3v/slim4api
     - https://github.com/edgd1er/slim4api
-  version: 0.8.5-SNAPSHOT
+  version: 0.9.0-SNAPSHOT
   title: Slim4API - OpenAPI 3.0
   license:
     name: Apache 2.0

@@ -138,13 +138,13 @@ Clarified use of $in as array
 Added 50 unit tests
 
 
-[v 0.85]
+[v 0.90]
 
-Create slim4api.yaml file for swagger (95% OK except recheck Schema vs requestBodies & review statuses in responses)
+Create slim4api.yaml file for swagger (95% OK recheck Schema vs requestBodies & review statuses in responses)
 
-New endpoints DELETE + PUT/Update for users+customers (return id on success or validation exception if not found/cannot be updated)
+New endpoints DELETE + PUT/Update for users+customers (return id on success or validation exception if not found/cannot be updated) + Unit test
 
 On search, count pagmaxsize based on keyword iso count all rows no params
 
-createUserForm.php and createCustomerForm.php make call to API for endpoints POST READ PUT DELETE
+createUserForm.php and createCustomerForm.php make call to API for verbs POST GET PUT DELETE (Create Read Update Delete)
 
