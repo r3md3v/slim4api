@@ -25,7 +25,11 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)
+            ->expects($this->once())
+            ->method('updateUser')
+            ->with(1,$user)
+            ->willReturn(true);
 
         $service = $this->container->get(UserUpdator::class);
         $actual = $service->updateUser(1, $user);
@@ -46,7 +50,11 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class)->method('userExists')->with(1, $user['username'], $user['email'])->willReturn(true);
+        $this->mock(UserUpdatorRepository::class)
+            ->expects($this->once())
+            ->method('userExists')
+            ->with(1, $user['username'], $user['email'])
+            ->willReturn(true);
 
         $this->expectException(ValidationException::class);
         $this->expectErrorMessage('User already exists with name [' . $user['username'] . '] or email [' . $user['email'] . ']');
@@ -68,7 +76,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');
         $service = $this->container->get(UserUpdator::class);
 
         $this->expectException(ValidationException::class);
@@ -90,7 +98,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');
         $service = $this->container->get(UserUpdator::class);
 
         $this->expectException(ValidationException::class);
@@ -112,7 +120,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');;;
         $service = $this->container->get(UserUpdator::class);
 
         $this->expectException(ValidationException::class);
@@ -134,7 +142,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');;;
 
         $service = $this->container->get(UserUpdator::class);
 
@@ -157,7 +165,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');;;
 
         $service = $this->container->get(UserUpdator::class);
 
@@ -180,7 +188,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');;;
 
         $service = $this->container->get(UserUpdator::class);
 
@@ -203,7 +211,7 @@ class UserUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(UserUpdatorRepository::class);
+        $this->mock(UserUpdatorRepository::class)->expects($this->never())->method('updateUser');;;
 
         $service = $this->container->get(UserUpdator::class);
 
