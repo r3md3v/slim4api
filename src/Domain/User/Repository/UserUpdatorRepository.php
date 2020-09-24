@@ -32,7 +32,7 @@ class UserUpdatorRepository
      *
      * @return bool row updated
      */
-    public function updatetUser(int $userId, array $user): bool
+    public function updateUser(int $userId, array $user): bool
     {
         $paramSql = [
             'username' => $user['username'],
