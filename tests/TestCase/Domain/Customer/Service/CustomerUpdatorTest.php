@@ -8,9 +8,12 @@ use App\Exception\ValidationException;
 use PHPUnit\Framework\TestCase;
 use Tests\AppTestTrait;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class CustomerUpdatorTest extends TestCase
 {
-
     use AppTestTrait;
 
     public function testUpdateCustomerOk()
@@ -24,13 +27,12 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class)->expects($this->once())->method('updateCustomer')->with(1,$customer)->willReturn(true);
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->once())->method('updateCustomer')->with(1, $customer)->willReturn(true);
 
         $service = $this->container->get(CustomerUpdator::class);
         $actual = $service->updateCustomer(1, $customer);
 
         static::assertSame(1, $actual);
-
     }
 
     public function testUpdateCustomerKOCustomerExists(): void
@@ -47,11 +49,10 @@ class CustomerUpdatorTest extends TestCase
         $this->mock(CustomerUpdatorRepository::class)->method('customerExists')->with(1, $customer['email'])->willReturn(true);
 
         $this->expectException(ValidationException::class);
-        $this->expectErrorMessage('Customer already exists with email [' . $customer['email'] . ']');
+        $this->expectErrorMessage('Customer already exists with email ['.$customer['email'].']');
 
-		$service = $this->container->get(CustomerUpdator::class);
+        $service = $this->container->get(CustomerUpdator::class);
         $actual = $service->updateCustomer(1, $customer);
-
     }
 
     public function testUpdateCustomerKOFormMissingCusName(): void
@@ -72,7 +73,6 @@ class CustomerUpdatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->updateCustomer(1, $customer);
-
     }
 
     public function testUpdateCustomerKOFormMissingAddress(): void
@@ -86,14 +86,13 @@ class CustomerUpdatorTest extends TestCase
         ];
 
         // Mock the required repository method
-        $this->mock(CustomerUpdatorRepository::class)->expects($this->never())->method('updateCustomer');;
+        $this->mock(CustomerUpdatorRepository::class)->expects($this->never())->method('updateCustomer');
         $service = $this->container->get(CustomerUpdator::class);
 
         $this->expectException(ValidationException::class);
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->updateCustomer(1, $customer);
-
     }
 
     public function testUpdateCustomerKOFormMissingCityName(): void
@@ -115,7 +114,6 @@ class CustomerUpdatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->updateCustomer(1, $customer);
-
     }
 
     public function testUpdateCustomerOKFormMissingPhone(): void
@@ -132,14 +130,14 @@ class CustomerUpdatorTest extends TestCase
         $this->mock(CustomerUpdatorRepository::class)
             ->expects($this->once())
             ->method('updateCustomer')
-            ->with(1,$customer)
-            ->willReturn(true);
+            ->with(1, $customer)
+            ->willReturn(true)
+        ;
 
         $service = $this->container->get(CustomerUpdator::class);
 
         $actual = $service->updateCustomer(1, $customer);
         static::assertSame(1, $actual);
-
     }
 
     public function testUpdateCustomerKOFormMissingEmail(): void
@@ -161,7 +159,6 @@ class CustomerUpdatorTest extends TestCase
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->updateCustomer(1, $customer);
-
     }
 
     public function testUpdateCustomerKOFormFormatEmail(): void
@@ -171,17 +168,16 @@ class CustomerUpdatorTest extends TestCase
             'address' => '25 rue des arbres',
             'city' => '59000 Lille',
             'phone' => '0102030405',
-            'email' => 'john@doe'
+            'email' => 'john@doe',
         ];
 
         // Mock the required repository method
-		$this->mock(CustomerUpdatorRepository::class);
+        $this->mock(CustomerUpdatorRepository::class);
         $service = $this->container->get(CustomerUpdator::class);
 
         $this->expectException(ValidationException::class);
         $this->expectErrorMessage('Please check your input.');
 
         $actual = $service->updateCustomer(1, $customer);
-
     }
 }
