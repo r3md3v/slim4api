@@ -30,7 +30,7 @@ class CustomerListerTest extends TestCase
         static::assertSame(15, $actual);
     }
 
-    public function testGetUserListNominalOK()
+    public function testGetUserListNominalOk()
     {
         $users = [
             new CustomerData(
@@ -105,7 +105,6 @@ class CustomerListerTest extends TestCase
         $this->mock(CustomerListerRepository::class)->method('getCustomers')->with(9999, 50)->willThrowException(TypeError::class);
         $service = $this->container->get(CustomerLister::class);
         $actual = $service->getCustomerList(9999, 50);
-        //static::assertEquals($users, $actual);
     }
 
     // When page is not a number then TypeError exception is sent
