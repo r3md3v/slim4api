@@ -32,6 +32,10 @@
     </coverage>
     <logging>
         <junit outputFile="tests/reports/junit/junit.xml"/>
+		<teamcity outputFile="tests/reports/teamcity.txt"/>
+		<testdoxHtml outputFile="tests/reports/dox/testdox.html"/>
+		<testdoxText outputFile="tests/reports/dox/testdox.txt"/>
+		<testdoxXml outputFile="tests/reports/dox/testdox.xml"/>
         <text outputFile="tests/reports/logfile.txt"/>
     </logging>
     <testsuites>
