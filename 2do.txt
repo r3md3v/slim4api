@@ -3,13 +3,12 @@ Ideas and devlopments for some upcoming version
 
 Ongoing
 -----------
-finish correct slim4api.yaml file for swagger
+finish slim4api.yaml file for swagger
 
 To do
 -----
 recheck all return statuses 200 201 202 404 405 etc
-recheck default values on all fields in case omited (ex customer without phone number causes error)
-fix ValidationException not returning comments
+fix ValidationException not returning $error detail
 verify in CustomerCreateService that profile is from allowed list {users customers}
 split tables logtoken and logtokenrevoked (blacklist)
 trigger zircote/swagger to generate yaml from AO
