@@ -103,7 +103,7 @@ $settings['jwt'] = [
 #### Populate DB:
 
 - For POC purpose, users customers loglogins and logtokens tables have 5 lines
-- Run thess command as many times a needed, to populate 500 additionnal lines of data thanks to great faker:
+- Run these commands as many times a needed, to populate 500 additionnal lines of data thanks to great faker:
 ```
 $ composer fakercu (customers and users tables)
 $ composer fakerlg (loglogins and logtokens tables)

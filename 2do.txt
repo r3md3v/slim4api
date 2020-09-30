@@ -3,7 +3,8 @@ Ideas and devlopments for some upcoming version
 
 Ongoing
 -----------
-finish slim4api.yaml file for swagger
+slim4api.yaml file for swagger / 95%
+phpunit test for action / 95%
 
 To do
 -----
@@ -11,4 +12,4 @@ recheck all return statuses 200 201 202 404 405 etc
 fix ValidationException not returning $error detail
 verify in CustomerCreateService that profile is from allowed list {users customers}
 split tables logtoken and logtokenrevoked (blacklist)
-trigger zircote/swagger to generate yaml from AO
+trigger zircote/swagger to generate yaml from OA/OpenAnnotations
