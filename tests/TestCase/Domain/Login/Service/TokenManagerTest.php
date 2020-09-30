@@ -40,7 +40,7 @@ class TokenManagerTest extends TestCase
         self::assertEquals('4', $actual);
     }
 
-    public function testGetTokenDetailsOK()
+    public function testGetTokenDetailsOk()
     {
         $this->setUp2();
         $this->mock(TokenRepository::class)->method('getTokenByJwt')->with($this->token)->willReturn($this->tokenData);

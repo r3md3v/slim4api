@@ -35,7 +35,7 @@ class CustomerUpdatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testUpdateCustomerKOCustomerExists(): void
+    public function testUpdateCustomerKoCustomerExists(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',
@@ -55,7 +55,7 @@ class CustomerUpdatorTest extends TestCase
         $actual = $service->updateCustomer(1, $customer);
     }
 
-    public function testUpdateCustomerKOFormMissingCusName(): void
+    public function testUpdateCustomerKoFormMissingCusName(): void
     {
         $customer = [
             'cusname' => '',
@@ -75,7 +75,7 @@ class CustomerUpdatorTest extends TestCase
         $actual = $service->updateCustomer(1, $customer);
     }
 
-    public function testUpdateCustomerKOFormMissingAddress(): void
+    public function testUpdateCustomerKoFormMissingAddress(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',
@@ -95,7 +95,7 @@ class CustomerUpdatorTest extends TestCase
         $actual = $service->updateCustomer(1, $customer);
     }
 
-    public function testUpdateCustomerKOFormMissingCityName(): void
+    public function testUpdateCustomerKoFormMissingCityName(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',
@@ -116,7 +116,7 @@ class CustomerUpdatorTest extends TestCase
         $actual = $service->updateCustomer(1, $customer);
     }
 
-    public function testUpdateCustomerOKFormMissingPhone(): void
+    public function testUpdateCustomerOkFormMissingPhone(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',
@@ -140,7 +140,7 @@ class CustomerUpdatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testUpdateCustomerKOFormMissingEmail(): void
+    public function testUpdateCustomerKoFormMissingEmail(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',
@@ -161,7 +161,7 @@ class CustomerUpdatorTest extends TestCase
         $actual = $service->updateCustomer(1, $customer);
     }
 
-    public function testUpdateCustomerKOFormFormatEmail(): void
+    public function testUpdateCustomerKoFormFormatEmail(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',

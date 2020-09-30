@@ -15,7 +15,7 @@ class LoginReaderTest extends TestCase
 
     use AppTestTrait;
 
-    public function testGetLoginDetailsOKStatus1()
+    public function testGetLoginDetailsOkStatus1()
     {
         $login = new LoginData(0, "username", 'na', 'na', 'lasttoken', '1');
         $this->mock(LoginRepository::class)->method('getLoginByUMP')
@@ -27,7 +27,7 @@ class LoginReaderTest extends TestCase
         self::assertEquals($login, $actual);
     }
 
-    public function testGetLoginDetailsOKStatus0()
+    public function testGetLoginDetailsOkStatus0()
     {
         $login = new LoginData(0, "username", 'na', 'na', 'lasttoken', '0');
         $this->mock(LoginRepository::class)->method('getLoginByUMP')
@@ -39,7 +39,7 @@ class LoginReaderTest extends TestCase
         self::assertEquals($login, $actual);
     }
 
-    public function testGetLoginDetailsKOEmptyUsername()
+    public function testGetLoginDetailsKoEmptyUsername()
     {
         $this->expectException(ValidationException::class);
         $this->mock(LoginRepository::class)->method('getLoginByUMP')
@@ -54,7 +54,7 @@ class LoginReaderTest extends TestCase
         self::assertEquals('Username and password required', $msg);
     }
 
-    public function testGetLoginDetailsKOEmptyPassword()
+    public function testGetLoginDetailsKoEmptyPassword()
     {
         $this->expectException(ValidationException::class);
         $this->mock(LoginRepository::class)->method('getLoginByUMP')
@@ -69,7 +69,7 @@ class LoginReaderTest extends TestCase
         self::assertEquals('Username and password required', $msg);
     }
 
-    public function testGetLoginDetailsKOKStatusSup1()
+    public function testGetLoginDetailsKoKStatusSup1()
     {
         $this->expectException(ValidationException::class);
         $login = new LoginData(0, "username", 'na', 'na', 'lasttoken', 'Login incorrect for: username');

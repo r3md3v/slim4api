@@ -36,7 +36,7 @@ class CustomerCreatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testCreateCustomerKOCustomerExists(): void
+    public function testCreateCustomerKoCustomerExists(): void
     {
         $customer = [
             'cusname' => 'john.doe',
@@ -56,7 +56,7 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
     }
 
-    public function testCreateCustomerKOFormMissingCusName(): void
+    public function testCreateCustomerKoFormMissingCusName(): void
     {
         $customer = [
             'cusname' => '',
@@ -76,7 +76,7 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
     }
 
-    public function testCreateCustomerKOFormMissingAddress(): void
+    public function testCreateCustomerKoFormMissingAddress(): void
     {
         $customer = [
             'cusname' => 'john.Doe',
@@ -96,7 +96,7 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
     }
 
-    public function testCreateCustomerKOFormMissingCityName(): void
+    public function testCreateCustomerKoFormMissingCityName(): void
     {
         $customer = [
             'cusname' => 'john.doe',
@@ -116,7 +116,7 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
     }
 
-    public function testCreateCustomerOKFormMissingPhone(): void
+    public function testCreateCustomerOkFormMissingPhone(): void
     {
         $customer = [
             'cusname' => 'john.doe',
@@ -136,7 +136,7 @@ class CustomerCreatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testCreateCustomerKOFormMissingEmail(): void
+    public function testCreateCustomerKoFormMissingEmail(): void
     {
         $customer = [
             'cusname' => 'john.doe',
@@ -156,7 +156,7 @@ class CustomerCreatorTest extends TestCase
         $actual = $service->createCustomer($customer);
     }
 
-    public function testCreateCustomerKOFormFormatEmail(): void
+    public function testCreateCustomerKoFormFormatEmail(): void
     {
         $customer = [
             'cusname' => 'Customer SARL',

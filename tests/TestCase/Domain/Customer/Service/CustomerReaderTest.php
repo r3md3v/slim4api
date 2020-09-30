@@ -14,7 +14,7 @@ class CustomerReaderTest extends TestCase
 {
     use AppTestTrait;
 
-    public function testGetCustomerDetailsOK()
+    public function testGetCustomerDetailsOk()
     {
         $cd = new CustomerData(1, "name", "address", "city", "phone", "email");
         // Mock the required repository method
