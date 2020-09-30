@@ -74,7 +74,7 @@ class UserListerRepository
         }
 
         if (0 == count($users)) {
-            throw new DomainException(sprintf('No item page %d / %d', $page + 1, $pagemax));
+            throw new DomainException(sprintf('No user page %d / %d', $page + 1, $pagemax));
         }
 
         return $users;

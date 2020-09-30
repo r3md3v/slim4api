@@ -75,7 +75,7 @@ class CustomerListerRepository
         }
 
         if (0 == count($customers)) {
-            throw new DomainException(sprintf('No item page %d / %d', $page + 1, $pagemax));
+            throw new DomainException(sprintf('No customer page %d / %d', $page + 1, $pagemax));
         }
 
         return $customers;
