@@ -78,6 +78,36 @@ $settings['jwt'] = [
 -----END PUBLIC KEY-----',
 ];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Database settings
 $settings['db'] = [
     'driver' => 'mysql',
@@ -94,7 +124,9 @@ $settings['db'] = [
         ['First name', 'USRFIRSTNAME'],
         ['Last name', 'USRLASTNAME'],
         ['Email', 'USREMAIL'],
-        ['Profile', 'USRPROFILE', ['Users', 'Customers', 'Products', 'Stocks']], ],
+        ['Profile', 'USRPROFILE'],
+        // ['Profile', 'USRPROFILE', ['Users', 'Customers', 'Products', 'Stocks']], for later use with ctrl of allowed values
+    ],
     'defaultSearchFieldCustomer' => [
         ['Customer name', 'CUSNAME'],
         ['Address', 'CUSADDRESS'],
