@@ -32,9 +32,9 @@ final class TokenManager
     /**
      * The constructor.
      *
-     * @param TokenRepository $repository The repository
-     * @param ContainerInterface $ci The container interface
-     * @param LoggerFactory $lf The logger Factory
+     * @param TokenRepository    $repository The repository
+     * @param ContainerInterface $ci         The container interface
+     * @param LoggerFactory      $lf         The logger Factory
      */
     public function __construct(TokenRepository $repository, ContainerInterface $ci, LoggerFactory $lf)
     {
@@ -68,7 +68,10 @@ final class TokenManager
      */
     public function revokeToken(string $token): int
     {
-        return $this->repository->revokeTokenByJwt($token);
+        // Get first chunk of JWT (not decoded)
+        $chunk = $this->decodeTokenHeader($token, 1);
+
+        return $this->repository->revokeTokenByJwt($chunk);
     }
 
     /**
@@ -82,19 +85,10 @@ final class TokenManager
      */
     public function logTokenDetails(string $username, string $token, string $lifetime)
     {
-        /*// Decode first chunk of JWT
-        $splitJwt = explode('.', $token);
-        if (3 != count($splitJwt)) {
-            return -1;
-        }
-        $chunk = $splitJwt[0];
-        if ($remainder = strlen($chunk) % 4) {
-            $chunk .= str_repeat('=', 4 - $remainder);
-        }
-        $decoded = base64_decode(strtr($chunk, '-_', '+/'));
-        $this->repository->insertTokenDetails($username, $decoded, $lifetime);
-        */
-        return $this->repository->insertTokenDetails($username, $token, $lifetime);
+        // Get first chunk of JWT (not decoded)
+        $chunk = $this->decodeTokenHeader($token, 1);
+
+        return $this->repository->insertTokenDetails($username, $chunk, $lifetime);
     }
 
     /**
@@ -115,5 +109,33 @@ final class TokenManager
     public function getTokenCount(): int
     {
         return $this->repository->countTokens();
+    }
+
+    /**
+     * Decode token header.
+     *
+     * @param string $token The Token
+     * @param bool   $raw   Decode or not
+     *
+     * @return string decoded token
+     */
+    public function decodeTokenHeader($token, $raw = 1): string
+    {
+        // Split token in 3
+        $splitJwt = explode('.', $token);
+        if (3 != count($splitJwt)) {
+            return -1;
+        }
+        $chunk = $splitJwt[0];
+        if ($remainder = strlen($chunk) % 4) {
+            $chunk .= str_repeat('=', 4 - $remainder);
+        }
+
+        // Return raw first chunk or decoded values
+        if ($raw) {
+            return $chunk;
+        }
+
+        return base64_decode(strtr($chunk, '-_', '+/'));
     }
 }
