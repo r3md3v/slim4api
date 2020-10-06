@@ -33,7 +33,7 @@ $settings['redirection'] = [
 $settings['api'] = [
     'name' => 'slim4api',
     'version' => '0.90',
-    'url' => 'https://localhost:8080',
+    'url' => 'http://localhost:8080',
     'testpage' => 'testapi.html',
     'build' => '2020-09-24',
     'endpoints' => [
@@ -78,36 +78,6 @@ $settings['jwt'] = [
 -----END PUBLIC KEY-----',
 ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Database settings
 $settings['db'] = [
     'driver' => 'mysql',
@@ -124,9 +94,7 @@ $settings['db'] = [
         ['First name', 'USRFIRSTNAME'],
         ['Last name', 'USRLASTNAME'],
         ['Email', 'USREMAIL'],
-        ['Profile', 'USRPROFILE'],
-        // ['Profile', 'USRPROFILE', ['Users', 'Customers', 'Products', 'Stocks']], for later use with ctrl of allowed values
-    ],
+        ['Profile', 'USRPROFILE', ['Users', 'Customers', 'Products', 'Stocks']], ],
     'defaultSearchFieldCustomer' => [
         ['Customer name', 'CUSNAME'],
         ['Address', 'CUSADDRESS'],

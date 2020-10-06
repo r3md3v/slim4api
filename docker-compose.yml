@@ -1,0 +1,29 @@
+version: '3.5'
+services:
+  mysql:
+    image: mariadb/server
+    ports:
+      - 3330:3306
+    restart:
+      unless-stopped
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_PASSWORD=changeItToo
+      - MYSQL_HOST=my_app
+      - MYSQL_DATABASE=slim
+      - MYSQL_USER=slim
+      - MYSQL_PASSWORD=changeIt
+  my_app:
+    image: thecodingmachine/php:7.4-v3-cli
+    command: /usr/src/app/init.sh
+    ports:
+      - 0.0.0.0:8088:8000
+    environment:
+      # set the parameter error_reporting=EALL
+      PHP_INI_ERROR_REPORTING: E_ALL
+      # Use the production php.ini file as a base
+      #TEMPLATE_PHP_INI=production
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - mysql
