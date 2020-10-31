@@ -6,9 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ master,dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ master,dev ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,8 +29,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        #with:
+        with:
           # Additional arguments to the sonarcloud scanner
-          #args: # optional
+          # optional
+          args: >
+            -D
           # Set the sonar.projectBaseDir analysis property
           #projectBaseDir: # optional, default is .
