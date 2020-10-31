@@ -33,6 +33,6 @@ jobs:
           # Additional arguments to the sonarcloud scanner
           # optional
           args: >
-            -D
+            -Dsonar.encoding=UTF-8
           # Set the sonar.projectBaseDir analysis property
           #projectBaseDir: # optional, default is .
