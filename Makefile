@@ -5,6 +5,7 @@ PWD := $(dir $(MAKEPATH))
 CONTAINERS := $(shell docker ps -a -q -f "name=slim4api*")
 SONARQUBE_URL := "sonarqube:9000"
 SONAR_NET := "slim4api_sonarnet"
+SONAR_PROP := "sonar-project-local.properties"
 
 vendor:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "composer install"
@@ -53,15 +54,14 @@ test:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm composer test
 		#docker-compose -f docker-compose-nginx.yml exec php-fpm vendor/bin/phpunit
 
-sonarstart:
-		docker-compose -f docker-compose-sonarsvr.yaml up -d
-
 sonarlog:
 		docker-compose -f docker-compose-sonarsvr.yaml logs -f
 
 sonarrun:
+		docker-compose -f docker-compose-sonarsvr.yaml up -d
 		docker run --rm \
 			-e SONAR_HOST_URL=http://${SONARQUBE_URL} \
             -v "${PWD}:/usr/src" \
             --network="${SONAR_NET}" \
-            sonarsource/sonar-scanner-cli
+            sonarsource/sonar-scanner-cli \
+            -Dproject.settings=${SONAR_PROP}
