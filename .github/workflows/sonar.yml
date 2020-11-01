@@ -36,6 +36,11 @@ jobs:
       - name: install dependencies
         run: composer install
 
+      - name: debug
+        run: \
+          ls -al ${GITHUB_WORKSPACE}
+          cat ${GITHUB_WORKSPACE}/phpunit.xml
+
       - name: PHPUnit Tests
         run: ./vendor/bin/phpunit ${GITHUB_WORKSPACE}/phpunit.xml
 
