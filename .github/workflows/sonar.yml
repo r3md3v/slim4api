@@ -30,8 +30,8 @@ jobs:
           coverage: xdebug
           tools: php-cs-fixer, phpunit, pecl, composer:v2, phpstan
 
-      - name: Run PHPStan
-        run: phpstan analyse src
+      #- name: Run PHPStan
+      #  run: phpstan analyse src
 
       - name: install dependencies
         run: composer install
