@@ -44,11 +44,8 @@ jobs:
           ls -al ${GITHUB_WORKSPACE}
           cat ${GITHUB_WORKSPACE}/phpunit.xml
 
-      - name: PHPUnit Tests
-        run: ./vendor/bin/phpunit ${GITHUB_WORKSPACE}/phpunit.xml
-
-      - name: PHPUnit Coverage
-        run: ./vendor/bin/phpunit --coverage-text --coverage-html coverage
+      - name: PHPUnit Tests +Coverage
+        run: phpunit ${GITHUB_WORKSPACE}/phpunit.xml --coverage-text --coverage-html coverage
 
       - name: SonarCloud Scan
         # You may pin to the exact commit or the version.
