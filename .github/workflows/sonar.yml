@@ -57,7 +57,7 @@ jobs:
         if: always()
         run: |
           sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
-          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
+          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/codeCoverage/clover.xml
 
       - name: debug
         if: always()
