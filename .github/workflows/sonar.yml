@@ -58,6 +58,8 @@ jobs:
         run: |
           ls -al ${GITHUB_WORKSPACE}
           cat ${GITHUB_WORKSPACE}/phpunit.xml
+          cat ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
+          cat ${GITHUB_WORKSPACE}/tests/reports/codeCoverage/clover.xml
 
       - name: SonarCloud Scan
         if: always()
