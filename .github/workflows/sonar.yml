@@ -72,8 +72,8 @@ jobs:
           # optional
           args: >
             -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.php.tests.reportPath=${GITHUB_WORKSPACE}/tests/codeCoverage/logfile.xml
-            -Dsonar.php.coverage.reportPaths=${GITHUB_WORKSPACE}/tests/codeCoverage/coverage.xml
+            -Dsonar.php.tests.reportPath=/github/workspace/tests/codeCoverage/logfile.xml
+            -Dsonar.php.coverage.reportPaths=/github/workspace/tests/codeCoverage/coverage.xml
           #-Dsonar.coverage.jacoco.xmlReportPaths=
           # Set the sonar.projectBaseDir analysis property
           #projectBaseDir: # optional, default is .
