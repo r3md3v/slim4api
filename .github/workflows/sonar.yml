@@ -53,17 +53,17 @@ jobs:
       - name: PHPUnit Tests + Coverage
         run: composer test
 
-      _ name: prepare for sonar
+      - name: prepare for sonar
         if: always()
         run: |
           sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
           sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
 
-        - name: debug
-          if: always()
-          run: |
-            ls -al ${GITHUB_WORKSPACE}
-            cat ${GITHUB_WORKSPACE}/phpunit.xml
+          - name: debug
+            if: always()
+            run: |
+              ls -al ${GITHUB_WORKSPACE}
+              cat ${GITHUB_WORKSPACE}/phpunit.xml
             cat ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
             cat ${GITHUB_WORKSPACE}/tests/reports/codeCoverage/clover.xml
 
