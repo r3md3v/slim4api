@@ -1,4 +1,4 @@
-.PHONY: vendor coverage genrsa genjwt faker up down reload php phplog test sonarstart sonarlog sonarrun
+.PHONY: vendor coverage genrsa genjwt faker up down reload php phplog test sonarstart sonarlog sonarrun help
 
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(dir $(MAKEPATH))
@@ -7,8 +7,11 @@ SONARQUBE_URL := "sonarqube:9000"
 SONAR_NET := "slim4api_sonarnet"
 SONAR_PROP := "sonar-project-local.properties"
 
+help:
+		@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# Fichiers/,/^# Base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
+
 vendor:
-		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "composer install"
+		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "composer validate --no-check-all --strict;composer install"
 
 coverage:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "./vendor/bin/phpunit --coverage-text --coverage-html coverage"
