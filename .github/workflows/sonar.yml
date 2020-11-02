@@ -72,5 +72,5 @@ jobs:
           # optional
           args: >
             -Dsonar.sourceEncoding=UTF-8
-            # Set the sonar.projectBaseDir analysis property
-            #projectBaseDir: # optional, default is .
+          # Set the sonar.projectBaseDir analysis property
+          #projectBaseDir: # optional, default is .
