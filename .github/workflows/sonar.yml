@@ -51,7 +51,10 @@ jobs:
           mv config/settings.php.example config/settings.php
 
       - name: PHPUnit Tests + Coverage
-        run: composer test
+        run: |
+          composer test
+          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
+          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
 
       - name: debug
         if: always()
