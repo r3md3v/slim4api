@@ -50,14 +50,14 @@ jobs:
         run: |
           mv config/settings.php.example config/settings.php
 
+      - name: PHPUnit Tests + Coverage
+        run: composer test
+
       - name: debug
         if: always()
         run: |
           ls -al ${GITHUB_WORKSPACE}
           cat ${GITHUB_WORKSPACE}/phpunit.xml
-
-      - name: PHPUnit Tests + Coverage
-        run: composer test
 
       - name: SonarCloud Scan
         if: always()
@@ -72,5 +72,8 @@ jobs:
           # optional
           args: >
             -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.php.tests.reportPath=${GITHUB_WORKSPACE}/src/tests/codeCoverage/logfile.xml
+            -Dsonar.php.coverage.reportPaths=${GITHUB_WORKSPACE}/src/tests/codeCoverage/coverage.xml
+          #-Dsonar.coverage.jacoco.xmlReportPaths=
           # Set the sonar.projectBaseDir analysis property
           #projectBaseDir: # optional, default is .
