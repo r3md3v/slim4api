@@ -41,7 +41,7 @@ jobs:
 
       - name: install dependencies
         run: |
-          composer validate --no-check-all --strict
+          #composer validate --no-check-all --strict
           composer update --lock
           composer install
 
