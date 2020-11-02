@@ -13,7 +13,9 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  analysis:
+  tests:
+    continue-on-error: true
+    name: run phpunit tests
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     defaults:
@@ -22,7 +24,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -39,6 +42,7 @@ jobs:
       - name: install dependencies
         run: |
           composer validate --no-check-all --strict
+          composer update --lock
           composer install
 
       - name: debug
@@ -49,10 +53,14 @@ jobs:
       - name: PHPUnit Tests + Coverage
         run: composer test
 
-      - name: SonarCloud Scan
-        # You may pin to the exact commit or the version.
-        # uses: SonarSource/sonarcloud-github-action@f4c6e4d91ea9785ec823eaeed459042606123402
-        uses: SonarSource/sonarcloud-github-action@v1.4
+  sonarcloud:
+    runs-on: ubuntu-latest
+    name: SonarCloud Scan
+    needs: tests
+    # You may pin to the exact commit or the version.
+    # uses: SonarSource/sonarcloud-github-action@f4c6e4d91ea9785ec823eaeed459042606123402
+    steps:
+      - uses: SonarSource/sonarcloud-github-action@v1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
