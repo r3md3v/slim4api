@@ -11,7 +11,7 @@ help:
 		@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# Fichiers/,/^# Base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 vendor:
-		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "composer validate --no-check-all --strict;composer install"
+		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "composer --version validate --no-check-all --strict;composer install"
 
 coverage:
 		docker-compose -f docker-compose-nginx.yml exec php-fpm sh -c "./vendor/bin/phpunit --coverage-text --coverage-html coverage"
