@@ -31,7 +31,7 @@ jobs:
           extensions: mbstring, intl, pdo_mysql, mysqli
           ini-values: post_max_size=256M, short_open_tag=On
           coverage: xdebug
-          tools: php-cs-fixer, phpunit, pecl, composer:v2, phpstan
+          tools: php-cs-fixer, pecl, composer:v2, phpstan
 
       #- name: Run PHPStan
       #  run: phpstan analyse src
@@ -46,8 +46,8 @@ jobs:
           ls -al ${GITHUB_WORKSPACE}
           cat ${GITHUB_WORKSPACE}/phpunit.xml
 
-      - name: PHPUnit Tests +Coverage
-        run: phpunit ${GITHUB_WORKSPACE}/phpunit.xml --coverage-text --coverage-html coverage
+      - name: PHPUnit Tests + Coverage
+        run: composer test
 
       - name: SonarCloud Scan
         # You may pin to the exact commit or the version.
