@@ -1,6 +1,6 @@
 # SlimM4API - API POC
 
-RESTful API proof of concept manage customers and users with JWT.
+RESTful API proof of concept to manage customers and users with JWT.
 
 Based on: `PHP 7, Slim 4, MySQL, PHPUnit, OpenSSL`.
 
@@ -48,7 +48,7 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 Create a new DB and execute `db.sql` to create 5 tables users customers logins loginlog logtoken (automatic for docker).
 
 
-#### Configure app (settings.php):
+### Configure app (settings.php):
 
 Configure error reporting for development or production (below is production):
 ```
@@ -100,13 +100,21 @@ $settings['jwt'] = [
 ```
  
 
-#### Populate DB:
+### Populate DB:
 
 - For POC purpose, users customers loglogins and logtokens tables have 5 lines
-- Run thess command as many times a needed, to populate 500 additionnal lines of data thanks to great faker:
+- Run these commands as many times a needed, to populate 500 additionnal lines of data thanks to great faker:
 ```
 $ composer fakercu (customers and users tables)
 $ composer fakerlg (loglogins and logtokens tables)
+```
+
+
+### HTTPS
+
+By design, HTTP traffic is redirected to HTTPS tanks to HttpsMiddleware enabled in config/middleware.php:
+```
+$app->add(HttpsMiddleware::class);
 ```
 
 
