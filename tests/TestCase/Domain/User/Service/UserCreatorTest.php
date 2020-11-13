@@ -42,7 +42,7 @@ class UserCreatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testCreateUserKoUserExists(): void
+    public function testCreateUserKOUserExists(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -63,7 +63,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormMissingUsrName(): void
+    public function testCreateUserKOFormMissingUsrName(): void
     {
         $user = [
             'username' => '',
@@ -83,7 +83,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormMissingPassword(): void
+    public function testCreateUserKOFormMissingPassword(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -103,7 +103,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormMissingFirstName(): void
+    public function testCreateUserKOFormMissingFirstName(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -123,7 +123,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserOkFormMissingLastName(): void
+    public function testCreateUserOKFormMissingLastName(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -143,7 +143,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormMissingEmail(): void
+    public function testCreateUserKOFormMissingEmail(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -163,7 +163,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormMissingProfile(): void
+    public function testCreateUserKOFormMissingProfile(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -183,7 +183,7 @@ class UserCreatorTest extends TestCase
         $actual = $service->createUser($user);
     }
 
-    public function testCreateUserKoFormFormatEmail(): void
+    public function testCreateUserKOFormFormatEmail(): void
     {
         $user = [
             'username' => 'john.doe',

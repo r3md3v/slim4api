@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: slim4API
+  version: 0.0.1
+paths:
+  /hello/:
+    get:
+      summary: 'send greeting to user'
+      description: 'send greeting to user given in query '
+  /api/users:
+    post:
+      summary: 'create user'
+      description: 'create user according to posted data '
+      requestBody:
+        description: 'Client side search object'
+        required: true
+        content:
+          application/json: {  }
+      responses:
+        '201':
+          description: Success
+        '404':
+          description: 'Could Not Find Resource'
+  '/api/user/{id}':
+    get:
+      responses:
+        '200':
+          description: 'An example resource'
+components:
+  schemas:
+    UserData: {  }
+  responses:
+    '200':
+      description: 'hello {name}'
+      content:
+        application/json: {  }
+    default:
+      description: 'hello {name}'
+  parameters:
+    NAME:
+      name: NAME
+      in: query
+      description: 'The field used to set name'
+      type: string

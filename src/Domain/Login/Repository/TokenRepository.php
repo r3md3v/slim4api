@@ -106,23 +106,27 @@ class TokenRepository
     /**
      * Revoke token.
      *
-     * @param string $token The first chunk of the Token
+     * @param string $token The Token
      *
      * @throws DomainException
      *
-     * @return int nbrow The nb of rows
+     * @return nbrow The nb of rows
      */
     public function revokeTokenByJwt(string $token): int
     {
-        $sql = 'UPDATE logtokens SET TOKSTATUS = 0 WHERE BINARY TOKTOKEN = :token'; // BINARY compare for exact match
+        $sql = 'UPDATE logtokens SET TOKSTATUS = 0 WHERE TOKTOKEN = :token';
         $statement = $this->connection->prepare($sql);
         $statement->bindParam('token', $token);
 
         $statement->execute();
+
         $nbrows = $statement->rowCount();
 
-        if (0 == $nbrows) {
-            throw new DomainException(sprintf('Token not found: %s', $token));
+        if (0 == !$nbrows) {
+            // Show only header of token for security reason
+            $tokens = explode('.', $token);
+            // Remove this warning to show only "Unauthorized"
+            throw new DomainException(sprintf('Token not found: %s', $tokens[0]));
         }
 
         return (int) $nbrows;

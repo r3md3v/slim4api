@@ -127,7 +127,7 @@ class LoginRepository
         }
 
         if (0 == count($logins)) {
-            throw new DomainException(sprintf('No login page %d / %d!', $page + 1, $pagemax));
+            throw new DomainException(sprintf('No item page %d / %d!', $page + 1, $pagemax));
         }
 
         return $logins;

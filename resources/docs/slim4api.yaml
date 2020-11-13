@@ -111,6 +111,35 @@ paths:
             schema:
               $ref: '#/components/schemas/Customers'
   /customers/id/{id}:
+    get:
+      tags:
+        - customers
+      summary: Find a customer by id
+      description: Find a single customer by id
+      operationId: findCustomerById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customers'
+        '400':
+          description: Invalid id value
     put:
       tags:
         - customers
@@ -161,35 +190,6 @@ paths:
         - name: id
           in: path
           description: The id that needs to be deleted.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customers'
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customers'
-        '400':
-          description: Invalid id value
-    get:
-      tags:
-        - customers
-      summary: Find a customer by id
-      description: Find a single customer by id
-      operationId: findCustomerById
-      parameters:
-        - name: id
-          in: path
-          description: The id that needs to be fetched.
           required: true
           schema:
             type: string
@@ -335,6 +335,39 @@ paths:
             - 'write:users'
             - 'read:users'
   /users/id/{id}:
+    get:
+      tags:
+        - users
+      summary: Find a user by id
+      description: Find a single user by id
+      operationId: findUserById
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched. Use 564 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+        '400':
+          description: Invalid id value
+      security:
+        - slim4api_auth:
+            - 'write:users'
+            - 'read:users'
     put:
       tags:
         - users
@@ -412,40 +445,7 @@ paths:
         - slim4api_auth:
             - 'write:users'
             - 'read:users'
-    get:
-      tags:
-        - users
-      summary: Find a user by id
-      description: Find a single user by id
-      operationId: findUserById
-      parameters:
-        - name: id
-          in: path
-          description: The id that needs to be fetched. Use 564 for testing.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Users'
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Users'
-        '400':
-          description: Invalid id value
-      security:
-        - slim4api_auth:
-            - 'write:users'
-            - 'read:users'
-   /users/:
+  /users/:
     get:
       tags:
         - users

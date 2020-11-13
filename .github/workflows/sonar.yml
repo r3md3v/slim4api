@@ -1,0 +1,81 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Code analysis
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master,dev ]
+  pull_request:
+    branches: [ master,dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  tests:
+    continue-on-error: true
+    name: run phpunit tests
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          extensions: mbstring, intl, pdo_mysql, mysqli
+          ini-values: post_max_size=256M, short_open_tag=On
+          coverage: xdebug
+          tools: php-cs-fixer, pecl, composer:v2, phpstan
+
+      #- name: Run PHPStan
+      #  run: phpstan analyse src
+
+      - name: install dependencies
+        run: |
+          #composer validate --no-check-all --strict
+          composer update --lock
+          composer install
+
+      - name: create settings.php
+        if: always()
+        run: |
+          mv config/settings.php.example config/settings.php
+
+      - name: PHPUnit Tests + Coverage
+        run: composer test
+
+      - name: prepare for sonar
+        if: always()
+        run: |
+          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
+          sed -i "s#/home/runner/work/slim4api/slim4api#/github/workspace#g" ${GITHUB_WORKSPACE}/tests/reports/codeCoverage/clover.xml
+
+      - name: debug
+        if: always()
+        run: |
+          ls -al ${GITHUB_WORKSPACE}
+          cat ${GITHUB_WORKSPACE}/phpunit.xml
+          cat ${GITHUB_WORKSPACE}/tests/reports/junit/junit.xml
+          cat ${GITHUB_WORKSPACE}/tests/reports/codeCoverage/clover.xml
+
+      - name: SonarCloud Scan
+        if: always()
+        # You may pin to the exact commit or the version.
+        # uses: SonarSource/sonarcloud-github-action@f4c6e4d91ea9785ec823eaeed459042606123402
+        uses: SonarSource/sonarcloud-github-action@v1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          # Additional arguments to the sonarcloud scanner, optional
+          args: >
+            -Dsonar.sourceEncoding=UTF-8

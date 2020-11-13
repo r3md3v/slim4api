@@ -41,7 +41,7 @@ class UserUpdatorTest extends TestCase
         static::assertSame(1, $actual);
     }
 
-    public function testUpdateUserKoUserExists(): void
+    public function testUpdateUserKOUserExists(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -67,7 +67,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingUserName(): void
+    public function testUpdateUserKOFormMissingUserName(): void
     {
         $user = [
             'username' => '',
@@ -88,7 +88,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingPassword(): void
+    public function testUpdateUserKOFormMissingPassword(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -109,7 +109,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingFirstName(): void
+    public function testUpdateUserKOFormMissingFirstName(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -130,7 +130,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingLastName(): void
+    public function testUpdateUserKOFormMissingLastName(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -152,7 +152,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingEmail(): void
+    public function testUpdateUserKOFormMissingEmail(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -174,7 +174,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormMissingProfile(): void
+    public function testUpdateUserKOFormMissingProfile(): void
     {
         $user = [
             'username' => 'john.doe',
@@ -196,7 +196,7 @@ class UserUpdatorTest extends TestCase
         $actual = $service->updateUser(1, $user);
     }
 
-    public function testUpdateUserKoFormFormatEmail(): void
+    public function testUpdateUserKOFormFormatEmail(): void
     {
         $user = [
             'username' => 'john.doe',

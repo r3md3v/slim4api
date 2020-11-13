@@ -6,25 +6,21 @@ use App\Domain\Login\Data\TokenData;
 use App\Domain\Login\Repository\TokenRepository;
 use App\Domain\Login\Service\TokenManager;
 use DomainException;
+use function PHPUnit\Framework\once;
 use PHPUnit\Framework\TestCase;
 use Tests\AppTestTrait;
-use function PHPUnit\Framework\once;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TokenManagerTest extends TestCase
 {
-
     use AppTestTrait;
 
     protected $token;
     protected $tokenData;
     protected $now;
-
-    protected function setUp2(): void
-    {
-        $this->token = "this.Is.AToken";
-        $this->now = date("YYYYMMDDHHMMSS");
-        $this->tokenData = new TokenData('1', 'username', $this->token, 'statusOk', $this->now, '-1');
-    }
 
     public function testLogTokenDetails()
     {
@@ -49,7 +45,6 @@ class TokenManagerTest extends TestCase
 
         $actual = $service->getTokenDetails($this->token);
         self::assertEquals($this->tokenData, $actual);
-
     }
 
     public function testCleanupTokens()
@@ -87,21 +82,28 @@ class TokenManagerTest extends TestCase
 
         $service = $this->container->get(TokenManager::class);
         $service->revokeToken($this->token);
-
     }
 
     public function testRevokeTokenFailed()
     {
         $this->setUp2();
         $this->expectException(DomainException::class);
-        $expectedException= new DomainException(sprintf('Token not found: %s', $this->token));
+        $expectedException = new DomainException(sprintf('Token not found: %s', $this->token));
         $this->mock(TokenRepository::class)
             ->expects(once())
             ->method('revokeTokenByJwt')
-            ->willThrowException($expectedException);
+            ->willThrowException($expectedException)
+        ;
 
         $service = $this->container->get(TokenManager::class);
         $service->revokeToken($this->token);
         $this->expectExceptionMessage($expectedException->getMessage());
+    }
+
+    protected function setUp2(): void
+    {
+        $this->token = 'this.Is.AToken';
+        $this->now = date('YYYYMMDDHHMMSS');
+        $this->tokenData = new TokenData('1', 'username', $this->token, 'statusOk', $this->now, '-1');
     }
 }
